@@ -2,46 +2,46 @@
   "version": 3,
   "targets": {
     "net10.0": {
-      "Ecomm.AppLayer/1.0.0": {
+      "Ecomm.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "Ecomm.DomainLayer": "1.0.0"
+          "Ecomm.Domain": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/Ecomm.AppLayer.dll": {}
+          "bin/placeholder/Ecomm.Application.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Ecomm.AppLayer.dll": {}
+          "bin/placeholder/Ecomm.Application.dll": {}
         }
       },
-      "Ecomm.DomainLayer/1.0.0": {
+      "Ecomm.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "compile": {
-          "bin/placeholder/Ecomm.DomainLayer.dll": {}
+          "bin/placeholder/Ecomm.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Ecomm.DomainLayer.dll": {}
+          "bin/placeholder/Ecomm.Domain.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Ecomm.AppLayer/1.0.0": {
+    "Ecomm.Application/1.0.0": {
       "type": "project",
-      "path": "../Ecomm.AppLayer/Ecomm.AppLayer.csproj",
-      "msbuildProject": "../Ecomm.AppLayer/Ecomm.AppLayer.csproj"
+      "path": "../Ecomm.Application/Ecomm.Application.csproj",
+      "msbuildProject": "../Ecomm.Application/Ecomm.Application.csproj"
     },
-    "Ecomm.DomainLayer/1.0.0": {
+    "Ecomm.Domain/1.0.0": {
       "type": "project",
-      "path": "../Ecomm.DomainLayer/Ecomm.DomainLayer.csproj",
-      "msbuildProject": "../Ecomm.DomainLayer/Ecomm.DomainLayer.csproj"
+      "path": "../Ecomm.Domain/Ecomm.Domain.csproj",
+      "msbuildProject": "../Ecomm.Domain/Ecomm.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Ecomm.AppLayer >= 1.0.0"
+      "Ecomm.Application >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -71,8 +71,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.AppLayer\\Ecomm.AppLayer.csproj": {
-              "projectPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.AppLayer\\Ecomm.AppLayer.csproj"
+            "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Application\\Ecomm.Application.csproj": {
+              "projectPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Application\\Ecomm.Application.csproj"
             }
           }
         }

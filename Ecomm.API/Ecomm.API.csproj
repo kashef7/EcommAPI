@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ecomm.AppLayer\Ecomm.AppLayer.csproj" />
+      <ProjectReference Include="..\Ecomm.Application\Ecomm.Application.csproj" />
       <ProjectReference Include="..\Ecomm.Infrastructure\Ecomm.Infrastructure.csproj" />
     </ItemGroup>
 

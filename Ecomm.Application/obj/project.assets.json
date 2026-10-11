@@ -2,28 +2,28 @@
   "version": 3,
   "targets": {
     "net10.0": {
-      "Ecomm.DomainLayer/1.0.0": {
+      "Ecomm.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "compile": {
-          "bin/placeholder/Ecomm.DomainLayer.dll": {}
+          "bin/placeholder/Ecomm.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Ecomm.DomainLayer.dll": {}
+          "bin/placeholder/Ecomm.Domain.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Ecomm.DomainLayer/1.0.0": {
+    "Ecomm.Domain/1.0.0": {
       "type": "project",
-      "path": "../Ecomm.DomainLayer/Ecomm.DomainLayer.csproj",
-      "msbuildProject": "../Ecomm.DomainLayer/Ecomm.DomainLayer.csproj"
+      "path": "../Ecomm.Domain/Ecomm.Domain.csproj",
+      "msbuildProject": "../Ecomm.Domain/Ecomm.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Ecomm.DomainLayer >= 1.0.0"
+      "Ecomm.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.AppLayer\\Ecomm.AppLayer.csproj",
-      "projectName": "Ecomm.AppLayer",
-      "projectPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.AppLayer\\Ecomm.AppLayer.csproj",
+      "projectUniqueName": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Application\\Ecomm.Application.csproj",
+      "projectName": "Ecomm.Application",
+      "projectPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Application\\Ecomm.Application.csproj",
       "packagesPath": "C:\\Users\\youss\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.AppLayer\\obj\\",
+      "outputPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\youss\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -53,8 +53,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.DomainLayer\\Ecomm.DomainLayer.csproj": {
-              "projectPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.DomainLayer\\Ecomm.DomainLayer.csproj"
+            "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Domain\\Ecomm.Domain.csproj": {
+              "projectPath": "C:\\Users\\youss\\RiderProjects\\EcommAPI\\Ecomm.Domain\\Ecomm.Domain.csproj"
             }
           }
         }
