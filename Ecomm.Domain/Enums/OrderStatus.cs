@@ -1,11 +1,11 @@
-﻿namespace Ecomm.Domain.Enums;
+namespace Ecomm.Domain.Enums;
 
 public enum OrderStatus
 {
-    Placed,
-    Approved,
-    Rejected,
-    Cancelled,
-    InProgress,
-    Delivered
+    Placed = 0,
+    Approved = 1,
+    Rejected = 2,
+    Cancelled = 3,
+    InProgress = 4,
+    Delivered = 5
 }

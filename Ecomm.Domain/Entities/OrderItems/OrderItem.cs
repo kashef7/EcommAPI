@@ -1,33 +1,32 @@
-﻿using Ecomm.Domain.Entities.Orders;
+using Ecomm.Domain.Entities.Orders;
 using Ecomm.Domain.Entities.Products;
 
 namespace Ecomm.Domain.Entities.OrderItems;
 
 public class OrderItem
 {
+    public Guid Id { get; init; } = Guid.CreateVersion7();
     public Guid OrderId { get; init; }
-    public Order Order { get; init; }
+    public Order Order { get; init; } = null!;
     public Guid ProductId { get; init; }
-    public Product Product { get; init; }
+    public Product Product { get; init; } = null!;
     public int Quantity { get; private set; }
-    public decimal UnitPrice { get; private set; }
+    public decimal UnitPrice { get; init; }
     
-    public OrderItem(){}
+    private OrderItem() { }
 
-    public OrderItem(Order order, Product product, int quantity, decimal unitPrice)
+    internal OrderItem(Order order, Product product, int quantity, decimal unitPrice)
     {
+        OrderId = order.Id;
         Order = order;
+        ProductId = product.Id;
         Product = product;
         Quantity = quantity;
         UnitPrice = unitPrice;
     }
     
-    public void UpdateQuantity(int quantity)
+    internal void IncreaseQuantity(int quantity)
     {
-        Quantity = quantity;
-    }
-    public void UpdateUnitPrice(decimal unitPrice)
-    {
-        UnitPrice = unitPrice;
+        Quantity += quantity;
     }
 }

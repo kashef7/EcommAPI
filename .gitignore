@@ -1,4 +1,4 @@
-﻿.env
+.env
 .idea
 
 
@@ -17,3 +17,10 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# Build results and user settings
+bin/
+obj/
+.vs/
+*.user
+*.DotSettings.user
