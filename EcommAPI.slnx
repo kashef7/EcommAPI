@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Ecomm.API/Ecomm.API.csproj" />
+  <Project Path="Ecomm.AppLayer/Ecomm.AppLayer.csproj" />
+  <Project Path="Ecomm.DomainLayer/Ecomm.DomainLayer.csproj" />
+  <Project Path="Ecomm.Infrastructure/Ecomm.Infrastructure.csproj" />
+</Solution>
