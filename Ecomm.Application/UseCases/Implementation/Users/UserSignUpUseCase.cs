@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.DTOs.UserDTO;
+using Ecomm.Application.DTOs.UserDTO;
 using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction.IUserRepo;
 using Ecomm.Application.Services.Abstraction;
@@ -20,9 +20,10 @@ public class UserSignUpUseCase:IUserSignUpUseCase
     }
     public async Task<AuthUserDTO> ExecuteAsync(UserSignUpDTO user)
     {
-        if (await _userRepo.GetUserByEmailAsync(user.Email) != null)
+        var normalizedEmail = user.Email.Trim().ToLowerInvariant();
+        if (await _userRepo.GetUserByEmailAsync(normalizedEmail) != null)
         {
-            throw new EmailAlreadyExistException(user.Email);
+            throw new EmailAlreadyExistException(normalizedEmail);
         }
 
         var passwordHash = _passwordHasher.HashPassword(user.Password);
@@ -33,11 +34,11 @@ public class UserSignUpUseCase:IUserSignUpUseCase
         
         var (accessToken,expiresIn) = _tokenService.GenerateAccessToken(newUser);
         
-        var (refreshTokenRaw,refreshTokenHash) = _tokenService.GenerateRefreshToken(newUser);
+        var (refreshTokenRaw,refreshTokenHash,refreshTokenExpiresAt) = _tokenService.GenerateRefreshToken(newUser);
         
-        newUser.UpdateRefreshToken(refreshTokenHash,DateTime.UtcNow.AddDays(7));
-        _userRepo.SaveChangesAsync();
+        newUser.UpdateRefreshToken(refreshTokenHash,refreshTokenExpiresAt);
+        await _userRepo.SaveChangesAsync();
         
-        return new AuthUserDTO(newUser.Name, newUser.Email,refreshTokenRaw,accessToken,expiresIn);
+        return new AuthUserDTO(newUser.Name, newUser.Email,refreshTokenRaw,accessToken,expiresIn,refreshTokenExpiresAt);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.DTOs.UserDTO;
+using Ecomm.Application.DTOs.UserDTO;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +14,11 @@ public class AuthController:ControllerBase
         _userSignUpUseCase = userSignUpUseCase;
     }
 
-    [HttpPost]
+    [HttpPost("signup")]
     public async Task<IActionResult> SignUp(UserSignUpDTO user)
     {
         var result = await _userSignUpUseCase.ExecuteAsync(user);
-        SetRefreshTokenCookie(result.refreshToken,DateTime.UtcNow.AddDays(7)); //should change it from hardcoded to a var
+        SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
         return Ok(result); //Will change to CreatedAtAction when adding the GetMe controller
     }
     

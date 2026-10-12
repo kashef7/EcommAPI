@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ecomm.Application.DTOs.UserDTO;
 
@@ -14,7 +14,7 @@ public record UserSignUpDTO()
     public string Email { get; set; }
     
     [Required]
-    [MaxLength(500)]
+    [MaxLength(72)]
     [MinLength(8)]
     public string Password { get; set; }
 };

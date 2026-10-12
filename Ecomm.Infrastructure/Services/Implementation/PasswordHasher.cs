@@ -1,6 +1,6 @@
-﻿using Ecomm.Application.Services.Abstraction;
+using Ecomm.Application.Services.Abstraction;
 
-namespace Ecomm.Application.Services.Implementation;
+namespace Ecomm.Infrastructure.Services.Implementation;
 
 public class PasswordHasher:IPasswordHasher
 {

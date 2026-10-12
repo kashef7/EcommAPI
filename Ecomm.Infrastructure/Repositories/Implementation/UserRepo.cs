@@ -1,7 +1,9 @@
-﻿using Ecomm.Application.Repositories.Abstraction.IUserRepo;
+using Ecomm.Application.Exceptions;
+using Ecomm.Application.Repositories.Abstraction.IUserRepo;
 using Ecomm.Domain.Entities.Users;
 using Ecomm.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Ecomm.Infrastructure.Repositories.Implementation;
 
@@ -19,14 +21,21 @@ public class UserRepo:IUserRepo
         return user;
     }
 
-    public async Task AddUserAsync(User user)
+    public Task AddUserAsync(User user)
     {
         _dbContext.Users.Add(user);
-        await _dbContext.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
     public async Task SaveChangesAsync()
     {
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: "23505" })
+        {
+            throw new EmailAlreadyExistException();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -7,7 +7,7 @@ using Ecomm.Domain.Entities.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Ecomm.Application.Services.Implementation;
+namespace Ecomm.Infrastructure.Services.Implementation;
 
 public class TokenService:ITokenService
 {
@@ -40,14 +40,17 @@ public class TokenService:ITokenService
         return (new JwtSecurityTokenHandler().WriteToken(token),Convert.ToInt32(expireIn) * 60);
     }
 
-    public (string RawToken, string TokenHash) GenerateRefreshToken(User user)
+    public (string RawToken, string TokenHash, DateTime ExpiresAt) GenerateRefreshToken(User user)
     {
         var randomBytes = RandomNumberGenerator.GetBytes(64);
         var rawToken = Convert.ToBase64String(randomBytes);
         
         var tokenHash = HashRefreshToken(rawToken);
 
-        return (rawToken, tokenHash);
+        double expireDays = Convert.ToDouble(_config["Jwt:RefreshTokenExpireDays"]);
+        var expiresAt = DateTime.UtcNow.AddDays(expireDays);
+
+        return (rawToken, tokenHash, expiresAt);
     }
 
     public string HashRefreshToken(string refreshToken)
