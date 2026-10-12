@@ -24,3 +24,6 @@ obj/
 .vs/
 *.user
 *.DotSettings.user
+
+# Serilog logs
+logs/
