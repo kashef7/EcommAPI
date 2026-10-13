@@ -8,10 +8,12 @@ namespace Ecomm.API.Controllers.Auth;
 public class AuthController:ControllerBase
 {
     private readonly IUserSignUpUseCase _userSignUpUseCase;
+    private readonly IUserLoginUseCase _userLoginUseCase;
 
-    public AuthController(IUserSignUpUseCase userSignUpUseCase)
+    public AuthController(IUserSignUpUseCase userSignUpUseCase , IUserLoginUseCase userLoginUseCase)
     {
         _userSignUpUseCase = userSignUpUseCase;
+        _userLoginUseCase = userLoginUseCase;
     }
 
     [HttpPost("signup")]
@@ -19,7 +21,17 @@ public class AuthController:ControllerBase
     {
         var result = await _userSignUpUseCase.ExecuteAsync(user);
         SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
+        //Should remove the refreshToken from the result
         return Ok(result); //Will change to CreatedAtAction when adding the GetMe controller
+    }
+    
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(UserLoginDTO user)
+    {
+        var result = await _userLoginUseCase.ExecuteAsync(user);
+        SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
+        //Should remove the refreshToken from the result
+        return Ok(result);
     }
     
     private void SetRefreshTokenCookie(string refreshToken, DateTime expiresAt)

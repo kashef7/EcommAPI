@@ -4,6 +4,7 @@ using Ecomm.Application.Repositories.Abstraction.IUserRepo;
 using Ecomm.Application.Services.Abstraction;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Ecomm.Domain.Entities.Users;
+using Microsoft.Extensions.Logging;
 
 namespace Ecomm.Application.UseCases.Implementation.Users;
 
@@ -12,11 +13,13 @@ public class UserSignUpUseCase:IUserSignUpUseCase
     private readonly IUserRepo _userRepo;
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenService _tokenService;
-    public UserSignUpUseCase(IUserRepo userRepo, IPasswordHasher passwordHasher, ITokenService tokenService)
+    private readonly ILogger<UserSignUpUseCase> _logger;
+    public UserSignUpUseCase(IUserRepo userRepo, IPasswordHasher passwordHasher, ITokenService tokenService , ILogger<UserSignUpUseCase> logger)
     {
         _userRepo = userRepo;
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
+        _logger = logger;
     }
     public async Task<AuthUserDTO> ExecuteAsync(UserSignUpDTO user)
     {
@@ -28,7 +31,7 @@ public class UserSignUpUseCase:IUserSignUpUseCase
 
         var passwordHash = _passwordHasher.HashPassword(user.Password);
         
-        var newUser = new User(user.Name, user.Email, passwordHash);
+        var newUser = new User(user.Name, normalizedEmail, passwordHash);
         
         await _userRepo.AddUserAsync(newUser);
         
@@ -38,7 +41,7 @@ public class UserSignUpUseCase:IUserSignUpUseCase
         
         newUser.UpdateRefreshToken(refreshTokenHash,refreshTokenExpiresAt);
         await _userRepo.SaveChangesAsync();
-        
+        _logger.LogInformation("User:{Name} Created successfully", newUser.Name);
         return new AuthUserDTO(newUser.Name, newUser.Email,refreshTokenRaw,accessToken,expiresIn,refreshTokenExpiresAt);
     }
 }

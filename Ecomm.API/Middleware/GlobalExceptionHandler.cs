@@ -21,6 +21,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             InsufficientStockException => (StatusCodes.Status409Conflict, "Conflict"),
             InvalidStatusTransitionException => (StatusCodes.Status409Conflict, "Conflict"),
             EmailAlreadyExistException => (StatusCodes.Status409Conflict, "Conflict"),
+            InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
             DomainException => (StatusCodes.Status400BadRequest, "Bad Request"),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
         };

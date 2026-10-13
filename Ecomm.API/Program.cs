@@ -11,6 +11,7 @@ using Ecomm.Infrastructure.Services.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -65,7 +66,9 @@ try
     builder.Services.AddScoped<IUserSignUpUseCase, UserSignUpUseCase>();
     builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
     builder.Services.AddScoped<ITokenService, TokenService>();
-    
+    builder.Services.AddScoped<IUserLoginUseCase, UserLoginUseCase>();
+    builder.Services.AddScoped<IPasswordVerifier, PasswordVerifier>();
+   
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);
