@@ -18,11 +18,24 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
 
         var (statusCode, title) = exception switch
         {
-            InsufficientStockException => (StatusCodes.Status409Conflict, "Conflict"),
-            InvalidStatusTransitionException => (StatusCodes.Status409Conflict, "Conflict"),
-            EmailAlreadyExistException => (StatusCodes.Status409Conflict, "Conflict"),
-            InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
-            DomainException => (StatusCodes.Status400BadRequest, "Bad Request"),
+            // 409 Conflict: Business state or uniqueness conflicts
+            InsufficientStockException => (StatusCodes.Status409Conflict, "Insufficient Stock"),
+            InvalidStatusTransitionException => (StatusCodes.Status409Conflict, "Invalid Status Transition"),
+            EmailAlreadyExistException => (StatusCodes.Status409Conflict, "Email Already Exists"),
+
+            // 401 Unauthorized: All authentication & refresh token failures
+            InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid Credentials"),
+            ExpiredRefreshTokenException => (StatusCodes.Status401Unauthorized, "Refresh Token Expired"),
+            InValidRefreshToken => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
+            NoUserRefreshTokenExist => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
+
+            // 404 Not Found: Missing domain resources
+            UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),
+
+            // 400 Bad Request: Domain validation rules (keep below specific subclasses if any inherit from DomainException)
+            DomainException => (StatusCodes.Status400BadRequest, "Domain Validation Error"),
+
+            // 500 Internal Server Error: Unhandled exceptions
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
         };
 

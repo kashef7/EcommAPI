@@ -36,6 +36,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasMaxLength(256);
             tokenBuilder.Property(RefreshToken => RefreshToken.ExpiresAt)
                 .HasColumnName("RefreshTokenExpiresAt");
+            tokenBuilder.HasIndex(RefreshToken => RefreshToken.TokenHash)
+                .IsUnique();
         });
 
         builder.HasIndex(u => u.Email)

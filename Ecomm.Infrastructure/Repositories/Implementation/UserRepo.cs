@@ -21,6 +21,18 @@ public class UserRepo:IUserRepo
         return user;
     }
 
+    public async Task<User?> GetUserByIdAsync(Guid id)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return user;
+    }
+
+    public async Task<User?> GetUserByRefreshTokenHashAsync(string refreshTokenHash)
+    {
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.RefreshToken != null && u.RefreshToken.TokenHash == refreshTokenHash);
+    }
+    
     public Task AddUserAsync(User user)
     {
         _dbContext.Users.Add(user);

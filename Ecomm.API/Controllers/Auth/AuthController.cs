@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Ecomm.Application.DTOs.UserDTO;
 using Ecomm.Application.UseCases.Abstraction.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecomm.API.Controllers.Auth;
@@ -9,11 +11,14 @@ public class AuthController:ControllerBase
 {
     private readonly IUserSignUpUseCase _userSignUpUseCase;
     private readonly IUserLoginUseCase _userLoginUseCase;
-
-    public AuthController(IUserSignUpUseCase userSignUpUseCase , IUserLoginUseCase userLoginUseCase)
+    private readonly IUserLogoutUseCase _userLogoutUseCase;
+    private readonly IUserRefreshTokenUseCase _userRefreshTokenUseCase;
+    public AuthController(IUserSignUpUseCase userSignUpUseCase , IUserLoginUseCase userLoginUseCase, IUserLogoutUseCase userLogoutUseCase, IUserRefreshTokenUseCase userRefreshTokenUseCase)
     {
         _userSignUpUseCase = userSignUpUseCase;
         _userLoginUseCase = userLoginUseCase;
+        _userLogoutUseCase = userLogoutUseCase;
+        _userRefreshTokenUseCase = userRefreshTokenUseCase;
     }
 
     [HttpPost("signup")]
@@ -29,6 +34,32 @@ public class AuthController:ControllerBase
     public async Task<IActionResult> Login(UserLoginDTO user)
     {
         var result = await _userLoginUseCase.ExecuteAsync(user);
+        SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
+        //Should remove the refreshToken from the result
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized();
+        }
+        
+        await _userLogoutUseCase.ExecuteAsync(userId);
+        Response.Cookies.Delete("refreshToken");
+
+        return NoContent();
+    }
+
+    [HttpPost("refreshToken")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        var result = await _userRefreshTokenUseCase.ExecuteAsync(refreshToken);
         SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
         //Should remove the refreshToken from the result
         return Ok(result);

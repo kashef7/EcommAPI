@@ -13,7 +13,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 
 Env.TraversePath().Load();
 
@@ -68,7 +70,8 @@ try
     builder.Services.AddScoped<ITokenService, TokenService>();
     builder.Services.AddScoped<IUserLoginUseCase, UserLoginUseCase>();
     builder.Services.AddScoped<IPasswordVerifier, PasswordVerifier>();
-   
+    builder.Services.AddScoped<IUserLogoutUseCase, UserLogoutUseCase>();
+    builder.Services.AddScoped<IUserRefreshTokenUseCase, UserRefreshTokenUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);
@@ -77,7 +80,15 @@ try
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(o =>
+    {
+        o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer"
+        });
+        o.OperationFilter<SecurityRequirementsOperationFilter>();
+    });
     
     builder.Services.AddControllers();
 
