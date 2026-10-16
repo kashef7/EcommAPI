@@ -24,7 +24,7 @@ public class UserLogoutUseCase : IUserLogoutUseCase
             throw new UserNotFoundException();
         }
         user.RemoveRefreshToken();
-        _userRepo.SaveChangesAsync();
+        await _userRepo.SaveChangesAsync();
         _logger.LogInformation($"User {id} logged out");
         return;
 
