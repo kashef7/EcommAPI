@@ -33,6 +33,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),
 
             // 400 Bad Request: Domain validation rules (keep below specific subclasses if any inherit from DomainException)
+            IncorrectPasswordException => (StatusCodes.Status400BadRequest, "Incorrect Password"),
             DomainException => (StatusCodes.Status400BadRequest, "Domain Validation Error"),
 
             // 500 Internal Server Error: Unhandled exceptions

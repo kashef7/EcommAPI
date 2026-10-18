@@ -72,6 +72,9 @@ try
     builder.Services.AddScoped<IPasswordVerifier, PasswordVerifier>();
     builder.Services.AddScoped<IUserLogoutUseCase, UserLogoutUseCase>();
     builder.Services.AddScoped<IUserRefreshTokenUseCase, UserRefreshTokenUseCase>();
+    builder.Services.AddScoped<IUserGetMeUseCase, UserGetMeUseCase>();
+    builder.Services.AddScoped<IUserUpdateEmailUseCase, UserUpdateEmailUseCase>();
+    builder.Services.AddScoped<IUserUpdatePasswordUseCase, UserUpdatePasswordUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);
