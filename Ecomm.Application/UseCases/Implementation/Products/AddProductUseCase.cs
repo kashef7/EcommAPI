@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.ProductDTO;
 using Ecomm.Application.Repositories.Abstraction.IProductRepo;
 using Ecomm.Application.UseCases.Abstraction.Products;
 using Ecomm.Domain.Entities.Products;
@@ -19,10 +19,10 @@ public class AddProductUseCase:IAddProductUseCase
     
     public async Task<GetProductDTO> ExecuteAsync(AddProductDTO product)
     {
-        var newProduct = new Product(product.Name,product.Description,product.Price,product.Stock,product.Tag,product.ImgUrl);
+        var newProduct = new Product(product.Name,product.Description,product.Price!.Value,product.Stock!.Value,product.Tag,product.ImgUrl);
         await _productRepo.AddAsync(newProduct);
         await _productRepo.SaveChangesAsync();
-        _logger.LogInformation($"Product {newProduct.Name} added successfully");
+        _logger.LogInformation("Product {ProductId} ({ProductName}) added successfully", newProduct.Id, newProduct.Name);
         return new GetProductDTO(newProduct.Id,newProduct.Name,newProduct.Description,newProduct.ImageUrl,newProduct.Tag,newProduct.Price,newProduct.StockQuantity,newProduct.CreatedAt);
     }
 }

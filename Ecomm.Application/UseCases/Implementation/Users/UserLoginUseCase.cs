@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.DTOs.UserDTO;
+using Ecomm.Application.DTOs.UserDTO;
 using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction.IUserRepo;
 using Ecomm.Application.Services.Abstraction;
@@ -40,7 +40,7 @@ public class UserLoginUseCase : IUserLoginUseCase
         
         loggedInUser.UpdateRefreshToken(refreshTokenHash,refreshTokenExpiresAt);
         await _userRepo.SaveChangesAsync();
-        _logger.LogInformation("User:{Name} Logged In successfully", loggedInUser.Name);
+        _logger.LogInformation("User {UserId} logged in successfully", loggedInUser.Id);
         return new AuthUserDTO(loggedInUser.Name, loggedInUser.Email,refreshTokenRaw,accessToken,expiresIn,refreshTokenExpiresAt);
     }
 }

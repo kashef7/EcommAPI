@@ -47,7 +47,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         }
         else
         {
-            logger.LogWarning("Handled domain exception  | {Method} {Path} | {ExceptionMessage}", method, path, exception.Message);
+            logger.LogWarning("Handled domain exception | {Method} {Path} | {ExceptionMessage}", method, path, exception.Message);
         }
 
         var detail = statusCode == StatusCodes.Status500InternalServerError

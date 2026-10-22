@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.ProductDTO;
 using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction.IProductRepo;
 using Ecomm.Application.UseCases.Abstraction.Products;
@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Ecomm.Application.UseCases.Implementation.Products;
 
-public class GetProductById:IGetProductById
+public class GetProductByIdUseCase : IGetProductByIdUseCase
 {
     private readonly IProductRepo _productRepo;
-    private readonly ILogger<GetProductById> _logger;
+    private readonly ILogger<GetProductByIdUseCase> _logger;
 
-    public GetProductById(IProductRepo productRepo, ILogger<GetProductById> logger)
+    public GetProductByIdUseCase(IProductRepo productRepo, ILogger<GetProductByIdUseCase> logger)
     {
         _productRepo = productRepo;
         _logger = logger;

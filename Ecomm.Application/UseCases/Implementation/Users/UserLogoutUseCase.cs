@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.Exceptions;
+using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction.IUserRepo;
 using Ecomm.Application.Services.Abstraction;
 using Ecomm.Application.UseCases.Abstraction.Users;
@@ -25,7 +25,7 @@ public class UserLogoutUseCase : IUserLogoutUseCase
         }
         user.RemoveRefreshToken();
         await _userRepo.SaveChangesAsync();
-        _logger.LogInformation($"User {id} logged out");
+        _logger.LogInformation("User {UserId} logged out", id);
         return;
 
     }

@@ -41,7 +41,7 @@ public class UserSignUpUseCase:IUserSignUpUseCase
         
         newUser.UpdateRefreshToken(refreshTokenHash,refreshTokenExpiresAt);
         await _userRepo.SaveChangesAsync();
-        _logger.LogInformation("User:{Name} Created successfully", newUser.Name);
+        _logger.LogInformation("User {UserId} created successfully", newUser.Id);
         return new AuthUserDTO(newUser.Name, newUser.Email,refreshTokenRaw,accessToken,expiresIn,refreshTokenExpiresAt);
     }
 }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using DotNetEnv;
 using Ecomm.API.Middleware;
@@ -61,6 +62,21 @@ try
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
             };
+            options.Events = new JwtBearerEvents
+            {
+                OnForbidden = context =>
+                {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    var userId = context.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)
+                        ?? context.HttpContext.User.FindFirst("sub")?.Value
+                        ?? "anonymous";
+                    logger.LogWarning("Forbidden | {Method} {Path} | User {UserId}",
+                        context.HttpContext.Request.Method,
+                        context.HttpContext.Request.Path,
+                        userId);
+                    return Task.CompletedTask;
+                }
+            };
         });
 
     builder.Services.AddAuthorization(options =>
@@ -83,7 +99,7 @@ try
     builder.Services.AddScoped<IUserUpdatePasswordUseCase, UserUpdatePasswordUseCase>();
     builder.Services.AddScoped<IProductRepo, ProductRepo>();
     builder.Services.AddScoped<IAddProductUseCase,AddProductUseCase>();
-    builder.Services.AddScoped<IGetProductById, GetProductById>();
+    builder.Services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);

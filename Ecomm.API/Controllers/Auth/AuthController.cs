@@ -28,7 +28,12 @@ public class AuthController:ControllerBase
         var result = await _userSignUpUseCase.ExecuteAsync(user);
         SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
         //Should remove the refreshToken from the result
-        return Ok(result); //Will change to CreatedAtAction when adding the GetMe controller
+        return CreatedAtAction(
+            actionName: nameof(UserController.GetMe),
+            controllerName: "User",
+            routeValues: null,
+            value: result
+        );
     }
     
     [HttpPost("login")]
@@ -37,12 +42,7 @@ public class AuthController:ControllerBase
         var result = await _userLoginUseCase.ExecuteAsync(user);
         SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
         //Should remove the refreshToken from the result
-        return CreatedAtAction(
-            actionName: nameof(UserController.GetMe),
-            controllerName: "User",
-            routeValues: null,
-            value: result
-        );
+        return Ok(result);
     }
 
     [Authorize]
