@@ -1,9 +1,12 @@
 using System.Text;
 using DotNetEnv;
 using Ecomm.API.Middleware;
+using Ecomm.Application.Repositories.Abstraction.IProductRepo;
 using Ecomm.Application.Repositories.Abstraction.IUserRepo;
 using Ecomm.Application.Services.Abstraction;
+using Ecomm.Application.UseCases.Abstraction.Products;
 using Ecomm.Application.UseCases.Abstraction.Users;
+using Ecomm.Application.UseCases.Implementation.Products;
 using Ecomm.Application.UseCases.Implementation.Users;
 using Ecomm.Infrastructure.Persistence;
 using Ecomm.Infrastructure.Repositories.Implementation;
@@ -60,7 +63,10 @@ try
             };
         });
 
-    builder.Services.AddAuthorization();
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    });
     
     builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionString));
 
@@ -75,6 +81,9 @@ try
     builder.Services.AddScoped<IUserGetMeUseCase, UserGetMeUseCase>();
     builder.Services.AddScoped<IUserUpdateEmailUseCase, UserUpdateEmailUseCase>();
     builder.Services.AddScoped<IUserUpdatePasswordUseCase, UserUpdatePasswordUseCase>();
+    builder.Services.AddScoped<IProductRepo, ProductRepo>();
+    builder.Services.AddScoped<IAddProductUseCase,AddProductUseCase>();
+    builder.Services.AddScoped<IGetProductById, GetProductById>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);

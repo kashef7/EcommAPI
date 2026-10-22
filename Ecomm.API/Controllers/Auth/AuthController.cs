@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Ecomm.API.Controllers.Users;
 using Ecomm.Application.DTOs.UserDTO;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -36,7 +37,12 @@ public class AuthController:ControllerBase
         var result = await _userLoginUseCase.ExecuteAsync(user);
         SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
         //Should remove the refreshToken from the result
-        return Ok(result);
+        return CreatedAtAction(
+            actionName: nameof(UserController.GetMe),
+            controllerName: "User",
+            routeValues: null,
+            value: result
+        );
     }
 
     [Authorize]

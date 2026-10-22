@@ -33,10 +33,9 @@ public class UserRepo:IUserRepo
             .FirstOrDefaultAsync(u => u.RefreshToken != null && u.RefreshToken.TokenHash == refreshTokenHash);
     }
     
-    public Task AddUserAsync(User user)
+    public async Task AddUserAsync(User user)
     {
-        _dbContext.Users.Add(user);
-        return Task.CompletedTask;
+        await _dbContext.Users.AddAsync(user);
     }
 
     public async Task SaveChangesAsync()

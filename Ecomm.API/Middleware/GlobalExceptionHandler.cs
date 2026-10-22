@@ -31,6 +31,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
 
             // 404 Not Found: Missing domain resources
             UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),
+            ProductNotFoundException => (StatusCodes.Status404NotFound, "Product Not Found"),
 
             // 400 Bad Request: Domain validation rules (keep below specific subclasses if any inherit from DomainException)
             IncorrectPasswordException => (StatusCodes.Status400BadRequest, "Incorrect Password"),
