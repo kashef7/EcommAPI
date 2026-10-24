@@ -28,6 +28,8 @@ public class ProductController:ControllerBase
         var result = await _getAllProductsUseCase.ExecuteAsync(queryParams);
         return Ok(result);
     }
+
+    [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {

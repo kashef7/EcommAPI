@@ -1,18 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ecomm.Application.DTOs.ProductDTO;
 
-public record ProductQueryParamsDTO()
+public record ProductQueryParamsDTO() : IValidatableObject
 {
-    private const int MaxPageSize = 50;
-    private int _pageSize = 10;
-
-    public int PageNumber { get; set; } = 1;
-    public int PageSize
-    {
-        get => _pageSize;
-        init => _pageSize = value > MaxPageSize ? MaxPageSize : value;
-    }
+    [Range(1, int.MaxValue)] public int PageNumber { get; set; } = 1;
+    [Range(1, 50)] public int PageSize { get; set; } = 10;
     
     [MaxLength(200)]
     public string? Name { get; set; }
@@ -27,4 +20,14 @@ public record ProductQueryParamsDTO()
     public string? Tag { get; set;}
 
     public bool InStock { get; set; } = false;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (MinPrice.HasValue && MaxPrice.HasValue && MinPrice > MaxPrice)
+        {
+            yield return new ValidationResult(
+                "MinPrice cannot be greater than MaxPrice.",
+                [nameof(MinPrice), nameof(MaxPrice)]);
+        }
+    }
 }

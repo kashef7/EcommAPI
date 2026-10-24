@@ -1,5 +1,6 @@
-﻿using Ecomm.Domain.Entities.Products;
+using Ecomm.Domain.Entities.Products;
 using Ecomm.Domain.Query.Product;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecomm.Infrastructure.Filters.Products;
 
@@ -9,12 +10,16 @@ public static class ProductFilter
     {
         if (query.Tag != null)
         {
-            products = products.Where(x => x.Tag.Contains(query.Tag));
+            products = products.Where(x => x.Tag == query.Tag);
         }
 
         if (query.Name != null)
         {
-            products = products.Where(x => x.Name.Contains(query.Name));
+            var escaped = query.Name
+                .Replace(@"\", @"\\")
+                .Replace("%", @"\%")
+                .Replace("_", @"\_");
+            products = products.Where(x => EF.Functions.ILike(x.Name, $"%{escaped}%"));
         }
 
         if (query.InStock)
@@ -29,7 +34,7 @@ public static class ProductFilter
         
         if (query.MaxPrice != null)
         {
-            products = products.Where(x => x.Price <= query.MinPrice);
+            products = products.Where(x => x.Price <= query.MaxPrice);
         }
 
         return products;
