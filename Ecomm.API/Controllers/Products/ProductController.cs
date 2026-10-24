@@ -13,13 +13,21 @@ public class ProductController:ControllerBase
 {
     private readonly IAddProductUseCase _addProductUseCase;
     private readonly IGetProductByIdUseCase _getProductByIdUseCase;
-
-    public ProductController(IAddProductUseCase addProductUseCase, IGetProductByIdUseCase getProductByIdUseCase)
+    private readonly IGetAllProductsUseCase _getAllProductsUseCase;
+    public ProductController(IAddProductUseCase addProductUseCase, IGetProductByIdUseCase getProductByIdUseCase, IGetAllProductsUseCase getAllProductsUseCase)
     {
         _addProductUseCase = addProductUseCase;
         _getProductByIdUseCase = getProductByIdUseCase;
+        _getAllProductsUseCase = getAllProductsUseCase;
     }
 
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<IActionResult> GetProducts([FromQuery] ProductQueryParamsDTO queryParams)
+    {
+        var result = await _getAllProductsUseCase.ExecuteAsync(queryParams);
+        return Ok(result);
+    }
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {

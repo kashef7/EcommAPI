@@ -100,6 +100,7 @@ try
     builder.Services.AddScoped<IProductRepo, ProductRepo>();
     builder.Services.AddScoped<IAddProductUseCase,AddProductUseCase>();
     builder.Services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
+    builder.Services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);
