@@ -33,11 +33,7 @@ public class ProductRepo:IProductRepo
         var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
         return product;
     }
-
-    public async Task<Product?> GetByTagAsync(string tag)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public async Task AddAsync(Product product)
     {

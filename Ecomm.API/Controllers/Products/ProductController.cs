@@ -14,11 +14,13 @@ public class ProductController:ControllerBase
     private readonly IAddProductUseCase _addProductUseCase;
     private readonly IGetProductByIdUseCase _getProductByIdUseCase;
     private readonly IGetAllProductsUseCase _getAllProductsUseCase;
-    public ProductController(IAddProductUseCase addProductUseCase, IGetProductByIdUseCase getProductByIdUseCase, IGetAllProductsUseCase getAllProductsUseCase)
+    private readonly IUpdateProductUseCase _updateProductUseCase;
+    public ProductController(IAddProductUseCase addProductUseCase, IGetProductByIdUseCase getProductByIdUseCase, IGetAllProductsUseCase getAllProductsUseCase, IUpdateProductUseCase updateProductUseCase)
     {
         _addProductUseCase = addProductUseCase;
         _getProductByIdUseCase = getProductByIdUseCase;
         _getAllProductsUseCase = getAllProductsUseCase;
+        _updateProductUseCase = updateProductUseCase;
     }
 
     [AllowAnonymous]
@@ -43,5 +45,13 @@ public class ProductController:ControllerBase
     {
         var newProduct = await _addProductUseCase.ExecuteAsync(addProductDto);
         return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
+    }
+
+    [HttpPatch("{id:guid}")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> UpdateProduct(Guid id, UpdateProductDTO updateProductDto)
+    {
+        await _updateProductUseCase.ExecuteAsync(id, updateProductDto);
+        return NoContent();
     }
 }

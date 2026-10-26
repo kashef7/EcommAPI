@@ -7,7 +7,6 @@ public interface IProductRepo
 {
     Task<(IReadOnlyList<Product> items, int totalCount)> GetAllAsync(ProductQuery query);
     Task<Product?> GetByIdAsync(Guid id);
-    Task<Product?> GetByTagAsync(string tag);
     Task AddAsync(Product product);
     Task SaveChangesAsync();
     
