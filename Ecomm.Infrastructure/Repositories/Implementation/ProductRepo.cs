@@ -44,4 +44,29 @@ public class ProductRepo : IProductRepo
     {
         await _dbContext.SaveChangesAsync();
     }
+
+    /// <summary>
+    /// Atomically adjusts the stock quantity of a product in a single conditional SQL UPDATE statement.
+    /// This prevents lost updates and concurrency issues under concurrent orders or adjustments.
+    /// It is atomic on purpose and must stay that way.
+    /// </summary>
+    public async Task<int> AdjustStockAsync(Guid id, int delta)
+    {
+        return await _dbContext.Products
+            .Where(p => p.Id == id
+                     && p.StockQuantity + delta >= 0
+                     && p.StockQuantity + delta <= Product.MaxStockQuantity)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(p => p.StockQuantity, p => p.StockQuantity + delta)
+                .SetProperty(p => p.UpdatedAt, DateTime.UtcNow));
+    }
+
+    public async Task<int?> GetStockAsync(Guid id)
+    {
+        return await _dbContext.Products
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .Select(p => (int?)p.StockQuantity)
+            .FirstOrDefaultAsync();
+    }
 }

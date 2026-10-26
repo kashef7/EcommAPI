@@ -9,4 +9,13 @@ public interface IProductRepo
     Task<Product?> GetByIdAsync(Guid id);
     Task AddAsync(Product product);
     Task SaveChangesAsync();
+
+    /// <summary>
+    /// Atomically adjusts the stock quantity of a product in a single conditional SQL UPDATE statement.
+    /// This prevents lost updates and concurrency issues under concurrent orders or adjustments.
+    /// It is atomic on purpose and must stay that way.
+    /// </summary>
+    Task<int> AdjustStockAsync(Guid id, int delta);
+
+    Task<int?> GetStockAsync(Guid id);
 }

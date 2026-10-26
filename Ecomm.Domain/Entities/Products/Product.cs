@@ -4,6 +4,8 @@ namespace Ecomm.Domain.Entities.Products;
 
 public class Product
 {
+    public const int MaxStockQuantity = 1_000_000;
+
     public Guid Id { get; init; } = Guid.CreateVersion7();
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;

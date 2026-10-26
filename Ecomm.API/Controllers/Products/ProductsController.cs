@@ -15,19 +15,22 @@ public class ProductsController : ControllerBase
     private readonly IGetAllProductsUseCase _getAllProductsUseCase;
     private readonly IUpdateProductUseCase _updateProductUseCase;
     private readonly IDeleteProductUseCase _deleteProductUseCase;
+    private readonly IAdjustProductStockUseCase _adjustProductStockUseCase;
 
     public ProductsController(
         IAddProductUseCase addProductUseCase,
         IGetProductByIdUseCase getProductByIdUseCase,
         IGetAllProductsUseCase getAllProductsUseCase,
         IUpdateProductUseCase updateProductUseCase,
-        IDeleteProductUseCase deleteProductUseCase)
+        IDeleteProductUseCase deleteProductUseCase,
+        IAdjustProductStockUseCase adjustProductStockUseCase)
     {
         _addProductUseCase = addProductUseCase;
         _getProductByIdUseCase = getProductByIdUseCase;
         _getAllProductsUseCase = getAllProductsUseCase;
         _updateProductUseCase = updateProductUseCase;
         _deleteProductUseCase = deleteProductUseCase;
+        _adjustProductStockUseCase = adjustProductStockUseCase;
     }
 
     [AllowAnonymous]
@@ -60,6 +63,14 @@ public class ProductsController : ControllerBase
     {
         await _updateProductUseCase.ExecuteAsync(id, updateProductDto);
         return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/stock")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> AdjustStock(Guid id, AdjustProductStockDTO dto)
+    {
+        var result = await _adjustProductStockUseCase.ExecuteAsync(id, dto);
+        return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]
