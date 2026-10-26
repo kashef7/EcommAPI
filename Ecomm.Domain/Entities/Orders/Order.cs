@@ -17,6 +17,7 @@ public class Order
     public decimal Total { get; private set; }
     public string Address { get; private set; } = null!;
     public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; private set; }
 
     public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
 
@@ -32,7 +33,10 @@ public class Order
         Status = OrderStatus.Placed;
         Total = 0;
         Address = address;
-        CreatedAt = DateTime.UtcNow;
+        
+        var now = DateTime.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
     }
 
     public void AddItem(Product product, int quantity)

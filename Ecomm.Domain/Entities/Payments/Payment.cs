@@ -15,6 +15,7 @@ public class Payment
     public string Provider { get; init; } = null!;
     public string ProviderReference { get; init; } = null!;
     public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; private set; }
     public DateTime? PaidAt { get; private set; }
     
     private Payment() { }
@@ -37,7 +38,10 @@ public class Payment
         Provider = provider;
         ProviderReference = providerReference;
         Status = PaymentStatus.Pending;
-        CreatedAt = DateTime.UtcNow;
+        
+        var now = DateTime.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
     }
     
     public void MarkAsPaid()

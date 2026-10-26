@@ -29,6 +29,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.CreatedAt)
             .IsRequired();
+
+        builder.Property(u => u.UpdatedAt)
+            .IsRequired();
+
         builder.OwnsOne(u => u.RefreshToken, tokenBuilder =>
         {
             tokenBuilder.Property(RefreshToken => RefreshToken.TokenHash)

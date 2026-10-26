@@ -1,4 +1,4 @@
-﻿namespace Ecomm.Infrastructure.Persistence.Configurations;
+namespace Ecomm.Infrastructure.Persistence.Configurations;
 
 using Ecomm.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +42,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMaxLength(2048);
 
         builder.Property(p => p.CreatedAt)
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedAt)
             .IsRequired();
 
         builder.HasIndex(p => p.Tag);

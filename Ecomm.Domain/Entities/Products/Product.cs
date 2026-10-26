@@ -13,6 +13,7 @@ public class Product
     public string? ImageUrl { get; private set; }
     
     public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; private set; }
 
     private Product() { }
 
@@ -35,7 +36,10 @@ public class Product
         StockQuantity = stockQuantity;
         Tag = tag;
         ImageUrl = imageUrl;
-        CreatedAt = DateTime.UtcNow;
+        
+        var now = DateTime.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
     }
 
     public void UpdateName(string name)

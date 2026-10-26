@@ -14,6 +14,9 @@ public class Cart
     public Guid UserId { get; init; }
     public User User { get; init; } = null!;
 
+    public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; private set; }
+
     public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
     
     private Cart() { }
@@ -22,6 +25,10 @@ public class Cart
     {
         UserId = user.Id;
         User = user;
+        
+        var now = DateTime.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
     }
 
     public void AddItem(Product product, int quantity)

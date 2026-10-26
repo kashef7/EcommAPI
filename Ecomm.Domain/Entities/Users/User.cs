@@ -12,6 +12,7 @@ public class User
     public RefreshToken? RefreshToken { get; private set; }
     public bool IsAdmin { get; private set; } = false;
     public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; private set; }
 
     private User() { }
     
@@ -27,7 +28,10 @@ public class User
         Name = name;
         Email = email.Trim().ToLowerInvariant();
         PasswordHash = passwordHash;
-        CreatedAt = DateTime.UtcNow;
+        
+        var now = DateTime.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
     }
     
     public void UpdateEmail(string newEmail)
