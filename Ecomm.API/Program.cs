@@ -101,6 +101,7 @@ try
     builder.Services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
     builder.Services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
     builder.Services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
+    builder.Services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);

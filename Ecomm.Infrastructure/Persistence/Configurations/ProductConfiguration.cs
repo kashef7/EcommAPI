@@ -47,6 +47,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.UpdatedAt)
             .IsRequired();
 
+        builder.Property(p => p.DeletedAt);
+
+        // Soft delete: queries that must include archived products (e.g. order history) have to call IgnoreQueryFilters()
+        builder.HasQueryFilter(p => p.DeletedAt == null);
+
         builder.HasIndex(p => p.Tag);
         builder.HasIndex(p => p.Name);
     }

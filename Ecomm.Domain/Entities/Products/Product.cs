@@ -14,6 +14,7 @@ public class Product
     
     public DateTime CreatedAt { get; init; }
     public DateTime UpdatedAt { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
 
     private Product() { }
 
@@ -96,5 +97,13 @@ public class Product
     public void UpdateImageUrl(string? imageUrl)
     {
         ImageUrl = imageUrl;
+    }
+
+    public void Delete()
+    {
+        if (DeletedAt != null)
+            throw new DomainException("Product is already deleted.");
+
+        DeletedAt = DateTime.UtcNow;
     }
 }

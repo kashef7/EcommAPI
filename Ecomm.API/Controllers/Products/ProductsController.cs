@@ -14,17 +14,20 @@ public class ProductsController : ControllerBase
     private readonly IGetProductByIdUseCase _getProductByIdUseCase;
     private readonly IGetAllProductsUseCase _getAllProductsUseCase;
     private readonly IUpdateProductUseCase _updateProductUseCase;
+    private readonly IDeleteProductUseCase _deleteProductUseCase;
 
     public ProductsController(
         IAddProductUseCase addProductUseCase,
         IGetProductByIdUseCase getProductByIdUseCase,
         IGetAllProductsUseCase getAllProductsUseCase,
-        IUpdateProductUseCase updateProductUseCase)
+        IUpdateProductUseCase updateProductUseCase,
+        IDeleteProductUseCase deleteProductUseCase)
     {
         _addProductUseCase = addProductUseCase;
         _getProductByIdUseCase = getProductByIdUseCase;
         _getAllProductsUseCase = getAllProductsUseCase;
         _updateProductUseCase = updateProductUseCase;
+        _deleteProductUseCase = deleteProductUseCase;
     }
 
     [AllowAnonymous]
@@ -56,6 +59,14 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> UpdateProduct(Guid id, UpdateProductDTO updateProductDto)
     {
         await _updateProductUseCase.ExecuteAsync(id, updateProductDto);
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> DeleteProduct(Guid id)
+    {
+        await _deleteProductUseCase.ExecuteAsync(id);
         return NoContent();
     }
 }
