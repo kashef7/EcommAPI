@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.ProductDTO;
 using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction.IProductRepo;
 using Ecomm.Application.UseCases.Abstraction.Products;
@@ -41,14 +41,11 @@ public class UpdateProductUseCase:IUpdateProductUseCase
         {
             product.UpdateTag(productDto.Tag);
         }
-        if (productDto.Stock != null)
-        {
-            product.UpdateStockQuantity(productDto.Stock.Value);
-        }
         if (productDto.ImgUrl != null)
         {
             product.UpdateImageUrl(productDto.ImgUrl);
         }
         await _productRepo.SaveChangesAsync();
+        _logger.LogInformation("Product {ProductId} updated", id);
     }
 }

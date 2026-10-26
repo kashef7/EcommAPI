@@ -62,14 +62,6 @@ public class Product
         Price = price;
     }
 
-    public void UpdateStockQuantity(int quantity)
-    {
-        if (quantity < 0)
-            throw new DomainException("Product stock quantity cannot be negative.");
-
-        StockQuantity = quantity;
-    }
-
     public void DecreaseStock(int quantity)
     {
         if (quantity <= 0)
