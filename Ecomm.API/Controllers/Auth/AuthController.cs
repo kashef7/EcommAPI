@@ -1,46 +1,52 @@
 using System.Security.Claims;
 using Ecomm.API.Controllers.Users;
-using Ecomm.Application.DTOs.UserDTO;
+using Ecomm.Application.DTOs.Users;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecomm.API.Controllers.Auth;
+
 [ApiController]
-[Route("api/[controller]")]
-public class AuthController:ControllerBase
+[Route("api/auth")]
+public class AuthController : ControllerBase
 {
-    private readonly IUserSignUpUseCase _userSignUpUseCase;
-    private readonly IUserLoginUseCase _userLoginUseCase;
-    private readonly IUserLogoutUseCase _userLogoutUseCase;
-    private readonly IUserRefreshTokenUseCase _userRefreshTokenUseCase;
-    public AuthController(IUserSignUpUseCase userSignUpUseCase , IUserLoginUseCase userLoginUseCase, IUserLogoutUseCase userLogoutUseCase, IUserRefreshTokenUseCase userRefreshTokenUseCase)
+    private readonly ISignUpUserUseCase _signUpUserUseCase;
+    private readonly ILoginUserUseCase _loginUserUseCase;
+    private readonly ILogoutUserUseCase _logoutUserUseCase;
+    private readonly IRefreshUserTokenUseCase _refreshUserTokenUseCase;
+
+    public AuthController(
+        ISignUpUserUseCase signUpUserUseCase,
+        ILoginUserUseCase loginUserUseCase,
+        ILogoutUserUseCase logoutUserUseCase,
+        IRefreshUserTokenUseCase refreshUserTokenUseCase)
     {
-        _userSignUpUseCase = userSignUpUseCase;
-        _userLoginUseCase = userLoginUseCase;
-        _userLogoutUseCase = userLogoutUseCase;
-        _userRefreshTokenUseCase = userRefreshTokenUseCase;
+        _signUpUserUseCase = signUpUserUseCase;
+        _loginUserUseCase = loginUserUseCase;
+        _logoutUserUseCase = logoutUserUseCase;
+        _refreshUserTokenUseCase = refreshUserTokenUseCase;
     }
 
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp(UserSignUpDTO user)
+    public async Task<IActionResult> SignUp(SignUpUserDTO user)
     {
-        var result = await _userSignUpUseCase.ExecuteAsync(user);
-        SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
+        var result = await _signUpUserUseCase.ExecuteAsync(user);
+        SetRefreshTokenCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
         //Should remove the refreshToken from the result
         return CreatedAtAction(
-            actionName: nameof(UserController.GetMe),
-            controllerName: "User",
+            actionName: nameof(UsersController.GetMe),
+            controllerName: "Users",
             routeValues: null,
             value: result
         );
     }
     
     [HttpPost("login")]
-    public async Task<IActionResult> Login(UserLoginDTO user)
+    public async Task<IActionResult> Login(LoginUserDTO user)
     {
-        var result = await _userLoginUseCase.ExecuteAsync(user);
-        SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
+        var result = await _loginUserUseCase.ExecuteAsync(user);
+        SetRefreshTokenCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
         //Should remove the refreshToken from the result
         return Ok(result);
     }
@@ -55,7 +61,7 @@ public class AuthController:ControllerBase
             return Unauthorized();
         }
         
-        await _userLogoutUseCase.ExecuteAsync(userId);
+        await _logoutUserUseCase.ExecuteAsync(userId);
         Response.Cookies.Delete("refreshToken");
 
         return NoContent();
@@ -65,8 +71,8 @@ public class AuthController:ControllerBase
     public async Task<IActionResult> RefreshToken()
     {
         var refreshToken = Request.Cookies["refreshToken"];
-        var result = await _userRefreshTokenUseCase.ExecuteAsync(refreshToken);
-        SetRefreshTokenCookie(result.refreshToken, result.refreshTokenExpiresAt);
+        var result = await _refreshUserTokenUseCase.ExecuteAsync(refreshToken);
+        SetRefreshTokenCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
         //Should remove the refreshToken from the result
         return Ok(result);
     }

@@ -1,0 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace Ecomm.Application.DTOs.Users;
+
+public record UpdateUserEmailDTO()
+{
+    private string? _email;
+
+    [Required]
+    [MaxLength(320)]
+    [EmailAddress]
+    public string Email
+    {
+        get => _email ?? string.Empty;
+        set => _email = value;
+    }
+
+    public string? NewEmail
+    {
+        get => _email;
+        set => _email = value;
+    }
+};

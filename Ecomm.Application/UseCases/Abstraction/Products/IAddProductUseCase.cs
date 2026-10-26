@@ -1,8 +1,8 @@
-﻿using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.Products;
 
 namespace Ecomm.Application.UseCases.Abstraction.Products;
 
 public interface IAddProductUseCase
 {
-    public Task<GetProductDTO> ExecuteAsync(AddProductDTO product);
+    Task<GetProductDTO> ExecuteAsync(AddProductDTO product);
 }

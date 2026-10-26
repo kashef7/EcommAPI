@@ -2,8 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using DotNetEnv;
 using Ecomm.API.Middleware;
-using Ecomm.Application.Repositories.Abstraction.IProductRepo;
-using Ecomm.Application.Repositories.Abstraction.IUserRepo;
+using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Application.Services.Abstraction;
 using Ecomm.Application.UseCases.Abstraction.Products;
 using Ecomm.Application.UseCases.Abstraction.Users;
@@ -86,19 +85,19 @@ try
     
     builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionString));
 
-    builder.Services.AddScoped<IUserRepo,UserRepo>();
-    builder.Services.AddScoped<IUserSignUpUseCase, UserSignUpUseCase>();
+    builder.Services.AddScoped<IUserRepo, UserRepo>();
+    builder.Services.AddScoped<ISignUpUserUseCase, SignUpUserUseCase>();
     builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
     builder.Services.AddScoped<ITokenService, TokenService>();
-    builder.Services.AddScoped<IUserLoginUseCase, UserLoginUseCase>();
+    builder.Services.AddScoped<ILoginUserUseCase, LoginUserUseCase>();
     builder.Services.AddScoped<IPasswordVerifier, PasswordVerifier>();
-    builder.Services.AddScoped<IUserLogoutUseCase, UserLogoutUseCase>();
-    builder.Services.AddScoped<IUserRefreshTokenUseCase, UserRefreshTokenUseCase>();
-    builder.Services.AddScoped<IUserGetMeUseCase, UserGetMeUseCase>();
-    builder.Services.AddScoped<IUserUpdateEmailUseCase, UserUpdateEmailUseCase>();
-    builder.Services.AddScoped<IUserUpdatePasswordUseCase, UserUpdatePasswordUseCase>();
+    builder.Services.AddScoped<ILogoutUserUseCase, LogoutUserUseCase>();
+    builder.Services.AddScoped<IRefreshUserTokenUseCase, RefreshUserTokenUseCase>();
+    builder.Services.AddScoped<IGetCurrentUserUseCase, GetCurrentUserUseCase>();
+    builder.Services.AddScoped<IUpdateUserEmailUseCase, UpdateUserEmailUseCase>();
+    builder.Services.AddScoped<IUpdateUserPasswordUseCase, UpdateUserPasswordUseCase>();
     builder.Services.AddScoped<IProductRepo, ProductRepo>();
-    builder.Services.AddScoped<IAddProductUseCase,AddProductUseCase>();
+    builder.Services.AddScoped<IAddProductUseCase, AddProductUseCase>();
     builder.Services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
     builder.Services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
     builder.Services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();

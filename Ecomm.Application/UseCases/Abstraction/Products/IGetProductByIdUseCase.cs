@@ -1,4 +1,4 @@
-using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.Products;
 
 namespace Ecomm.Application.UseCases.Abstraction.Products;
 

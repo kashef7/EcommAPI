@@ -21,13 +21,13 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             // 409 Conflict: Business state or uniqueness conflicts
             InsufficientStockException => (StatusCodes.Status409Conflict, "Insufficient Stock"),
             InvalidStatusTransitionException => (StatusCodes.Status409Conflict, "Invalid Status Transition"),
-            EmailAlreadyExistException => (StatusCodes.Status409Conflict, "Email Already Exists"),
+            EmailAlreadyExistsException => (StatusCodes.Status409Conflict, "Email Already Exists"),
 
             // 401 Unauthorized: All authentication & refresh token failures
             InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid Credentials"),
             ExpiredRefreshTokenException => (StatusCodes.Status401Unauthorized, "Refresh Token Expired"),
-            InValidRefreshToken => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
-            NoUserRefreshTokenExist => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
+            InvalidRefreshTokenException => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
+            RefreshTokenNotFoundException => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
 
             // 404 Not Found: Missing domain resources
             UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),

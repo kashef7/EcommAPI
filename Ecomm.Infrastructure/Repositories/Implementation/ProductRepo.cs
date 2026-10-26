@@ -1,13 +1,13 @@
-using Ecomm.Application.Repositories.Abstraction.IProductRepo;
+using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Domain.Entities.Products;
-using Ecomm.Domain.Query.Product;
+using Ecomm.Domain.Queries.Products;
 using Ecomm.Infrastructure.Filters.Products;
 using Ecomm.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecomm.Infrastructure.Repositories.Implementation;
 
-public class ProductRepo:IProductRepo
+public class ProductRepo : IProductRepo
 {
     private readonly AppDbContext _dbContext;
     
@@ -15,14 +15,14 @@ public class ProductRepo:IProductRepo
     {
         _dbContext = dbContext;
     }
-    public async Task<(IReadOnlyList<Product> items, int totalCount)> GetAllAsync(ProductQuery ProductQuery)
+    public async Task<(IReadOnlyList<Product> items, int totalCount)> GetAllAsync(ProductQuery productQuery)
     {
-        var query = _dbContext.Products.AsNoTracking().AsQueryable().ApplyQueryFilters(ProductQuery);
+        var query = _dbContext.Products.AsNoTracking().AsQueryable().ApplyQueryFilters(productQuery);
         
         int totalCount = await query.CountAsync();
 
-        var paginatedQuery = query.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.Id).Skip((ProductQuery.PageNumber - 1) * ProductQuery.PageSize)
-            .Take(ProductQuery.PageSize);
+        var paginatedQuery = query.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.Id).Skip((productQuery.PageNumber - 1) * productQuery.PageSize)
+            .Take(productQuery.PageSize);
         
         IReadOnlyList<Product> result = await paginatedQuery.ToListAsync();
         return (result, totalCount);
@@ -42,6 +42,6 @@ public class ProductRepo:IProductRepo
 
     public async Task SaveChangesAsync()
     {
-        await  _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

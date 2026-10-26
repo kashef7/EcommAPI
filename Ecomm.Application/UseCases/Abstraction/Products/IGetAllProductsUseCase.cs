@@ -1,9 +1,9 @@
-﻿using Ecomm.Application.Common;
-using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.Common;
+using Ecomm.Application.DTOs.Products;
 
 namespace Ecomm.Application.UseCases.Abstraction.Products;
 
 public interface IGetAllProductsUseCase
 {
-    public Task<PagedResult<GetProductDTO>> ExecuteAsync(ProductQueryParamsDTO queryParams);
+    Task<PagedResult<GetProductDTO>> ExecuteAsync(ProductQueryParamsDTO queryParams);
 }

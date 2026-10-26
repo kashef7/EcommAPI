@@ -30,7 +30,7 @@ public class User
         CreatedAt = DateTime.UtcNow;
     }
     
-    public void UpdateUserEmail(string newEmail)
+    public void UpdateEmail(string newEmail)
     {
         if (string.IsNullOrWhiteSpace(newEmail))
             throw new DomainException("User email cannot be empty.");
@@ -38,7 +38,7 @@ public class User
         Email = newEmail.Trim().ToLowerInvariant();
     }
 
-    public void UpdateUserPasswordHash(string newPasswordHash)
+    public void UpdatePasswordHash(string newPasswordHash)
     {
         if (string.IsNullOrWhiteSpace(newPasswordHash))
             throw new DomainException("User password hash cannot be empty.");

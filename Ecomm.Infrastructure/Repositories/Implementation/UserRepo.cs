@@ -1,5 +1,5 @@
 using Ecomm.Application.Exceptions;
-using Ecomm.Application.Repositories.Abstraction.IUserRepo;
+using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Domain.Entities.Users;
 using Ecomm.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using Npgsql;
 
 namespace Ecomm.Infrastructure.Repositories.Implementation;
 
-public class UserRepo:IUserRepo
+public class UserRepo : IUserRepo
 {
     private readonly AppDbContext _dbContext;
     
@@ -46,7 +46,7 @@ public class UserRepo:IUserRepo
         }
         catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: "23505" })
         {
-            throw new EmailAlreadyExistException();
+            throw new EmailAlreadyExistsException();
         }
     }
 }

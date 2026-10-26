@@ -1,16 +1,15 @@
-using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.Products;
 using Ecomm.Application.Exceptions;
-using Ecomm.Application.Repositories.Abstraction.IProductRepo;
+using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Application.UseCases.Abstraction.Products;
 using Microsoft.Extensions.Logging;
 
 namespace Ecomm.Application.UseCases.Implementation.Products;
 
-public class UpdateProductUseCase:IUpdateProductUseCase
+public class UpdateProductUseCase : IUpdateProductUseCase
 {
     private readonly IProductRepo _productRepo;
     private readonly ILogger<UpdateProductUseCase> _logger;
-
 
     public UpdateProductUseCase(IProductRepo productRepo, ILogger<UpdateProductUseCase> logger)
     {
@@ -18,7 +17,7 @@ public class UpdateProductUseCase:IUpdateProductUseCase
         _logger = logger;
     }
     
-    public async Task ExecuteAsync(Guid id,UpdateProductDTO productDto)
+    public async Task ExecuteAsync(Guid id, UpdateProductDTO productDto)
     {
         var product = await _productRepo.GetByIdAsync(id);
         if (product == null)

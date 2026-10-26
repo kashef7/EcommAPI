@@ -1,5 +1,5 @@
 using Ecomm.Domain.Entities.Products;
-using Ecomm.Domain.Query.Product;
+using Ecomm.Domain.Queries.Products;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecomm.Infrastructure.Filters.Products;

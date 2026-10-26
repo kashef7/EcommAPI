@@ -1,6 +1,6 @@
-using Ecomm.Application.DTOs.ProductDTO;
+using Ecomm.Application.DTOs.Products;
 using Ecomm.Application.Exceptions;
-using Ecomm.Application.Repositories.Abstraction.IProductRepo;
+using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Application.UseCases.Abstraction.Products;
 using Microsoft.Extensions.Logging;
 
@@ -23,7 +23,6 @@ public class GetProductByIdUseCase : IGetProductByIdUseCase
         {
             throw new ProductNotFoundException();
         }
-        return new GetProductDTO(product.Id,product.Name,product.Description,product.ImageUrl,product.Tag,product.Price,product.StockQuantity,product.CreatedAt);
-        
+        return new GetProductDTO(product.Id, product.Name, product.Description, product.ImageUrl, product.Tag, product.Price, product.StockQuantity, product.CreatedAt);
     }
 }
