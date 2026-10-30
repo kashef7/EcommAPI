@@ -22,6 +22,46 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Ecomm.Domain.Entities.CartItems.CartItem", b =>
+                {
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CartId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Carts.Cart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("Ecomm.Domain.Entities.Products.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -114,6 +154,36 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("Ecomm.Domain.Entities.CartItems.CartItem", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Carts.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Carts.Cart", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Users.User", "User")
+                        .WithOne()
+                        .HasForeignKey("Ecomm.Domain.Entities.Carts.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ecomm.Domain.Entities.Users.User", b =>
                 {
                     b.OwnsOne("Ecomm.Domain.ValueObjects.RefreshToken", "RefreshToken", b1 =>
@@ -143,6 +213,11 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                         });
 
                     b.Navigation("RefreshToken");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Carts.Cart", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

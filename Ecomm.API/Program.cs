@@ -4,8 +4,10 @@ using DotNetEnv;
 using Ecomm.API.Middleware;
 using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Application.Services.Abstraction;
+using Ecomm.Application.UseCases.Abstraction.Carts;
 using Ecomm.Application.UseCases.Abstraction.Products;
 using Ecomm.Application.UseCases.Abstraction.Users;
+using Ecomm.Application.UseCases.Implementation.Carts;
 using Ecomm.Application.UseCases.Implementation.Products;
 using Ecomm.Application.UseCases.Implementation.Users;
 using Ecomm.Infrastructure.Persistence;
@@ -103,6 +105,8 @@ try
     builder.Services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
     builder.Services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
     builder.Services.AddScoped<IAdjustProductStockUseCase, AdjustProductStockUseCase>();
+    builder.Services.AddScoped<IAddCartItemUseCase, AddCartItemUseCase>();
+    builder.Services.AddScoped<ICartRepo, CartRepo>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);
