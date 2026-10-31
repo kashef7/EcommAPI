@@ -7,10 +7,10 @@ public record LoginUserDTO()
     [Required]
     [MaxLength(320)]
     [EmailAddress]
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
     
     [Required]
     [MaxLength(72)]
     [MinLength(8)]
-    public string Password { get; set; }
+    public string Password { get; set; } = string.Empty;
 };

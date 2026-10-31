@@ -12,10 +12,12 @@ namespace Ecomm.API.Controllers.Carts;
 public class CartController:ControllerBase
 {
     private readonly IAddCartItemUseCase _addCartItemUseCase;
+    private readonly IGetCartItemsUseCase _getCartItemsUseCase;
 
-    public CartController(IAddCartItemUseCase addCartItemUseCase)
+    public CartController(IAddCartItemUseCase addCartItemUseCase, IGetCartItemsUseCase getCartItemsUseCase)
     {
         _addCartItemUseCase = addCartItemUseCase;
+        _getCartItemsUseCase = getCartItemsUseCase;
     }
 
     [HttpPost]
@@ -29,5 +31,17 @@ public class CartController:ControllerBase
 
         await _addCartItemUseCase.ExecuteAsync(userId, addCartItemDto);
         return Ok();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCartItems()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized();
+        }
+        var result = await _getCartItemsUseCase.ExecuteAsync(userId);
+        return Ok(result);
     }
 }

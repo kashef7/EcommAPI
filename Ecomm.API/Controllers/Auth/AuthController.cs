@@ -71,6 +71,10 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken()
     {
         var refreshToken = Request.Cookies["refreshToken"];
+        if (string.IsNullOrWhiteSpace(refreshToken))
+        {
+            return Unauthorized();
+        }
         var result = await _refreshUserTokenUseCase.ExecuteAsync(refreshToken);
         SetRefreshTokenCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
         //Should remove the refreshToken from the result

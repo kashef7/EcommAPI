@@ -1,4 +1,4 @@
-﻿using Ecomm.Application.Exceptions;
+using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Domain.Entities.Carts;
 using Ecomm.Infrastructure.Persistence;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecomm.Infrastructure.Repositories.Implementation;
 
-public class CartRepo:ICartRepo
+public class CartRepo : ICartRepo
 {
     private readonly AppDbContext _dbContext;
     public CartRepo(AppDbContext dbContext)
@@ -27,9 +27,22 @@ public class CartRepo:ICartRepo
 
         cart = new Cart(user);
         _dbContext.Carts.Add(cart);
+        await _dbContext.SaveChangesAsync();
         return cart;
     }
-    
+
+    public async Task<decimal> GetCartTotalPriceAsync(Guid cartId)
+    {
+        return await _dbContext.Carts
+            .Where(c => c.Id == cartId)
+            .SelectMany(c => c.Items)
+            .Join(
+                _dbContext.Products,
+                item => item.ProductId,
+                product => product.Id,
+                (item, product) => item.Quantity * product.Price)
+            .SumAsync();
+    }
 
     public async Task SaveChangesAsync()
     {
