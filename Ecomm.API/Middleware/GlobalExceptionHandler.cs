@@ -1,8 +1,9 @@
-using System.Diagnostics;
 using Ecomm.Application.Exceptions;
 using Ecomm.Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Ecomm.API.Middleware;
 
@@ -30,6 +31,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             RefreshTokenNotFoundException => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
 
             // 404 Not Found: Missing domain resources
+            CartItemNotFoundException => (StatusCodes.Status404NotFound, "Cart Item Not Found"),
             UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),
             ProductNotFoundException => (StatusCodes.Status404NotFound, "Product Not Found"),
 
@@ -37,22 +39,30 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             IncorrectPasswordException => (StatusCodes.Status400BadRequest, "Incorrect Password"),
             DomainException => (StatusCodes.Status400BadRequest, "Domain Validation Error"),
 
+            // 409 Conflict: Concurrency / unique constraint violation
+            DbUpdateException { InnerException: PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } } => (StatusCodes.Status409Conflict, "Conflict"),
+
             // 500 Internal Server Error: Unhandled exceptions
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
         };
 
         if (statusCode == StatusCodes.Status500InternalServerError)
         {
-            logger.LogError(exception, "Unhandled exception | {Method} {Path}",method, path);
+            logger.LogError(exception, "Unhandled exception | {Method} {Path}", method, path);
         }
         else
         {
             logger.LogWarning("Handled domain exception | {Method} {Path} | {ExceptionMessage}", method, path, exception.Message);
         }
 
-        var detail = statusCode == StatusCodes.Status500InternalServerError
-            ? "An unexpected error occurred. Please try again later."
-            : exception.Message;
+        var detail = exception switch
+        {
+            DbUpdateException { InnerException: PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } }
+                => "The request conflicted with another request. Please try again.",
+            _ when statusCode == StatusCodes.Status500InternalServerError
+                => "An unexpected error occurred. Please try again later.",
+            _ => exception.Message
+        };
 
         var problemDetails = new ProblemDetails
         {

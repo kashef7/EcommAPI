@@ -8,11 +8,13 @@ namespace Ecomm.Application.UseCases.Implementation.Products;
 public class DeleteProductUseCase : IDeleteProductUseCase
 {
     private readonly IProductRepo _productRepo;
+    private readonly ICartRepo _cartRepo;
     private readonly ILogger<DeleteProductUseCase> _logger;
 
-    public DeleteProductUseCase(IProductRepo productRepo, ILogger<DeleteProductUseCase> logger)
+    public DeleteProductUseCase(IProductRepo productRepo, ICartRepo cartRepo, ILogger<DeleteProductUseCase> logger)
     {
         _productRepo = productRepo;
+        _cartRepo = cartRepo;
         _logger = logger;
     }
 
@@ -26,6 +28,7 @@ public class DeleteProductUseCase : IDeleteProductUseCase
 
         product.Delete();
         await _productRepo.SaveChangesAsync();
+        await _cartRepo.RemoveProductFromAllCartsAsync(product.Id);
         _logger.LogInformation("Product {ProductId} ({ProductName}) soft-deleted", product.Id, product.Name);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using Ecomm.API.Extensions;
 using Ecomm.Application.DTOs.Carts;
 using Ecomm.Application.UseCases.Abstraction.Carts;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +9,7 @@ namespace Ecomm.API.Controllers.Carts;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class CartController:ControllerBase
+public class CartController : ControllerBase
 {
     private readonly IAddCartItemUseCase _addCartItemUseCase;
     private readonly IGetCartItemsUseCase _getCartItemsUseCase;
@@ -17,7 +17,12 @@ public class CartController:ControllerBase
     private readonly IRemoveCartItemUseCase _removeCartItemUseCase;
     private readonly IClearCartUseCase _clearCartUseCase;
 
-    public CartController(IAddCartItemUseCase addCartItemUseCase, IGetCartItemsUseCase getCartItemsUseCase, IUpdateCartItemUseCase updateCartItemUseCase, IRemoveCartItemUseCase removeCartItemUseCase, IClearCartUseCase clearCartUseCase)
+    public CartController(
+        IAddCartItemUseCase addCartItemUseCase,
+        IGetCartItemsUseCase getCartItemsUseCase,
+        IUpdateCartItemUseCase updateCartItemUseCase,
+        IRemoveCartItemUseCase removeCartItemUseCase,
+        IClearCartUseCase clearCartUseCase)
     {
         _addCartItemUseCase = addCartItemUseCase;
         _getCartItemsUseCase = getCartItemsUseCase;
@@ -29,24 +34,23 @@ public class CartController:ControllerBase
     [HttpPost("items")]
     public async Task<IActionResult> AddCartItem(AddCartItemDTO addCartItemDto)
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
 
         await _addCartItemUseCase.ExecuteAsync(userId, addCartItemDto);
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet]
     public async Task<IActionResult> GetCartItems()
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
+
         var result = await _getCartItemsUseCase.ExecuteAsync(userId);
         return Ok(result);
     }
@@ -54,11 +58,11 @@ public class CartController:ControllerBase
     [HttpPut("items/{productId:guid}/quantity")]
     public async Task<IActionResult> UpdateCartItem(Guid productId, UpdateCartItemQuantityDTO updateCartItemQuantityDto)
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
+
         await _updateCartItemUseCase.ExecuteAsync(userId, productId, updateCartItemQuantityDto);
         return NoContent();
     }
@@ -66,11 +70,11 @@ public class CartController:ControllerBase
     [HttpDelete("items/{productId:guid}")]
     public async Task<IActionResult> RemoveCartItem(Guid productId)
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
+
         await _removeCartItemUseCase.ExecuteAsync(userId, productId);
         return NoContent();
     }
@@ -78,13 +82,12 @@ public class CartController:ControllerBase
     [HttpDelete]
     public async Task<IActionResult> ClearCart()
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
+
         await _clearCartUseCase.ExecuteAsync(userId);
         return NoContent();
     }
-    
 }

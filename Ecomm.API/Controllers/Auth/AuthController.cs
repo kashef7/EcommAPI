@@ -1,5 +1,5 @@
-using System.Security.Claims;
 using Ecomm.API.Controllers.Users;
+using Ecomm.API.Extensions;
 using Ecomm.Application.DTOs.Users;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -55,8 +55,7 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }

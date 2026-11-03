@@ -1,4 +1,4 @@
-﻿using Ecomm.Domain.Entities.CartItems;
+using Ecomm.Domain.Entities.CartItems;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,5 +16,8 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(i => i.Quantity).IsRequired();
+
+        // Matches Product's global query filter so EF doesn't warn about a required navigation to a filtered entity.
+        builder.HasQueryFilter(i => i.Product.DeletedAt == null);
     }
 }

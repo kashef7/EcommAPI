@@ -9,15 +9,17 @@ namespace Ecomm.Infrastructure.Repositories.Implementation;
 public class CartRepo : ICartRepo
 {
     private readonly AppDbContext _dbContext;
+
     public CartRepo(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<Cart?> GetCartByUserIdAsync(Guid userId)
+    public async Task<Cart> GetOrCreateCartAsync(Guid userId)
     {
         var cart = await _dbContext.Carts
             .Include(c => c.Items)
+            .ThenInclude(i => i.Product)
             .FirstOrDefaultAsync(c => c.UserId == userId);
 
         if (cart is not null) return cart;
@@ -31,17 +33,9 @@ public class CartRepo : ICartRepo
         return cart;
     }
 
-    public async Task<decimal> GetCartTotalPriceAsync(Guid cartId)
+    public async Task RemoveProductFromAllCartsAsync(Guid productId)
     {
-        return await _dbContext.Carts
-            .Where(c => c.Id == cartId)
-            .SelectMany(c => c.Items)
-            .Join(
-                _dbContext.Products,
-                item => item.ProductId,
-                product => product.Id,
-                (item, product) => item.Quantity * product.Price)
-            .SumAsync();
+        await _dbContext.CartItems.Where(i => i.ProductId == productId).ExecuteDeleteAsync();
     }
 
     public async Task SaveChangesAsync()

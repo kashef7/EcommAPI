@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using Ecomm.API.Extensions;
 using Ecomm.Application.DTOs.Users;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -28,8 +28,7 @@ public class UsersController : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> GetMe()
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
@@ -42,8 +41,7 @@ public class UsersController : ControllerBase
     [HttpPut("updateEmail")]
     public async Task<IActionResult> UpdateEmail(UpdateUserEmailDTO user)
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
@@ -56,8 +54,7 @@ public class UsersController : ControllerBase
     [HttpPut("updatePassword")]
     public async Task<IActionResult> UpdatePassword(UpdateUserPasswordDTO user)
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }

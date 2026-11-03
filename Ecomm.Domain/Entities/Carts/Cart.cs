@@ -50,6 +50,8 @@ public class Cart
         {
             _items.Add(new CartItem(this, product, quantity));
         }
+
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void UpdateItemQuantity(Product product, int quantity)
@@ -58,24 +60,30 @@ public class Cart
             throw new DomainException("Quantity must be greater than zero.");
 
         var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id)
-            ?? throw new DomainException($"Product {product.Id} was not found in cart.");
+            ?? throw new CartItemNotFoundException(product.Id);
 
         if (quantity > product.StockQuantity)
-            throw new InsufficientStockException(product.Id, quantity, existingItem.Product.StockQuantity);
+            throw new InsufficientStockException(product.Id, quantity, product.StockQuantity);
 
         existingItem.UpdateQuantity(quantity);
+
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void RemoveItem(Guid productId)
     {
         var existingItem = _items.FirstOrDefault(i => i.ProductId == productId)
-            ?? throw new DomainException($"Product {productId} was not found in cart.");
+            ?? throw new CartItemNotFoundException(productId);
 
         _items.Remove(existingItem);
+
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void Clear()
     {
         _items.Clear();
+
+        UpdatedAt = DateTime.UtcNow;
     }
 }
