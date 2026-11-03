@@ -52,16 +52,16 @@ public class Cart
         }
     }
 
-    public void UpdateItemQuantity(Guid productId, int quantity)
+    public void UpdateItemQuantity(Product product, int quantity)
     {
         if (quantity <= 0)
             throw new DomainException("Quantity must be greater than zero.");
 
-        var existingItem = _items.FirstOrDefault(i => i.ProductId == productId)
-            ?? throw new DomainException($"Product {productId} was not found in cart.");
+        var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id)
+            ?? throw new DomainException($"Product {product.Id} was not found in cart.");
 
-        if (quantity > existingItem.Product.StockQuantity)
-            throw new InsufficientStockException(productId, quantity, existingItem.Product.StockQuantity);
+        if (quantity > product.StockQuantity)
+            throw new InsufficientStockException(product.Id, quantity, existingItem.Product.StockQuantity);
 
         existingItem.UpdateQuantity(quantity);
     }

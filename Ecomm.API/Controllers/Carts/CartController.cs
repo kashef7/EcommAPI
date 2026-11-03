@@ -13,14 +13,16 @@ public class CartController:ControllerBase
 {
     private readonly IAddCartItemUseCase _addCartItemUseCase;
     private readonly IGetCartItemsUseCase _getCartItemsUseCase;
+    private readonly IUpdateCartItemUseCase _updateCartItemUseCase;
 
-    public CartController(IAddCartItemUseCase addCartItemUseCase, IGetCartItemsUseCase getCartItemsUseCase)
+    public CartController(IAddCartItemUseCase addCartItemUseCase, IGetCartItemsUseCase getCartItemsUseCase, IUpdateCartItemUseCase updateCartItemUseCase)
     {
         _addCartItemUseCase = addCartItemUseCase;
         _getCartItemsUseCase = getCartItemsUseCase;
+        _updateCartItemUseCase = updateCartItemUseCase;
     }
 
-    [HttpPost]
+    [HttpPost("items")]
     public async Task<IActionResult> AddCartItem(AddCartItemDTO addCartItemDto)
     {
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,4 +46,17 @@ public class CartController:ControllerBase
         var result = await _getCartItemsUseCase.ExecuteAsync(userId);
         return Ok(result);
     }
+
+    [HttpPut("items/{productId:guid}/quantity")]
+    public async Task<IActionResult> UpdateCartItem(Guid productId, UpdateCartItemQuantityDTO updateCartItemQuantityDto)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized();
+        }
+        await _updateCartItemUseCase.ExecuteAsync(userId, productId, updateCartItemQuantityDto);
+        return NoContent();
+    }
+    
 }
