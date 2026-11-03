@@ -109,6 +109,8 @@ try
     builder.Services.AddScoped<ICartRepo, CartRepo>();
     builder.Services.AddScoped<IGetCartItemsUseCase, GetCartItemsUseCase>();
     builder.Services.AddScoped<IUpdateCartItemUseCase, UpdateCartItemUseCase>();
+    builder.Services.AddScoped<IRemoveCartItemUseCase, RemoveCartItemUseCase>();
+    builder.Services.AddScoped<IClearCartUseCase, ClearCartUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);

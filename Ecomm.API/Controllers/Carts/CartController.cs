@@ -14,12 +14,16 @@ public class CartController:ControllerBase
     private readonly IAddCartItemUseCase _addCartItemUseCase;
     private readonly IGetCartItemsUseCase _getCartItemsUseCase;
     private readonly IUpdateCartItemUseCase _updateCartItemUseCase;
+    private readonly IRemoveCartItemUseCase _removeCartItemUseCase;
+    private readonly IClearCartUseCase _clearCartUseCase;
 
-    public CartController(IAddCartItemUseCase addCartItemUseCase, IGetCartItemsUseCase getCartItemsUseCase, IUpdateCartItemUseCase updateCartItemUseCase)
+    public CartController(IAddCartItemUseCase addCartItemUseCase, IGetCartItemsUseCase getCartItemsUseCase, IUpdateCartItemUseCase updateCartItemUseCase, IRemoveCartItemUseCase removeCartItemUseCase, IClearCartUseCase clearCartUseCase)
     {
         _addCartItemUseCase = addCartItemUseCase;
         _getCartItemsUseCase = getCartItemsUseCase;
         _updateCartItemUseCase = updateCartItemUseCase;
+        _removeCartItemUseCase = removeCartItemUseCase;
+        _clearCartUseCase = clearCartUseCase;
     }
 
     [HttpPost("items")]
@@ -56,6 +60,30 @@ public class CartController:ControllerBase
             return Unauthorized();
         }
         await _updateCartItemUseCase.ExecuteAsync(userId, productId, updateCartItemQuantityDto);
+        return NoContent();
+    }
+    
+    [HttpDelete("items/{productId:guid}")]
+    public async Task<IActionResult> RemoveCartItem(Guid productId)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized();
+        }
+        await _removeCartItemUseCase.ExecuteAsync(userId, productId);
+        return NoContent();
+    }
+    
+    [HttpDelete]
+    public async Task<IActionResult> ClearCart()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized();
+        }
+        await _clearCartUseCase.ExecuteAsync(userId);
         return NoContent();
     }
     
