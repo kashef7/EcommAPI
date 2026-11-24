@@ -34,6 +34,21 @@ public class CartRepo : ICartRepo
         return cart;
     }
 
+    public async Task<Cart?> GetCartForValidationAsync(Guid userId)
+    {
+        return await _dbContext.Carts
+            .IgnoreQueryFilters()
+            .Include(c => c.Items)
+                .ThenInclude(i => i.Variant)
+                    .ThenInclude(v => v.Product)
+            .Include(c => c.Items)
+                .ThenInclude(i => i.Variant)
+                    .ThenInclude(v => v.OptionValues)
+                        .ThenInclude(ov => ov.OptionValue)
+                            .ThenInclude(ov => ov.Option)
+            .FirstOrDefaultAsync(c => c.UserId == userId);
+    }
+
     public async Task<GetCartItemsDTO> GetCartDisplayAsync(Guid userId)
     {
         var cart = await _dbContext.Carts

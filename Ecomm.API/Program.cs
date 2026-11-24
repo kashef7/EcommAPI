@@ -131,6 +131,7 @@ try
     builder.Services.AddScoped<IUpdateCartItemUseCase, UpdateCartItemUseCase>();
     builder.Services.AddScoped<IRemoveCartItemUseCase, RemoveCartItemUseCase>();
     builder.Services.AddScoped<IClearCartUseCase, ClearCartUseCase>();
+    builder.Services.AddScoped<IValidateCartUseCase, ValidateCartUseCase>();
     
     builder.Services.AddHealthChecks()
         .AddNpgSql(connectionString, name: "postgres", tags: ["ready"]);

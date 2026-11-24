@@ -16,19 +16,22 @@ public class CartController : ControllerBase
     private readonly IUpdateCartItemUseCase _updateCartItemUseCase;
     private readonly IRemoveCartItemUseCase _removeCartItemUseCase;
     private readonly IClearCartUseCase _clearCartUseCase;
+    private readonly IValidateCartUseCase _validateCartUseCase;
 
     public CartController(
         IAddCartItemUseCase addCartItemUseCase,
         IGetCartItemsUseCase getCartItemsUseCase,
         IUpdateCartItemUseCase updateCartItemUseCase,
         IRemoveCartItemUseCase removeCartItemUseCase,
-        IClearCartUseCase clearCartUseCase)
+        IClearCartUseCase clearCartUseCase,
+        IValidateCartUseCase validateCartUseCase)
     {
         _addCartItemUseCase = addCartItemUseCase;
         _getCartItemsUseCase = getCartItemsUseCase;
         _updateCartItemUseCase = updateCartItemUseCase;
         _removeCartItemUseCase = removeCartItemUseCase;
         _clearCartUseCase = clearCartUseCase;
+        _validateCartUseCase = validateCartUseCase;
     }
 
     [HttpPost("items")]
@@ -89,5 +92,17 @@ public class CartController : ControllerBase
 
         await _clearCartUseCase.ExecuteAsync(userId);
         return NoContent();
+    }
+
+    [HttpPost("validate")]
+    public async Task<IActionResult> ValidateCart()
+    {
+        if (!User.TryGetUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await _validateCartUseCase.ExecuteAsync(userId);
+        return Ok(result);
     }
 }

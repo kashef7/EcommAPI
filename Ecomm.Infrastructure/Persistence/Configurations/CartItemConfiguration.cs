@@ -17,6 +17,10 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
 
         builder.Property(i => i.Quantity).IsRequired();
 
+        builder.Property(i => i.UnitPriceAtAdd)
+            .IsRequired()
+            .HasPrecision(18, 2);
+
         // The CartItem global query filter must hide items whose variant is soft-deleted or whose product is soft-deleted.
         builder.HasQueryFilter(i => i.Variant.DeletedAt == null && i.Variant.Product.DeletedAt == null);
     }

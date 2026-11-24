@@ -33,6 +33,10 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<decimal>("UnitPriceAtAdd")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.HasKey("CartId", "VariantId");
 
                     b.HasIndex("VariantId");
@@ -179,6 +183,9 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
 
                     b.Property<Guid>("OptionId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Value")
                         .IsRequired()

@@ -6,6 +6,7 @@ namespace Ecomm.Application.Repositories.Abstraction;
 public interface ICartRepo
 {
     Task<Cart> GetOrCreateCartAsync(Guid userId);
+    Task<Cart?> GetCartForValidationAsync(Guid userId);
     Task<GetCartItemsDTO> GetCartDisplayAsync(Guid userId);
     Task RemoveProductFromAllCartsAsync(Guid productId);
     Task RemoveVariantFromAllCartsAsync(Guid variantId);

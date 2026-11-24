@@ -10,6 +10,7 @@ public class CartItem
     public Guid VariantId { get; init; }
     public ProductVariant Variant { get; init; } = null!;
     public int Quantity { get; private set; }
+    public decimal UnitPriceAtAdd { get; private set; }
     
     private CartItem() { }
 
@@ -20,6 +21,7 @@ public class CartItem
         VariantId = variant.Id;
         Variant = variant;
         Quantity = quantity;
+        UnitPriceAtAdd = variant.Price;
     }
     
     internal void UpdateQuantity(int quantity)
@@ -30,5 +32,10 @@ public class CartItem
     internal void IncreaseQuantity(int quantity)
     {
         Quantity += quantity;
+    }
+
+    public void UpdateUnitPriceAtAdd(decimal newPrice)
+    {
+        UnitPriceAtAdd = newPrice;
     }
 }
