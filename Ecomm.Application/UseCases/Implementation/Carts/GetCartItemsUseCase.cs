@@ -18,23 +18,6 @@ public class GetCartItemsUseCase : IGetCartItemsUseCase
 
     public async Task<GetCartItemsDTO> ExecuteAsync(Guid userId)
     {
-        var cart = await _cartRepo.GetOrCreateCartAsync(userId);
-        if (cart.Items.Count == 0)
-        {
-            return new GetCartItemsDTO([], 0m);
-        }
-
-        var items = cart.Items
-            .Select(item => new CartItemDTO(
-                item.ProductId,
-                item.Product.Name,
-                item.Product.Price,
-                item.Quantity,
-                item.Product.Price * item.Quantity))
-            .ToList();
-
-        var totalPrice = items.Sum(i => i.LineTotal);
-
-        return new GetCartItemsDTO(items, totalPrice);
+        return await _cartRepo.GetCartDisplayAsync(userId);
     }
 }

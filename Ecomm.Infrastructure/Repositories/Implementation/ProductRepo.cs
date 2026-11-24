@@ -1,3 +1,4 @@
+using Ecomm.Application.DTOs.Products;
 using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Domain.Entities.Products;
 using Ecomm.Domain.Queries.Products;
@@ -10,30 +11,85 @@ namespace Ecomm.Infrastructure.Repositories.Implementation;
 public class ProductRepo : IProductRepo
 {
     private readonly AppDbContext _dbContext;
-    
+
     public ProductRepo(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    public async Task<(IReadOnlyList<Product> items, int totalCount)> GetAllAsync(ProductQuery productQuery)
+
+    public async Task<(IReadOnlyList<GetProductDTO> items, int totalCount)> GetAllAsync(ProductQuery productQuery)
     {
-        var query = _dbContext.Products.AsNoTracking().AsQueryable().ApplyQueryFilters(productQuery);
-        
+        var query = _dbContext.Products
+            .AsNoTracking()
+            .ApplyQueryFilters(productQuery);
+
         int totalCount = await query.CountAsync();
 
-        var paginatedQuery = query.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.Id).Skip((productQuery.PageNumber - 1) * productQuery.PageSize)
+        IQueryable<Product> orderedQuery;
+        if (string.Equals(productQuery.OrderBy, "price", StringComparison.OrdinalIgnoreCase))
+        {
+            orderedQuery = productQuery.OrderDesc
+                ? query.OrderByDescending(p => p.Variants.Min(v => (decimal?)v.Price) ?? 0m).ThenBy(p => p.Id)
+                : query.OrderBy(p => p.Variants.Min(v => (decimal?)v.Price) ?? 0m).ThenBy(p => p.Id);
+        }
+        else
+        {
+            orderedQuery = productQuery.OrderDesc
+                ? query.OrderByDescending(p => p.CreatedAt).ThenBy(p => p.Id)
+                : query.OrderBy(p => p.CreatedAt).ThenBy(p => p.Id);
+        }
+
+        var pagedQuery = orderedQuery
+            .Skip((productQuery.PageNumber - 1) * productQuery.PageSize)
             .Take(productQuery.PageSize);
-        
-        IReadOnlyList<Product> result = await paginatedQuery.ToListAsync();
-        return (result, totalCount);
+
+        var items = await pagedQuery
+            .Select(p => new GetProductDTO(
+                p.Id,
+                p.Name,
+                p.Category.Name,
+                p.Images.OrderBy(i => i.SortOrder).Select(i => i.Url).FirstOrDefault(),
+                p.Variants.Min(v => (decimal?)v.Price) ?? 0m,
+                p.Variants.Any(v => v.StockQuantity > 0),
+                p.ProductTags.Select(pt => pt.Tag.Name).ToList()
+            ))
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
+    public async Task<Product?> GetByIdWithDetailsAsync(Guid id)
+    {
+        return await _dbContext.Products
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Include(p => p.Category)
+            .Include(p => p.Images)
+            .Include(p => p.ProductTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.Options).ThenInclude(o => o.Values)
+            .Include(p => p.Variants).ThenInclude(v => v.OptionValues).ThenInclude(ov => ov.OptionValue).ThenInclude(ov => ov.Option)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    public async Task<Product?> GetByIdForUpdateAsync(Guid id)
+    {
+        return await _dbContext.Products
+            .Include(p => p.Images)
+            .Include(p => p.ProductTags).ThenInclude(pt => pt.Tag)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<Product?> GetByIdAsync(Guid id)
     {
-        var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
-        return product;
+        return await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
-    
+
+    public async Task<ProductVariant?> GetVariantByIdAsync(Guid variantId)
+    {
+        return await _dbContext.ProductVariants
+            .Include(v => v.Product)
+            .FirstOrDefaultAsync(v => v.Id == variantId);
+    }
 
     public async Task AddAsync(Product product)
     {
@@ -46,27 +102,27 @@ public class ProductRepo : IProductRepo
     }
 
     /// <summary>
-    /// Atomically adjusts the stock quantity of a product in a single conditional SQL UPDATE statement.
+    /// Atomically adjusts the stock quantity of a product variant in a single conditional SQL UPDATE statement.
     /// This prevents lost updates and concurrency issues under concurrent orders or adjustments.
     /// It is atomic on purpose and must stay that way.
     /// </summary>
-    public async Task<int> AdjustStockAsync(Guid id, int delta)
+    public async Task<int> AdjustStockAsync(Guid variantId, int delta)
     {
-        return await _dbContext.Products
-            .Where(p => p.Id == id
-                     && p.StockQuantity + delta >= 0
-                     && p.StockQuantity + delta <= Product.MaxStockQuantity)
+        return await _dbContext.ProductVariants
+            .Where(v => v.Id == variantId
+                     && v.StockQuantity + delta >= 0
+                     && v.StockQuantity + delta <= ProductVariant.MaxStockQuantity)
             .ExecuteUpdateAsync(s => s
-                .SetProperty(p => p.StockQuantity, p => p.StockQuantity + delta)
-                .SetProperty(p => p.UpdatedAt, DateTime.UtcNow));
+                .SetProperty(v => v.StockQuantity, v => v.StockQuantity + delta)
+                .SetProperty(v => v.UpdatedAt, DateTime.UtcNow));
     }
 
-    public async Task<int?> GetStockAsync(Guid id)
+    public async Task<int?> GetStockAsync(Guid variantId)
     {
-        return await _dbContext.Products
+        return await _dbContext.ProductVariants
             .AsNoTracking()
-            .Where(p => p.Id == id)
-            .Select(p => (int?)p.StockQuantity)
+            .Where(v => v.Id == variantId)
+            .Select(v => (int?)v.StockQuantity)
             .FirstOrDefaultAsync();
     }
 }

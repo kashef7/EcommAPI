@@ -27,15 +27,15 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CartId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("VariantId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("CartId", "ProductId");
+                    b.HasKey("CartId", "VariantId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("VariantId");
 
                     b.ToTable("CartItems");
                 });
@@ -110,13 +110,6 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<int>("StockQuantity")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -126,12 +119,7 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("Products", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Products_Price_Positive", "\"Price\" > 0");
-
-                            t.HasCheckConstraint("CK_Products_Stock_NonNegative", "\"StockQuantity\" >= 0");
-                        });
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductImage", b =>
@@ -160,6 +148,51 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.ToTable("ProductImages", (string)null);
                 });
 
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("ProductOptions", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductOptionValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OptionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OptionId", "Value")
+                        .IsUnique();
+
+                    b.ToTable("ProductOptionValues", (string)null);
+                });
+
             modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductTags", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -176,6 +209,57 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("ProductTags", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductVariant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductVariants", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ProductVariants_Price_Positive", "\"Price\" > 0");
+
+                            t.HasCheckConstraint("CK_ProductVariants_Stock_NonNegative", "\"StockQuantity\" >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.VariantOptionValue", b =>
+                {
+                    b.Property<Guid>("VariantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OptionValueId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("VariantId", "OptionValueId");
+
+                    b.HasIndex("OptionValueId");
+
+                    b.ToTable("VariantOptionValues", (string)null);
                 });
 
             modelBuilder.Entity("Ecomm.Domain.Entities.Tags.Tag", b =>
@@ -245,15 +329,15 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
+                    b.HasOne("Ecomm.Domain.Entities.Products.ProductVariant", "Variant")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("VariantId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cart");
 
-                    b.Navigation("Product");
+                    b.Navigation("Variant");
                 });
 
             modelBuilder.Entity("Ecomm.Domain.Entities.Carts.Cart", b =>
@@ -289,6 +373,28 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductOption", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Options")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductOptionValue", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Products.ProductOption", "Option")
+                        .WithMany("Values")
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Option");
+                });
+
             modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductTags", b =>
                 {
                     b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
@@ -306,6 +412,36 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductVariant", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Variants")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.VariantOptionValue", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Products.ProductOptionValue", "OptionValue")
+                        .WithMany()
+                        .HasForeignKey("OptionValueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ecomm.Domain.Entities.Products.ProductVariant", "Variant")
+                        .WithMany("OptionValues")
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OptionValue");
+
+                    b.Navigation("Variant");
                 });
 
             modelBuilder.Entity("Ecomm.Domain.Entities.Users.User", b =>
@@ -348,7 +484,21 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Images");
 
+                    b.Navigation("Options");
+
                     b.Navigation("ProductTags");
+
+                    b.Navigation("Variants");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductOption", b =>
+                {
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductVariant", b =>
+                {
+                    b.Navigation("OptionValues");
                 });
 #pragma warning restore 612, 618
         }

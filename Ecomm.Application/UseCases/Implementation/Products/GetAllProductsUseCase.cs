@@ -20,23 +20,23 @@ public class GetAllProductsUseCase : IGetAllProductsUseCase
     
     public async Task<PagedResult<GetProductDTO>> ExecuteAsync(ProductQueryParamsDTO queryParams)
     {
-        var productQuery = new ProductQuery(queryParams.PageNumber, queryParams.PageSize, queryParams.Name,
-            queryParams.Tag, queryParams.MinPrice, queryParams.MaxPrice, queryParams.InStock);
+        var productQuery = new ProductQuery(
+            queryParams.PageNumber,
+            queryParams.PageSize,
+            queryParams.Name,
+            queryParams.CategoryId,
+            queryParams.Tags,
+            queryParams.MinPrice,
+            queryParams.MaxPrice,
+            queryParams.InStock,
+            queryParams.OrderBy,
+            queryParams.OrderDesc);
+
         var (products, totalCount) = await _productRepo.GetAllAsync(productQuery);
-        IReadOnlyList<GetProductDTO> productDtos = products
-            .Select(p => new GetProductDTO(
-                p.Id,
-                p.Name,
-                p.Description,
-                p.ImageUrl,
-                p.Tag,
-                p.Price,
-                p.StockQuantity,
-                p.CreatedAt
-            )).ToList();
+
         return new PagedResult<GetProductDTO>
         {
-            Items = productDtos,
+            Items = products,
             TotalCount = totalCount,
             PageNumber = productQuery.PageNumber,
             PageSize = productQuery.PageSize

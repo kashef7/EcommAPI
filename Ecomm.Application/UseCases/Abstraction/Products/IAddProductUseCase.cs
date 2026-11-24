@@ -4,5 +4,5 @@ namespace Ecomm.Application.UseCases.Abstraction.Products;
 
 public interface IAddProductUseCase
 {
-    Task<GetProductDTO> ExecuteAsync(AddProductDTO product);
+    Task<GetProductDetailDTO> ExecuteAsync(AddProductDTO product);
 }

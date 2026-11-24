@@ -29,6 +29,6 @@ public class DeleteProductUseCase : IDeleteProductUseCase
         product.Delete();
         await _productRepo.SaveChangesAsync();
         await _cartRepo.RemoveProductFromAllCartsAsync(product.Id);
-        _logger.LogInformation("Product {ProductId} ({ProductName}) soft-deleted", product.Id, product.Name);
+        _logger.LogInformation("Product {ProductId} ({ProductName}) soft-deleted and removed from carts", product.Id, product.Name);
     }
 }

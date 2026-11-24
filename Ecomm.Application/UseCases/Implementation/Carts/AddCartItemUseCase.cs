@@ -23,14 +23,14 @@ public class AddCartItemUseCase : IAddCartItemUseCase
     {
         var cart = await _cartRepo.GetOrCreateCartAsync(userId);
         
-        var product = await _productRepo.GetByIdAsync(addCartItemDto.ProductId);
-        if (product == null)
+        var variant = await _productRepo.GetVariantByIdAsync(addCartItemDto.VariantId);
+        if (variant == null)
         {
-            throw new ProductNotFoundException();
+            throw new VariantNotFoundException(addCartItemDto.VariantId);
         }
 
-        cart.AddItem(product, addCartItemDto.Quantity);
+        cart.AddItem(variant, addCartItemDto.Quantity);
         await _cartRepo.SaveChangesAsync();
-        _logger.LogInformation("Added {Quantity} of {ProductName} ({ProductId}) to cart for user {UserId}", addCartItemDto.Quantity, product.Name, product.Id, userId);
+        _logger.LogInformation("Added {Quantity} of variant {VariantId} to cart for user {UserId}", addCartItemDto.Quantity, variant.Id, userId);
     }
 }

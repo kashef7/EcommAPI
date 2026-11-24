@@ -115,6 +115,7 @@ try
     builder.Services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
     builder.Services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
     builder.Services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
+    builder.Services.AddScoped<IUpdateVariantPriceUseCase, UpdateVariantPriceUseCase>();
     builder.Services.AddScoped<IAdjustProductStockUseCase, AdjustProductStockUseCase>();
     builder.Services.AddScoped<IAddCartItemUseCase, AddCartItemUseCase>();
     builder.Services.AddScoped<ICartRepo, CartRepo>();

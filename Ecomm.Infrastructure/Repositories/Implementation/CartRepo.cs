@@ -1,3 +1,4 @@
+using Ecomm.Application.DTOs.Carts;
 using Ecomm.Application.Exceptions;
 using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Domain.Entities.Carts;
@@ -19,7 +20,7 @@ public class CartRepo : ICartRepo
     {
         var cart = await _dbContext.Carts
             .Include(c => c.Items)
-            .ThenInclude(i => i.Product)
+            .ThenInclude(i => i.Variant)
             .FirstOrDefaultAsync(c => c.UserId == userId);
 
         if (cart is not null) return cart;
@@ -33,9 +34,61 @@ public class CartRepo : ICartRepo
         return cart;
     }
 
+    public async Task<GetCartItemsDTO> GetCartDisplayAsync(Guid userId)
+    {
+        var cart = await _dbContext.Carts
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.UserId == userId);
+
+        if (cart == null)
+        {
+            return new GetCartItemsDTO([], 0m);
+        }
+
+        var items = await _dbContext.CartItems
+            .AsNoTracking()
+            .Where(i => i.CartId == cart.Id)
+            .Select(i => new
+            {
+                i.VariantId,
+                ProductId = i.Variant.ProductId,
+                ProductName = i.Variant.Product.Name,
+                ImageUrl = i.Variant.Product.Images.OrderBy(img => img.SortOrder).Select(img => img.Url).FirstOrDefault(),
+                UnitPrice = i.Variant.Price,
+                i.Quantity,
+                OptionValues = i.Variant.OptionValues
+                    .OrderBy(ov => ov.OptionValue.Option.SortOrder)
+                    .Select(ov => new { OptionName = ov.OptionValue.Option.Name, OptionVal = ov.OptionValue.Value })
+                    .ToList()
+            })
+            .ToListAsync();
+
+        var dtoList = items.Select(i =>
+        {
+            var variantLabel = i.OptionValues.Count > 0
+                ? string.Join(", ", i.OptionValues.Select(ov => $"{ov.OptionName}: {ov.OptionVal}"))
+                : string.Empty;
+            var lineTotal = i.UnitPrice * i.Quantity;
+            return new CartItemDTO(
+                i.VariantId,
+                i.ProductId,
+                i.ProductName,
+                variantLabel,
+                i.ImageUrl,
+                i.UnitPrice,
+                i.Quantity,
+                lineTotal);
+        }).ToList();
+
+        var total = dtoList.Sum(i => i.LineTotal);
+        return new GetCartItemsDTO(dtoList, total);
+    }
+
     public async Task RemoveProductFromAllCartsAsync(Guid productId)
     {
-        await _dbContext.CartItems.Where(i => i.ProductId == productId).ExecuteDeleteAsync();
+        await _dbContext.CartItems
+            .Where(i => i.Variant.ProductId == productId)
+            .ExecuteDeleteAsync();
     }
 
     public async Task SaveChangesAsync()

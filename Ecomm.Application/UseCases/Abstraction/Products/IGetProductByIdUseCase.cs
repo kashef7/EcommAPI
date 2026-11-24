@@ -4,5 +4,5 @@ namespace Ecomm.Application.UseCases.Abstraction.Products;
 
 public interface IGetProductByIdUseCase
 {
-    Task<GetProductDTO> ExecuteAsync(Guid productId);
+    Task<GetProductDetailDTO> ExecuteAsync(Guid productId);
 }

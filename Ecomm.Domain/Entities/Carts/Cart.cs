@@ -31,16 +31,16 @@ public class Cart
         UpdatedAt = now;
     }
 
-    public void AddItem(Product product, int quantity)
+    public void AddItem(ProductVariant variant, int quantity)
     {
         if (quantity <= 0)
             throw new DomainException("Quantity must be greater than zero.");
 
-        var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+        var existingItem = _items.FirstOrDefault(i => i.VariantId == variant.Id);
         var targetQuantity = existingItem != null ? existingItem.Quantity + quantity : quantity;
 
-        if (targetQuantity > product.StockQuantity)
-            throw new InsufficientStockException(product.Id, targetQuantity, product.StockQuantity);
+        if (targetQuantity > variant.StockQuantity)
+            throw new InsufficientStockException(variant.Id, targetQuantity, variant.StockQuantity);
 
         if (existingItem != null)
         {
@@ -48,32 +48,32 @@ public class Cart
         }
         else
         {
-            _items.Add(new CartItem(this, product, quantity));
+            _items.Add(new CartItem(this, variant, quantity));
         }
 
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateItemQuantity(Product product, int quantity)
+    public void UpdateItemQuantity(ProductVariant variant, int quantity)
     {
         if (quantity <= 0)
             throw new DomainException("Quantity must be greater than zero.");
 
-        var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id)
-            ?? throw new CartItemNotFoundException(product.Id);
+        var existingItem = _items.FirstOrDefault(i => i.VariantId == variant.Id)
+            ?? throw new CartItemNotFoundException(variant.Id);
 
-        if (quantity > product.StockQuantity)
-            throw new InsufficientStockException(product.Id, quantity, product.StockQuantity);
+        if (quantity > variant.StockQuantity)
+            throw new InsufficientStockException(variant.Id, quantity, variant.StockQuantity);
 
         existingItem.UpdateQuantity(quantity);
 
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void RemoveItem(Guid productId)
+    public void RemoveItem(Guid variantId)
     {
-        var existingItem = _items.FirstOrDefault(i => i.ProductId == productId)
-            ?? throw new CartItemNotFoundException(productId);
+        var existingItem = _items.FirstOrDefault(i => i.VariantId == variantId)
+            ?? throw new CartItemNotFoundException(variantId);
 
         _items.Remove(existingItem);
 

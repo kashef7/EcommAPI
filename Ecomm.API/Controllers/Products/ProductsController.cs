@@ -15,6 +15,7 @@ public class ProductsController : ControllerBase
     private readonly IGetAllProductsUseCase _getAllProductsUseCase;
     private readonly IUpdateProductUseCase _updateProductUseCase;
     private readonly IDeleteProductUseCase _deleteProductUseCase;
+    private readonly IUpdateVariantPriceUseCase _updateVariantPriceUseCase;
     private readonly IAdjustProductStockUseCase _adjustProductStockUseCase;
 
     public ProductsController(
@@ -23,6 +24,7 @@ public class ProductsController : ControllerBase
         IGetAllProductsUseCase getAllProductsUseCase,
         IUpdateProductUseCase updateProductUseCase,
         IDeleteProductUseCase deleteProductUseCase,
+        IUpdateVariantPriceUseCase updateVariantPriceUseCase,
         IAdjustProductStockUseCase adjustProductStockUseCase)
     {
         _addProductUseCase = addProductUseCase;
@@ -30,6 +32,7 @@ public class ProductsController : ControllerBase
         _getAllProductsUseCase = getAllProductsUseCase;
         _updateProductUseCase = updateProductUseCase;
         _deleteProductUseCase = deleteProductUseCase;
+        _updateVariantPriceUseCase = updateVariantPriceUseCase;
         _adjustProductStockUseCase = adjustProductStockUseCase;
     }
 
@@ -65,11 +68,19 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}/stock")]
+    [HttpPatch("{id:guid}/variants/{variantId:guid}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> AdjustStock(Guid id, AdjustProductStockDTO dto)
+    public async Task<IActionResult> UpdateVariantPrice(Guid id, Guid variantId, UpdateVariantPriceDTO dto)
     {
-        var result = await _adjustProductStockUseCase.ExecuteAsync(id, dto);
+        await _updateVariantPriceUseCase.ExecuteAsync(id, variantId, dto);
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/variants/{variantId:guid}/stock")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> AdjustStock(Guid id, Guid variantId, AdjustProductStockDTO dto)
+    {
+        var result = await _adjustProductStockUseCase.ExecuteAsync(id, variantId, dto);
         return Ok(result);
     }
 

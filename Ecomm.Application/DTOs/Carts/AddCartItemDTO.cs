@@ -2,12 +2,12 @@
 
 namespace Ecomm.Application.DTOs.Carts;
 
-public record AddCartItemDTO()
+public record AddCartItemDTO
 {
     [Required]
-    public Guid ProductId { get; set; }
+    public Guid VariantId { get; set; }
     
     [Required]
     [Range(1, 1000000)]
     public int Quantity { get; set; }
-};
+}

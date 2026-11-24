@@ -39,7 +39,12 @@ public class Order
         UpdatedAt = now;
     }
 
-    public void AddItem(Product product, int quantity)
+    public void AddItem(
+        ProductVariant variant,
+        int quantity,
+        string? productName = null,
+        string? variantLabel = null,
+        string? imageUrl = null)
     {
         if (Status != OrderStatus.Placed)
             throw new DomainException("Items can only be added to an order while in Placed status.");
@@ -47,19 +52,44 @@ public class Order
         if (quantity <= 0)
             throw new DomainException("Quantity must be greater than zero.");
 
-        product.DecreaseStock(quantity);
+        variant.DecreaseStock(quantity);
 
-        var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+        var existingItem = _items.FirstOrDefault(i => i.VariantId == variant.Id);
         if (existingItem != null)
         {
             existingItem.IncreaseQuantity(quantity);
         }
         else
         {
-            _items.Add(new OrderItem(this, product, quantity, product.Price));
+            var resolvedProductName = productName ?? variant.Product?.Name ?? string.Empty;
+            var resolvedVariantLabel = variantLabel ?? BuildVariantLabel(variant);
+            var resolvedImageUrl = imageUrl ?? variant.Product?.Images?.OrderBy(i => i.SortOrder).FirstOrDefault()?.Url;
+
+            _items.Add(new OrderItem(
+                this,
+                variant,
+                quantity,
+                resolvedProductName,
+                resolvedVariantLabel,
+                resolvedImageUrl,
+                variant.Price));
         }
 
         RecalculateTotal();
+    }
+
+    private static string BuildVariantLabel(ProductVariant variant)
+    {
+        if (variant.OptionValues == null || variant.OptionValues.Count == 0)
+            return string.Empty;
+
+        var labels = variant.OptionValues
+            .Where(ov => ov.OptionValue?.Option != null)
+            .OrderBy(ov => ov.OptionValue.Option.SortOrder)
+            .Select(ov => $"{ov.OptionValue.Option.Name}: {ov.OptionValue.Value}")
+            .ToList();
+
+        return labels.Count > 0 ? string.Join(", ", labels) : string.Empty;
     }
 
     public void UpdateAddress(string address)
@@ -75,7 +105,7 @@ public class Order
 
     /// <summary>
     /// Changes the order status according to permitted state transitions.
-    /// Items and their associated Products must be loaded when transitioning to Rejected or Cancelled to restore stock.
+    /// Items and their associated Variants must be loaded when transitioning to Rejected or Cancelled to restore stock.
     /// </summary>
     public void ChangeStatus(OrderStatus newStatus)
     {
@@ -94,7 +124,7 @@ public class Order
         {
             foreach (var item in _items)
             {
-                item.Product.IncreaseStock(item.Quantity);
+                item.Variant.IncreaseStock(item.Quantity);
             }
         }
 

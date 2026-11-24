@@ -14,12 +14,12 @@ public class RemoveCartItemUseCase : IRemoveCartItemUseCase
         _cartRepo = cartRepo;
         _logger = logger;
     }
-    
-    public async Task ExecuteAsync(Guid userId, Guid productId)
+
+    public async Task ExecuteAsync(Guid userId, Guid variantId)
     {
         var cart = await _cartRepo.GetOrCreateCartAsync(userId);
-        cart.RemoveItem(productId);
+        cart.RemoveItem(variantId);
         await _cartRepo.SaveChangesAsync();
-        _logger.LogInformation("Cart item {ProductId} has been removed for user {UserId}", productId, userId);
+        _logger.LogInformation("Removed variant {VariantId} from cart for user {UserId}", variantId, userId);
     }
 }

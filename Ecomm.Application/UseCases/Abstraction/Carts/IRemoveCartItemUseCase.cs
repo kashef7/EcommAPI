@@ -2,5 +2,5 @@
 
 public interface IRemoveCartItemUseCase
 {
-    public Task ExecuteAsync(Guid userId, Guid productId);
+    Task ExecuteAsync(Guid userId, Guid variantId);
 }

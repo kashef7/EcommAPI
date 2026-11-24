@@ -6,12 +6,13 @@ namespace Ecomm.Domain.Entities.Products;
 
 public class Product
 {
-    public const int MaxStockQuantity = 1_000_000;
     public const int MaxImagesCount = 10;
     public const int MaxTagsCount = 20;
 
     private readonly List<ProductImage> _images = [];
     private readonly List<ProductTags> _productTags = [];
+    private readonly List<ProductOption> _options = [];
+    private readonly List<ProductVariant> _variants = [];
 
     public Guid Id { get; init; } = Guid.CreateVersion7();
     public string Name { get; private set; } = null!;
@@ -19,21 +20,18 @@ public class Product
     public Guid CategoryId { get; private set; }
     public Category Category { get; private set; } = null!;
 
-    // Temporarily retained on Product during Phase 1 for Cart/Order compatibility;
-    // will be migrated to ProductVariant in Phase 2.
-    public decimal Price { get; private set; }
-    public int StockQuantity { get; private set; }
-
     public DateTime CreatedAt { get; init; }
     public DateTime UpdatedAt { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
     public IReadOnlyCollection<ProductImage> Images => _images.AsReadOnly();
     public IReadOnlyCollection<ProductTags> ProductTags => _productTags.AsReadOnly();
+    public IReadOnlyCollection<ProductOption> Options => _options.AsReadOnly();
+    public IReadOnlyCollection<ProductVariant> Variants => _variants.AsReadOnly();
 
     private Product() { }
 
-    public Product(string name, string description, Guid categoryId, decimal price = 0, int stockQuantity = 0)
+    public Product(string name, string description, Guid categoryId)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("Product name cannot be empty.");
@@ -45,8 +43,6 @@ public class Product
         Name = name.Trim();
         Description = description.Trim();
         CategoryId = categoryId;
-        Price = price;
-        StockQuantity = stockQuantity;
 
         var now = DateTime.UtcNow;
         CreatedAt = now;
@@ -118,61 +114,98 @@ public class Product
         UpdatedAt = DateTime.UtcNow;
     }
 
+    public void ConfigureOptionsAndVariants(
+        IReadOnlyList<(string Name, IReadOnlyList<string> Values)>? optionsInput,
+        IReadOnlyList<(IReadOnlyDictionary<string, string>? OptionValues, decimal Price, int StockQuantity)> variantsInput)
+    {
+        if (variantsInput == null || variantsInput.Count == 0)
+            throw new DomainException("Product must have at least one variant.");
+
+        _options.Clear();
+        _variants.Clear();
+
+        var normalizedOptions = optionsInput?
+            .Where(o => !string.IsNullOrWhiteSpace(o.Name))
+            .ToList() ?? [];
+
+        // Check unique option names
+        var seenOptionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        for (var i = 0; i < normalizedOptions.Count; i++)
+        {
+            var opt = normalizedOptions[i];
+            var trimmedName = opt.Name.Trim();
+            if (!seenOptionNames.Add(trimmedName))
+                throw new DomainException($"Duplicate option name '{trimmedName}'.");
+
+            if (opt.Values == null || opt.Values.Count == 0)
+                throw new DomainException($"Option '{trimmedName}' must have at least one value.");
+
+            var optionEntity = new ProductOption(Id, trimmedName, i);
+            foreach (var val in opt.Values)
+            {
+                optionEntity.AddValue(val);
+            }
+            _options.Add(optionEntity);
+        }
+
+        // If product has no options
+        if (_options.Count == 0)
+        {
+            if (variantsInput.Count != 1)
+                throw new DomainException("A product with no options must have exactly one variant.");
+
+            var singleVariant = variantsInput[0];
+            if (singleVariant.OptionValues != null && singleVariant.OptionValues.Count > 0)
+                throw new DomainException("A product with no options cannot have option values on its variant.");
+
+            var variantEntity = new ProductVariant(Id, singleVariant.Price, singleVariant.StockQuantity);
+            _variants.Add(variantEntity);
+        }
+        else
+        {
+            // If product has options:
+            // Every variant must have exactly one value for every option,
+            // and no two variants have the same combination.
+            var seenCombinations = new HashSet<string>();
+
+            foreach (var vInput in variantsInput)
+            {
+                if (vInput.OptionValues == null || vInput.OptionValues.Count != _options.Count)
+                    throw new DomainException($"Each variant must specify a value for all {_options.Count} options.");
+
+                var variantEntity = new ProductVariant(Id, vInput.Price, vInput.StockQuantity);
+                var combinationKeys = new List<string>();
+
+                // Match against each option in order of option SortOrder
+                foreach (var opt in _options.OrderBy(o => o.SortOrder))
+                {
+                    if (!vInput.OptionValues.TryGetValue(opt.Name, out var valStr) || string.IsNullOrWhiteSpace(valStr))
+                        throw new DomainException($"Variant is missing value for option '{opt.Name}'.");
+
+                    var matchedValue = opt.Values.FirstOrDefault(v => v.Value.Equals(valStr.Trim(), StringComparison.OrdinalIgnoreCase))
+                        ?? throw new DomainException($"Value '{valStr}' is not valid for option '{opt.Name}'.");
+
+                    variantEntity.AddOptionValue(matchedValue.Id);
+                    combinationKeys.Add($"{opt.Name.ToLowerInvariant()}:{matchedValue.Value.ToLowerInvariant()}");
+                }
+
+                var combinationKey = string.Join("|", combinationKeys);
+                if (!seenCombinations.Add(combinationKey))
+                    throw new DomainException($"Duplicate variant combination: {combinationKey}");
+
+                _variants.Add(variantEntity);
+            }
+        }
+
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     public void Delete()
     {
         if (DeletedAt != null)
             throw new DomainException("Product is already deleted.");
 
         DeletedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    // Transitional properties for Phase 1 compilation; not mapped in EF Core
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string Tag => _productTags.FirstOrDefault()?.Tag?.Name ?? string.Empty;
-
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string? ImageUrl => _images.OrderBy(i => i.SortOrder).FirstOrDefault()?.Url;
-
-    public Product(string name, string description, decimal price, int stockQuantity, string tag, string? imageUrl = null)
-        : this(name, description, Guid.Empty, price, stockQuantity)
-    {
-    }
-
-    public void UpdateTag(string tag)
-    {
-    }
-
-    public void UpdateImageUrl(string? imageUrl)
-    {
-    }
-    public void UpdatePrice(decimal price)
-    {
-        if (price <= 0)
-            throw new DomainException("Product price must be greater than zero.");
-
-        Price = price;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void DecreaseStock(int quantity)
-    {
-        if (quantity <= 0)
-            throw new DomainException("Quantity to decrease must be greater than zero.");
-
-        if (quantity > StockQuantity)
-            throw new InsufficientStockException(Id, quantity, StockQuantity);
-
-        StockQuantity -= quantity;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void IncreaseStock(int quantity)
-    {
-        if (quantity <= 0)
-            throw new DomainException("Quantity to increase must be greater than zero.");
-
-        StockQuantity += quantity;
         UpdatedAt = DateTime.UtcNow;
     }
 }

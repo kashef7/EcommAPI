@@ -8,16 +8,16 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
 {
     public void Configure(EntityTypeBuilder<CartItem> builder)
     {
-        builder.HasKey(i => new { i.CartId, i.ProductId });
+        builder.HasKey(i => new { i.CartId, i.VariantId });
 
-        builder.HasOne(i => i.Product)
+        builder.HasOne(i => i.Variant)
             .WithMany()
-            .HasForeignKey(i => i.ProductId)
+            .HasForeignKey(i => i.VariantId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(i => i.Quantity).IsRequired();
 
-        // Matches Product's global query filter so EF doesn't warn about a required navigation to a filtered entity.
-        builder.HasQueryFilter(i => i.Product.DeletedAt == null);
+        // The CartItem global query filter must hide items whose variant is soft-deleted or whose product is soft-deleted.
+        builder.HasQueryFilter(i => i.Variant.DeletedAt == null && i.Variant.Product.DeletedAt == null);
     }
 }

@@ -8,7 +8,7 @@ namespace Ecomm.API.Controllers.Carts;
 
 [ApiController]
 [Authorize]
-[Route("api/[controller]")]
+[Route("api/cart")]
 public class CartController : ControllerBase
 {
     private readonly IAddCartItemUseCase _addCartItemUseCase;
@@ -55,27 +55,27 @@ public class CartController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("items/{productId:guid}/quantity")]
-    public async Task<IActionResult> UpdateCartItem(Guid productId, UpdateCartItemQuantityDTO updateCartItemQuantityDto)
+    [HttpPut("items/{variantId:guid}/quantity")]
+    public async Task<IActionResult> UpdateCartItem(Guid variantId, UpdateCartItemQuantityDTO updateCartItemQuantityDto)
     {
         if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
 
-        await _updateCartItemUseCase.ExecuteAsync(userId, productId, updateCartItemQuantityDto);
+        await _updateCartItemUseCase.ExecuteAsync(userId, variantId, updateCartItemQuantityDto);
         return NoContent();
     }
     
-    [HttpDelete("items/{productId:guid}")]
-    public async Task<IActionResult> RemoveCartItem(Guid productId)
+    [HttpDelete("items/{variantId:guid}")]
+    public async Task<IActionResult> RemoveCartItem(Guid variantId)
     {
         if (!User.TryGetUserId(out var userId))
         {
             return Unauthorized();
         }
 
-        await _removeCartItemUseCase.ExecuteAsync(userId, productId);
+        await _removeCartItemUseCase.ExecuteAsync(userId, variantId);
         return NoContent();
     }
     

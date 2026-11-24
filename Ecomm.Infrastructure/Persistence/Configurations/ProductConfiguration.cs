@@ -8,11 +8,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Products", t =>
-        {
-            t.HasCheckConstraint("CK_Products_Price_Positive", "\"Price\" > 0");
-            t.HasCheckConstraint("CK_Products_Stock_NonNegative", "\"StockQuantity\" >= 0");
-        });
+        builder.ToTable("Products");
 
         builder.HasKey(p => p.Id);
         
@@ -34,13 +30,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithMany()
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Property(p => p.Price)
-            .IsRequired()
-            .HasPrecision(18, 2);
-
-        builder.Property(p => p.StockQuantity)
-            .IsRequired();
 
         builder.Property(p => p.CreatedAt)
             .IsRequired();
@@ -71,6 +60,24 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Navigation(p => p.ProductTags)
             .HasField("_productTags")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.HasMany(p => p.Options)
+            .WithOne(o => o.Product)
+            .HasForeignKey(o => o.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(p => p.Options)
+            .HasField("_options")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.HasMany(p => p.Variants)
+            .WithOne(v => v.Product)
+            .HasForeignKey(v => v.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Navigation(p => p.Variants)
+            .HasField("_variants")
             .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

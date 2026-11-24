@@ -19,33 +19,39 @@ public class AdjustProductStockUseCase : IAdjustProductStockUseCase
         _logger = logger;
     }
 
-    public async Task<ProductStockDTO> ExecuteAsync(Guid id, AdjustProductStockDTO dto)
+    public async Task<ProductStockDTO> ExecuteAsync(Guid productId, Guid variantId, AdjustProductStockDTO dto)
     {
+        var variant = await _productRepo.GetVariantByIdAsync(variantId);
+        if (variant == null || variant.ProductId != productId)
+        {
+            throw new VariantNotFoundException(variantId);
+        }
+
         var delta = dto.Delta!.Value;
-        var rows = await _productRepo.AdjustStockAsync(id, delta);
-        var current = await _productRepo.GetStockAsync(id);
+        var rows = await _productRepo.AdjustStockAsync(variantId, delta);
+        var current = await _productRepo.GetStockAsync(variantId);
 
         if (rows == 1)
         {
             if (current is null)
             {
-                throw new ProductNotFoundException();
+                throw new VariantNotFoundException(variantId);
             }
 
-            _logger.LogInformation("Stock for product {ProductId} adjusted by {Delta}. Resulting stock: {Stock}", id, delta, current.Value);
-            return new ProductStockDTO(id, current.Value);
+            _logger.LogInformation("Stock for variant {VariantId} adjusted by {Delta}. Resulting stock: {Stock}", variantId, delta, current.Value);
+            return new ProductStockDTO(variantId, current.Value);
         }
 
         if (current is null)
         {
-            throw new ProductNotFoundException();
+            throw new VariantNotFoundException(variantId);
         }
 
         if ((long)current.Value + delta < 0)
         {
-            throw new InsufficientStockException(id, -delta, current.Value);
+            throw new InsufficientStockException(variantId, -delta, current.Value);
         }
 
-        throw new DomainException($"Stock cannot exceed {Product.MaxStockQuantity}.");
+        throw new DomainException($"Stock cannot exceed {ProductVariant.MaxStockQuantity}.");
     }
 }

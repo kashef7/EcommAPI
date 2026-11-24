@@ -19,6 +19,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Tag> Tags { get; set; }
     public DbSet<ProductTags> ProductTags { get; set; }
     public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<ProductOption> ProductOptions { get; set; }
+    public DbSet<ProductOptionValue> ProductOptionValues { get; set; }
+    public DbSet<ProductVariant> ProductVariants { get; set; }
+    public DbSet<VariantOptionValue> VariantOptionValues { get; set; }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
