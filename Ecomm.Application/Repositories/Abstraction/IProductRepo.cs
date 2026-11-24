@@ -9,10 +9,13 @@ public interface IProductRepo
     Task<(IReadOnlyList<GetProductDTO> items, int totalCount)> GetAllAsync(ProductQuery query);
     Task<Product?> GetByIdWithDetailsAsync(Guid id);
     Task<Product?> GetByIdForUpdateAsync(Guid id);
+    Task<Product?> GetByIdForOptionsUpdateAsync(Guid id);
     Task<Product?> GetByIdAsync(Guid id);
     Task<ProductVariant?> GetVariantByIdAsync(Guid variantId);
     Task AddAsync(Product product);
     Task SaveChangesAsync();
+    Task DeleteOptionAsync(Product product, ProductOption option);
+    Task DeleteOptionValueAsync(Product product, ProductOptionValue value);
 
     /// <summary>
     /// Atomically adjusts the stock quantity of a product variant in a single conditional SQL UPDATE statement.

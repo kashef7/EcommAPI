@@ -85,6 +85,42 @@ public class ProductRepo : IProductRepo
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    public async Task<Product?> GetByIdForOptionsUpdateAsync(Guid id)
+    {
+        return await _dbContext.Products
+            .Include(p => p.Options).ThenInclude(o => o.Values)
+            .Include(p => p.Variants).ThenInclude(v => v.OptionValues).ThenInclude(ov => ov.OptionValue)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    public async Task DeleteOptionAsync(Product product, ProductOption option)
+    {
+        var valueIds = option.Values.Select(v => v.Id).ToList();
+
+        var linksToDelete = await _dbContext.VariantOptionValues
+            .IgnoreQueryFilters()
+            .Where(vov => valueIds.Contains(vov.OptionValueId))
+            .ToListAsync();
+
+        _dbContext.VariantOptionValues.RemoveRange(linksToDelete);
+        _dbContext.ProductOptions.Remove(option);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteOptionValueAsync(Product product, ProductOptionValue value)
+    {
+        var linksToDelete = await _dbContext.VariantOptionValues
+            .IgnoreQueryFilters()
+            .Where(vov => vov.OptionValueId == value.Id)
+            .ToListAsync();
+
+        _dbContext.VariantOptionValues.RemoveRange(linksToDelete);
+        _dbContext.ProductOptionValues.Remove(value);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<Product?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);

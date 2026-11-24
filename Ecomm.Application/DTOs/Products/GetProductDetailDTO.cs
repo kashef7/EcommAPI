@@ -15,7 +15,9 @@ public record CategoryReferenceDTO(Guid Id, string Name);
 
 public record ProductImageDetailDTO(string Url, int SortOrder);
 
-public record ProductOptionDetailDTO(string Name, IReadOnlyList<string> Values);
+public record ProductOptionValueDetailDTO(Guid Id, string Value);
+
+public record ProductOptionDetailDTO(Guid Id, string Name, IReadOnlyList<ProductOptionValueDetailDTO> Values);
 
 public record ProductVariantDetailDTO(
     Guid Id,

@@ -76,6 +76,17 @@ public class ProductVariant
     public void AddOptionValue(Guid optionValueId)
     {
         _optionValues.Add(new VariantOptionValue(Id, optionValueId));
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void RemoveOptionValue(Guid optionValueId)
+    {
+        var existing = _optionValues.FirstOrDefault(ov => ov.OptionValueId == optionValueId);
+        if (existing != null)
+        {
+            _optionValues.Remove(existing);
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 
     public void Delete()

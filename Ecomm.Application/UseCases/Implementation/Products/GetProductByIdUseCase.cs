@@ -34,7 +34,12 @@ public class GetProductByIdUseCase : IGetProductByIdUseCase
 
         var options = product.Options
             .OrderBy(o => o.SortOrder)
-            .Select(o => new ProductOptionDetailDTO(o.Name, o.Values.OrderBy(v => v.SortOrder).Select(v => v.Value).ToList()))
+            .Select(o => new ProductOptionDetailDTO(
+                o.Id,
+                o.Name,
+                o.Values.OrderBy(v => v.SortOrder)
+                    .Select(v => new ProductOptionValueDetailDTO(v.Id, v.Value))
+                    .ToList()))
             .ToList();
 
         var variants = product.Variants

@@ -25,4 +25,16 @@ public class ProductOptionValue
         Value = trimmed;
         SortOrder = sortOrder;
     }
+
+    public void Rename(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new DomainException("Option value cannot be empty.");
+
+        var trimmed = value.Trim();
+        if (trimmed.Length > 100)
+            throw new DomainException("Option value cannot exceed 100 characters.");
+
+        Value = trimmed;
+    }
 }

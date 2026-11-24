@@ -117,6 +117,14 @@ try
     builder.Services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
     builder.Services.AddScoped<IUpdateVariantPriceUseCase, UpdateVariantPriceUseCase>();
     builder.Services.AddScoped<IAdjustProductStockUseCase, AdjustProductStockUseCase>();
+    builder.Services.AddScoped<IAddProductVariantUseCase, AddProductVariantUseCase>();
+    builder.Services.AddScoped<IDeleteProductVariantUseCase, DeleteProductVariantUseCase>();
+    builder.Services.AddScoped<IAddProductOptionUseCase, AddProductOptionUseCase>();
+    builder.Services.AddScoped<IRenameProductOptionUseCase, RenameProductOptionUseCase>();
+    builder.Services.AddScoped<IDeleteProductOptionUseCase, DeleteProductOptionUseCase>();
+    builder.Services.AddScoped<IAddProductOptionValueUseCase, AddProductOptionValueUseCase>();
+    builder.Services.AddScoped<IRenameProductOptionValueUseCase, RenameProductOptionValueUseCase>();
+    builder.Services.AddScoped<IDeleteProductOptionValueUseCase, DeleteProductOptionValueUseCase>();
     builder.Services.AddScoped<IAddCartItemUseCase, AddCartItemUseCase>();
     builder.Services.AddScoped<ICartRepo, CartRepo>();
     builder.Services.AddScoped<IGetCartItemsUseCase, GetCartItemsUseCase>();

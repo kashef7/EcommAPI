@@ -92,6 +92,14 @@ public class CartRepo : ICartRepo
             .ExecuteDeleteAsync();
     }
 
+    public async Task RemoveVariantFromAllCartsAsync(Guid variantId)
+    {
+        await _dbContext.CartItems
+            .IgnoreQueryFilters()
+            .Where(i => i.VariantId == variantId)
+            .ExecuteDeleteAsync();
+    }
+
     public async Task SaveChangesAsync()
     {
         await _dbContext.SaveChangesAsync();

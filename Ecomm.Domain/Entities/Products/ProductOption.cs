@@ -45,4 +45,21 @@ public class ProductOption
         var sortOrder = _values.Count > 0 ? _values.Max(v => v.SortOrder) + 1 : 0;
         _values.Add(new ProductOptionValue(Id, trimmed, sortOrder));
     }
+
+    public void Rename(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new DomainException("Option name cannot be empty.");
+
+        var trimmed = name.Trim();
+        if (trimmed.Length > 50)
+            throw new DomainException("Option name cannot exceed 50 characters.");
+
+        Name = trimmed;
+    }
+
+    public void RemoveValue(ProductOptionValue value)
+    {
+        _values.Remove(value);
+    }
 }

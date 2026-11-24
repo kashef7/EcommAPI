@@ -24,6 +24,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             InsufficientStockException => (StatusCodes.Status409Conflict, "Insufficient Stock"),
             InvalidStatusTransitionException => (StatusCodes.Status409Conflict, "Invalid Status Transition"),
             EmailAlreadyExistsException => (StatusCodes.Status409Conflict, "Email Already Exists"),
+            ProductConflictException => (StatusCodes.Status409Conflict, "Conflict"),
 
             // 401 Unauthorized: All authentication & refresh token failures
             InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid Credentials"),
@@ -34,6 +35,9 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             // 404 Not Found: Missing domain resources
             CategoryNotFoundException => (StatusCodes.Status404NotFound, "Category Not Found"),
             VariantNotFoundException => (StatusCodes.Status404NotFound, "Variant Not Found"),
+            ProductVariantNotFoundException => (StatusCodes.Status404NotFound, "Variant Not Found"),
+            ProductOptionNotFoundException => (StatusCodes.Status404NotFound, "Product Option Not Found"),
+            ProductOptionValueNotFoundException => (StatusCodes.Status404NotFound, "Product Option Value Not Found"),
             CartItemNotFoundException => (StatusCodes.Status404NotFound, "Cart Item Not Found"),
             UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),
             ProductNotFoundException => (StatusCodes.Status404NotFound, "Product Not Found"),
