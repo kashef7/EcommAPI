@@ -42,6 +42,7 @@ public class ProductOption
         if (_values.Any(v => v.Value.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
             throw new DomainException($"Option value '{trimmed}' already exists for option '{Name}'.");
 
-        _values.Add(new ProductOptionValue(Id, trimmed));
+        var sortOrder = _values.Count > 0 ? _values.Max(v => v.SortOrder) + 1 : 0;
+        _values.Add(new ProductOptionValue(Id, trimmed, sortOrder));
     }
 }

@@ -118,21 +118,22 @@ public class Product
         IReadOnlyList<(string Name, IReadOnlyList<string> Values)>? optionsInput,
         IReadOnlyList<(IReadOnlyDictionary<string, string>? OptionValues, decimal Price, int StockQuantity)> variantsInput)
     {
+        if (_options.Count > 0 || _variants.Count > 0)
+            throw new DomainException("Cannot configure options and variants on an existing product.");
+
         if (variantsInput == null || variantsInput.Count == 0)
             throw new DomainException("Product must have at least one variant.");
 
-        _options.Clear();
-        _variants.Clear();
-
-        var normalizedOptions = optionsInput?
-            .Where(o => !string.IsNullOrWhiteSpace(o.Name))
-            .ToList() ?? [];
+        var inputOptions = optionsInput ?? [];
 
         // Check unique option names
         var seenOptionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        for (var i = 0; i < normalizedOptions.Count; i++)
+        for (var i = 0; i < inputOptions.Count; i++)
         {
-            var opt = normalizedOptions[i];
+            var opt = inputOptions[i];
+            if (string.IsNullOrWhiteSpace(opt.Name))
+                throw new DomainException("Option name cannot be empty.");
+
             var trimmedName = opt.Name.Trim();
             if (!seenOptionNames.Add(trimmedName))
                 throw new DomainException($"Duplicate option name '{trimmedName}'.");
@@ -170,7 +171,28 @@ public class Product
 
             foreach (var vInput in variantsInput)
             {
-                if (vInput.OptionValues == null || vInput.OptionValues.Count != _options.Count)
+                if (vInput.OptionValues == null)
+                    throw new DomainException($"Each variant must specify a value for all {_options.Count} options.");
+
+                var normalizedInputMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var kvp in vInput.OptionValues)
+                {
+                    var key = kvp.Key?.Trim() ?? string.Empty;
+                    if (string.IsNullOrEmpty(key))
+                        throw new DomainException("Option key cannot be empty in variant.");
+
+                    if (!normalizedInputMap.TryAdd(key, kvp.Value))
+                        throw new DomainException($"Duplicate option key '{key}' in variant.");
+                }
+
+                // Check for unknown keys naming the key
+                foreach (var inputKey in normalizedInputMap.Keys)
+                {
+                    if (!_options.Any(o => o.Name.Equals(inputKey, StringComparison.OrdinalIgnoreCase)))
+                        throw new DomainException($"Unknown option key '{inputKey}' specified for variant.");
+                }
+
+                if (normalizedInputMap.Count != _options.Count)
                     throw new DomainException($"Each variant must specify a value for all {_options.Count} options.");
 
                 var variantEntity = new ProductVariant(Id, vInput.Price, vInput.StockQuantity);
@@ -179,7 +201,7 @@ public class Product
                 // Match against each option in order of option SortOrder
                 foreach (var opt in _options.OrderBy(o => o.SortOrder))
                 {
-                    if (!vInput.OptionValues.TryGetValue(opt.Name, out var valStr) || string.IsNullOrWhiteSpace(valStr))
+                    if (!normalizedInputMap.TryGetValue(opt.Name, out var valStr) || string.IsNullOrWhiteSpace(valStr))
                         throw new DomainException($"Variant is missing value for option '{opt.Name}'.");
 
                     var matchedValue = opt.Values.FirstOrDefault(v => v.Value.Equals(valStr.Trim(), StringComparison.OrdinalIgnoreCase))

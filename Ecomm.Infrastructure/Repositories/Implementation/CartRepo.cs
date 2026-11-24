@@ -58,6 +58,7 @@ public class CartRepo : ICartRepo
                 i.Quantity,
                 OptionValues = i.Variant.OptionValues
                     .OrderBy(ov => ov.OptionValue.Option.SortOrder)
+                    .ThenBy(ov => ov.OptionValue.SortOrder)
                     .Select(ov => new { OptionName = ov.OptionValue.Option.Name, OptionVal = ov.OptionValue.Value })
                     .ToList()
             })

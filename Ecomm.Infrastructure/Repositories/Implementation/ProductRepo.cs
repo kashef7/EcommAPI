@@ -29,8 +29,12 @@ public class ProductRepo : IProductRepo
         if (string.Equals(productQuery.OrderBy, "price", StringComparison.OrdinalIgnoreCase))
         {
             orderedQuery = productQuery.OrderDesc
-                ? query.OrderByDescending(p => p.Variants.Min(v => (decimal?)v.Price) ?? 0m).ThenBy(p => p.Id)
-                : query.OrderBy(p => p.Variants.Min(v => (decimal?)v.Price) ?? 0m).ThenBy(p => p.Id);
+                ? query.OrderByDescending(p => p.Variants.Any(v => v.StockQuantity > 0)
+                    ? p.Variants.Where(v => v.StockQuantity > 0).Min(v => (decimal?)v.Price) ?? 0m
+                    : p.Variants.Min(v => (decimal?)v.Price) ?? 0m).ThenBy(p => p.Id)
+                : query.OrderBy(p => p.Variants.Any(v => v.StockQuantity > 0)
+                    ? p.Variants.Where(v => v.StockQuantity > 0).Min(v => (decimal?)v.Price) ?? 0m
+                    : p.Variants.Min(v => (decimal?)v.Price) ?? 0m).ThenBy(p => p.Id);
         }
         else
         {
@@ -49,7 +53,9 @@ public class ProductRepo : IProductRepo
                 p.Name,
                 p.Category.Name,
                 p.Images.OrderBy(i => i.SortOrder).Select(i => i.Url).FirstOrDefault(),
-                p.Variants.Min(v => (decimal?)v.Price) ?? 0m,
+                p.Variants.Any(v => v.StockQuantity > 0)
+                    ? p.Variants.Where(v => v.StockQuantity > 0).Min(v => (decimal?)v.Price) ?? 0m
+                    : p.Variants.Min(v => (decimal?)v.Price) ?? 0m,
                 p.Variants.Any(v => v.StockQuantity > 0),
                 p.ProductTags.Select(pt => pt.Tag.Name).ToList()
             ))

@@ -40,14 +40,14 @@ public static class ProductFilter
             products = products.Where(x => x.Variants.Any(v => v.StockQuantity > 0));
         }
 
-        if (query.MinPrice.HasValue)
+        if (query.MinPrice.HasValue || query.MaxPrice.HasValue)
         {
-            products = products.Where(x => x.Variants.Any(v => v.Price >= query.MinPrice.Value));
-        }
+            var min = query.MinPrice;
+            var max = query.MaxPrice;
 
-        if (query.MaxPrice.HasValue)
-        {
-            products = products.Where(x => x.Variants.Any(v => v.Price <= query.MaxPrice.Value));
+            products = products.Where(p =>
+                p.Variants.Any(v => v.StockQuantity > 0 && (!min.HasValue || v.Price >= min.Value) && (!max.HasValue || v.Price <= max.Value))
+                || (!p.Variants.Any(v => v.StockQuantity > 0) && p.Variants.Any(v => (!min.HasValue || v.Price >= min.Value) && (!max.HasValue || v.Price <= max.Value))));
         }
 
         return products;

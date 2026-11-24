@@ -34,15 +34,19 @@ public class GetProductByIdUseCase : IGetProductByIdUseCase
 
         var options = product.Options
             .OrderBy(o => o.SortOrder)
-            .Select(o => new ProductOptionDetailDTO(o.Name, o.Values.Select(v => v.Value).ToList()))
+            .Select(o => new ProductOptionDetailDTO(o.Name, o.Values.OrderBy(v => v.SortOrder).Select(v => v.Value).ToList()))
             .ToList();
 
         var variants = product.Variants
+            .OrderBy(v => v.Price)
+            .ThenBy(v => v.CreatedAt)
+            .ThenBy(v => v.Id)
             .Select(v =>
             {
                 var optionValuesMap = v.OptionValues
                     .Where(ov => ov.OptionValue?.Option != null)
                     .OrderBy(ov => ov.OptionValue.Option.SortOrder)
+                    .ThenBy(ov => ov.OptionValue.SortOrder)
                     .ToDictionary(ov => ov.OptionValue.Option.Name, ov => ov.OptionValue.Value);
 
                 return new ProductVariantDetailDTO(v.Id, v.Price, v.StockQuantity, optionValuesMap);

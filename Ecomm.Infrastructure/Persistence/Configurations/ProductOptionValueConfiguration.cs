@@ -19,6 +19,9 @@ public class ProductOptionValueConfiguration : IEntityTypeConfiguration<ProductO
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(ov => ov.SortOrder)
+            .IsRequired();
+
         builder.HasIndex(ov => new { ov.OptionId, ov.Value })
             .IsUnique();
 
