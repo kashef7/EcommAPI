@@ -1,7 +1,9 @@
 using System.Reflection;
 using Ecomm.Domain.Entities.CartItems;
 using Ecomm.Domain.Entities.Carts;
+using Ecomm.Domain.Entities.Categories;
 using Ecomm.Domain.Entities.Products;
+using Ecomm.Domain.Entities.Tags;
 using Ecomm.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Product> Products { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<ProductTags> ProductTags { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {

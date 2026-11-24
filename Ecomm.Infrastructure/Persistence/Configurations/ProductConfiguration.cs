@@ -1,8 +1,8 @@
-namespace Ecomm.Infrastructure.Persistence.Configurations;
-
 using Ecomm.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Ecomm.Infrastructure.Persistence.Configurations;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
@@ -27,19 +27,20 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired()
             .HasMaxLength(2000);
 
+        builder.Property(p => p.CategoryId)
+            .IsRequired();
+
+        builder.HasOne(p => p.Category)
+            .WithMany()
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Property(p => p.Price)
             .IsRequired()
             .HasPrecision(18, 2);
 
         builder.Property(p => p.StockQuantity)
             .IsRequired();
-
-        builder.Property(p => p.Tag)
-            .IsRequired()
-            .HasMaxLength(100);
-
-        builder.Property(p => p.ImageUrl)
-            .HasMaxLength(2048);
 
         builder.Property(p => p.CreatedAt)
             .IsRequired();
@@ -49,10 +50,27 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.DeletedAt);
 
-        // Soft delete: queries that must include archived products (e.g. order history) have to call IgnoreQueryFilters()
         builder.HasQueryFilter(p => p.DeletedAt == null);
 
-        builder.HasIndex(p => p.Tag);
+        builder.HasIndex(p => p.CategoryId);
         builder.HasIndex(p => p.Name);
+
+        builder.HasMany(p => p.Images)
+            .WithOne(i => i.Product)
+            .HasForeignKey(i => i.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(p => p.Images)
+            .HasField("_images")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.HasMany(p => p.ProductTags)
+            .WithOne(pt => pt.Product)
+            .HasForeignKey(pt => pt.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(p => p.ProductTags)
+            .HasField("_productTags")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

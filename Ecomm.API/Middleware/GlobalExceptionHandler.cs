@@ -20,6 +20,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         var (statusCode, title) = exception switch
         {
             // 409 Conflict: Business state or uniqueness conflicts
+            CategoryHasProductsException => (StatusCodes.Status409Conflict, "Category Has Products"),
             InsufficientStockException => (StatusCodes.Status409Conflict, "Insufficient Stock"),
             InvalidStatusTransitionException => (StatusCodes.Status409Conflict, "Invalid Status Transition"),
             EmailAlreadyExistsException => (StatusCodes.Status409Conflict, "Email Already Exists"),
@@ -31,6 +32,8 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             RefreshTokenNotFoundException => (StatusCodes.Status401Unauthorized, "Invalid Refresh Token"),
 
             // 404 Not Found: Missing domain resources
+            CategoryNotFoundException => (StatusCodes.Status404NotFound, "Category Not Found"),
+            VariantNotFoundException => (StatusCodes.Status404NotFound, "Variant Not Found"),
             CartItemNotFoundException => (StatusCodes.Status404NotFound, "Cart Item Not Found"),
             UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found"),
             ProductNotFoundException => (StatusCodes.Status404NotFound, "Product Not Found"),

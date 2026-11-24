@@ -5,10 +5,14 @@ using Ecomm.API.Middleware;
 using Ecomm.Application.Repositories.Abstraction;
 using Ecomm.Application.Services.Abstraction;
 using Ecomm.Application.UseCases.Abstraction.Carts;
+using Ecomm.Application.UseCases.Abstraction.Categories;
 using Ecomm.Application.UseCases.Abstraction.Products;
+using Ecomm.Application.UseCases.Abstraction.Tags;
 using Ecomm.Application.UseCases.Abstraction.Users;
 using Ecomm.Application.UseCases.Implementation.Carts;
+using Ecomm.Application.UseCases.Implementation.Categories;
 using Ecomm.Application.UseCases.Implementation.Products;
+using Ecomm.Application.UseCases.Implementation.Tags;
 using Ecomm.Application.UseCases.Implementation.Users;
 using Ecomm.Infrastructure.Persistence;
 using Ecomm.Infrastructure.Repositories.Implementation;
@@ -99,6 +103,13 @@ try
     builder.Services.AddScoped<IUpdateUserEmailUseCase, UpdateUserEmailUseCase>();
     builder.Services.AddScoped<IUpdateUserPasswordUseCase, UpdateUserPasswordUseCase>();
     builder.Services.AddScoped<IProductRepo, ProductRepo>();
+    builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+    builder.Services.AddScoped<ITagRepo, TagRepo>();
+    builder.Services.AddScoped<IGetAllCategoriesUseCase, GetAllCategoriesUseCase>();
+    builder.Services.AddScoped<ICreateCategoryUseCase, CreateCategoryUseCase>();
+    builder.Services.AddScoped<IUpdateCategoryUseCase, UpdateCategoryUseCase>();
+    builder.Services.AddScoped<IDeleteCategoryUseCase, DeleteCategoryUseCase>();
+    builder.Services.AddScoped<IGetAllTagsUseCase, GetAllTagsUseCase>();
     builder.Services.AddScoped<IAddProductUseCase, AddProductUseCase>();
     builder.Services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
     builder.Services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
@@ -159,7 +170,7 @@ try
     app.MapControllers();
     app.Run();
 }
-catch (Exception ex)
+catch (Exception ex) when (ex is not HostAbortedException)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
     throw;

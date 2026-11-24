@@ -62,9 +62,36 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.ToTable("Carts");
                 });
 
+            modelBuilder.Entity("Ecomm.Domain.Entities.Categories.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Categories", (string)null);
+                });
+
             modelBuilder.Entity("Ecomm.Domain.Entities.Products.Product", b =>
                 {
                     b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -78,10 +105,6 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -94,19 +117,14 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Tag")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("Tag");
+                    b.HasIndex("Name");
 
                     b.ToTable("Products", null, t =>
                         {
@@ -114,6 +132,71 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
 
                             t.HasCheckConstraint("CK_Products_Stock_NonNegative", "\"StockQuantity\" >= 0");
                         });
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId", "SortOrder");
+
+                    b.ToTable("ProductImages", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductTags", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ProductId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ProductTags", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Tags.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Ecomm.Domain.Entities.Users.User", b =>
@@ -184,6 +267,47 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.Product", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Categories.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductImage", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.ProductTags", b =>
+                {
+                    b.HasOne("Ecomm.Domain.Entities.Products.Product", "Product")
+                        .WithMany("ProductTags")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecomm.Domain.Entities.Tags.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Ecomm.Domain.Entities.Users.User", b =>
                 {
                     b.OwnsOne("Ecomm.Domain.ValueObjects.RefreshToken", "RefreshToken", b1 =>
@@ -218,6 +342,13 @@ namespace Ecomm.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Ecomm.Domain.Entities.Carts.Cart", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Ecomm.Domain.Entities.Products.Product", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("ProductTags");
                 });
 #pragma warning restore 612, 618
         }
