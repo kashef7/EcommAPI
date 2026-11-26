@@ -23,4 +23,6 @@ public class TagsController : ControllerBase
         var tags = await _getAllTagsUseCase.ExecuteAsync();
         return Ok(tags);
     }
+    
+    //Add Delete and Update tag endpoints
 }
