@@ -15,7 +15,14 @@
       background-color var(--dur-fast) var(--ease-soft),
       border-color var(--dur-fast) var(--ease-soft),
       color var(--dur-fast) var(--ease-soft),
+      box-shadow var(--dur-fast) var(--ease-soft),
+      transform var(--dur-fast) var(--ease-soft),
       opacity var(--dur-fast) var(--ease-soft);
+  }
+
+  .button:active:not(.isDisabled),
+  .iconButton:active:not(.isDisabled) {
+    transform: translateY(1px);
   }
 
   .md {
@@ -37,7 +44,8 @@
   .primary {
     background-color: var(--color-primary);
     color: var(--color-on-primary);
-    border-color: var(--color-primary);
+    border-color: var(--color-primary-border);
+    box-shadow: var(--shadow-surface);
   }
 
   .primary:hover:not(.isDisabled) {
@@ -50,10 +58,11 @@
     background-color: var(--color-surface);
     color: var(--color-ink);
     border-color: var(--color-border-control);
+    box-shadow: var(--shadow-surface);
   }
 
   .secondary:hover:not(.isDisabled) {
-    background-color: var(--color-surface-sunken);
+    background-color: var(--color-surface-hover);
     border-color: var(--color-ink);
     color: var(--color-ink);
   }
@@ -65,20 +74,22 @@
   }
 
   .quiet:hover:not(.isDisabled) {
-    background-color: var(--color-surface-sunken);
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-border);
     color: var(--color-ink);
   }
 
   .danger {
     background-color: var(--color-danger);
-    color: var(--color-surface);
+    color: var(--color-on-danger);
     border-color: var(--color-danger);
+    box-shadow: var(--shadow-surface);
   }
 
   .danger:hover:not(.isDisabled) {
-    background-color: var(--color-danger-ink);
-    border-color: var(--color-danger-ink);
-    color: var(--color-surface);
+    background-color: var(--color-danger-hover);
+    border-color: var(--color-danger-hover);
+    color: var(--color-on-danger);
   }
 
   .isDisabled {
@@ -104,6 +115,7 @@
       background-color var(--dur-fast) var(--ease-soft),
       border-color var(--dur-fast) var(--ease-soft),
       color var(--dur-fast) var(--ease-soft),
+      transform var(--dur-fast) var(--ease-soft),
       opacity var(--dur-fast) var(--ease-soft);
   }
 
@@ -111,10 +123,11 @@
     background-color: var(--color-surface);
     color: var(--color-ink);
     border-color: var(--color-border-control);
+    box-shadow: var(--shadow-surface);
   }
 
   .iconButton.secondary:hover:not(.isDisabled) {
-    background-color: var(--color-surface-sunken);
+    background-color: var(--color-surface-hover);
     border-color: var(--color-ink);
   }
 
@@ -124,7 +137,8 @@
   }
 
   .iconButton.quiet:hover:not(.isDisabled) {
-    background-color: var(--color-surface-sunken);
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-border);
   }
 
   .iconButton.danger {
@@ -134,14 +148,23 @@
 
   .iconButton.danger:hover:not(.isDisabled) {
     background-color: var(--color-danger-bg);
+    border-color: var(--color-danger-border);
   }
 
   .iconButton.primary {
     background-color: var(--color-primary);
     color: var(--color-on-primary);
+    border-color: var(--color-primary-border);
   }
 
   .iconButton.primary:hover:not(.isDisabled) {
     background-color: var(--color-primary-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:active:not(.isDisabled),
+  .iconButton:active:not(.isDisabled) {
+    transform: none;
   }
 }

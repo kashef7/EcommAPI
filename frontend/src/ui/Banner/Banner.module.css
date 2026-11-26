@@ -11,26 +11,26 @@
   }
 
   .info {
-    background-color: var(--color-surface-sunken);
-    border-color: var(--color-border);
-    color: var(--color-ink);
+    background-color: var(--color-info-bg);
+    border-color: var(--color-info-border);
+    color: var(--color-info-ink);
   }
 
   .success {
     background-color: var(--color-success-bg);
-    border-color: var(--color-success-bg);
+    border-color: var(--color-success-border);
     color: var(--color-success-ink);
   }
 
   .warning {
     background-color: var(--color-warning-bg);
-    border-color: var(--color-warning-bg);
+    border-color: var(--color-warning-border);
     color: var(--color-warning-ink);
   }
 
   .danger {
     background-color: var(--color-danger-bg);
-    border-color: var(--color-danger-bg);
+    border-color: var(--color-danger-border);
     color: var(--color-danger-ink);
   }
 
@@ -58,7 +58,7 @@
     flex-wrap: wrap;
   }
 
-  .dismiss {
+  .banner button.dismiss.dismiss {
     margin: -8px -8px -8px 0;
     color: currentColor;
   }

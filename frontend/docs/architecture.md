@@ -11,7 +11,7 @@ Import directions are strictly enforced in `eslint.config.js` using `no-restrict
 | `src/config/` | Single reader of `import.meta.env` (`env.ts`) | External std types only | `api`, `core`, `ui`, `features`, `layouts`, `app`, `pages`, `preact`, `@preact/signals`, `lucide-preact` |
 | `src/styles/` | Design tokens, cascade layers, font-faces, reduced-motion & view transitions | Font assets | UI/JS modules |
 | `src/ui/` | Generic design-system primitives | `ui/`, `styles/`, `preact`, `lucide-preact` | `api`, `core`, `features`, `config`, `layouts`, `app`, `pages` |
-| `src/core/` | Framework-agnostic infrastructure (`auth`, `data`, `format`, `http`, `logging`, `navigation`, `storage`, `validation`) | `config/`, `core/` | `api`, `ui`, `features`, `layouts`, `app`, `pages` |
+| `src/core/` | Framework-agnostic infrastructure (`auth`, `data`, `format`, `http`, `logging`, `navigation`, `storage`, `theme`, `validation`) | `config/`, `core/` | `api`, `ui`, `features`, `layouts`, `app`, `pages` |
 | `src/api/` | Thin typed wrappers over HTTP client + DTO wire types | `core/http`, `core/` utilities | `config`, `ui`, `features`, `layouts`, `app`, `pages`, `preact`, `@preact/signals`, `lucide-preact` |
 | `src/features/<name>/model/` | Pure TypeScript domain logic, query builders, validation, combinations | Pure TS, `core/` non-UI helpers | Cross-feature, `api`, `ui`, `core/http`, `core/auth`, `core/data`, `layouts`, `app`, `pages`, `preact`, `@preact/signals`, `lucide-preact`, sibling `hooks/` or `components/` |
 | `src/features/<name>/hooks/` | Stateful logic, API orchestration, error mapping, cache invalidation | `api/`, `core/`, feature `model/` | Cross-feature, `ui`, `layouts`, `app`, `pages` |
@@ -39,6 +39,7 @@ Global lint bans enforced everywhere except their dedicated infrastructure owner
      v  mountPage()
   [Bootstrap]
      |-- envValidation (src/config/env.ts) -> plain ConfigErrorView if invalid
+     |-- initThemeSync() -> sync data-theme, meta[name="theme-color"], storage & media listeners
      |-- installGlobalErrorHandlers() -> reportError() + calm error toast
      |-- installLinkPrefetch() (skips when navigator.connection?.saveData is true)
      |-- initAuthSync() + bootstrapSession()
@@ -71,7 +72,8 @@ Global lint bans enforced everywhere except their dedicated infrastructure owner
 
 ## State & Caching
 
-- **Cross-cutting Signals:** Only `sessionState` (`src/core/auth/session.ts`), `cartSummary` (`src/features/cart/model/cart-summary.ts`), and `toasts` (`src/ui/Toast/toast-store.ts`) use `@preact/signals`.
+- **Cross-cutting Signals:** Only `sessionState` (`src/core/auth/session.ts`), `theme` / `isDarkMode` (`src/core/theme/theme.ts`), `cartSummary` (`src/features/cart/model/cart-summary.ts`), and `toasts` (`src/ui/Toast/toast-store.ts`) use `@preact/signals`.
+- **Allowed `localStorage` Keys:** Strictly limited inside `src/core/storage/safe-storage.ts` to `rm.hasSession` (cookie-refresh hint) and `rm.theme` (`'light' | 'dark'` user theme preference). Session JWT tokens (`rm.session`) and redirect flash messages (`rm.flashToast`) live exclusively in `sessionStorage`.
 - **In-Memory Resource Cache (`src/core/data/useResource.ts`):** Categories and tags share a 5-minute TTL stale-while-revalidate cache in memory (never persisted to browser storage or a Service Worker). Admin category/product mutations call `invalidateResourceCache('categories' | 'tags' | 'products')` to clear stale entries immediately.
 - **Request Cancellation:** `useResource` creates an `AbortController` per load and aborts superseded or unmounted requests while ignoring out-of-order responses.
 

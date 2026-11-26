@@ -4,19 +4,30 @@ import preact from '@preact/preset-vite';
 import { defineConfig, loadEnv, type HtmlTagDescriptor, type Plugin } from 'vite';
 
 function buildProductionCsp(html: string): string {
-  const styleMatches = html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi);
   const styleHashes: string[] = [];
-  for (const match of styleMatches) {
+  for (const match of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
     const cssText = match[1];
-    if (cssText !== undefined) {
+    if (cssText !== undefined && cssText.trim().length > 0) {
       const digest = createHash('sha256').update(cssText, 'utf8').digest('base64');
       styleHashes.push(`'sha256-${digest}'`);
     }
   }
+
+  const scriptHashes: string[] = [];
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    const attrs = match[1] ?? '';
+    const jsText = match[2] ?? '';
+    if (!/\bsrc\s*=/i.test(attrs) && jsText.trim().length > 0) {
+      const digest = createHash('sha256').update(jsText, 'utf8').digest('base64');
+      scriptHashes.push(`'sha256-${digest}'`);
+    }
+  }
+
+  const scriptSrc = ["'self'", ...scriptHashes].join(' ');
   const styleSrc = ["'self'", ...styleHashes].join(' ');
   return [
     "default-src 'self'",
-    "script-src 'self'",
+    `script-src ${scriptSrc}`,
     `style-src ${styleSrc}`,
     "font-src 'self'",
     "img-src 'self' https: data:",

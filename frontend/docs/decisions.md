@@ -81,3 +81,18 @@
 18. **Single-`h1` top-level fallback headings & reduced-motion view transitions**
     - Added `headingLevel?: 'h1' | 'h2'` (default `'h2'`) to `EmptyState` and `ErrorState` so full-page 404/error states (`ErrorBoundary`, `ProductView`, `CartView`, `AdminProductEditView`) always expose an accessible `h1` without changing embedded section hierarchies or visual `.heading` sizing.
     - Added `@view-transition { navigation: none; }` inside `@media (prefers-reduced-motion: reduce)` in `src/styles/motion.css` alongside `animation: none !important` and `.header { view-transition-name: none; }` so supporting browsers skip cross-document transition capture altogether under reduced motion.
+
+## Phase 9 — Light/Dark Theme System, Visual Depth & Living Documentation
+
+19. **Anchored Royal Navy Chrome & Restrained Surface Elevation**
+    - Evolved the earlier flat-surface rule (`--shadow-floating` only) by introducing `--shadow-surface` and `--shadow-card-hover` alongside stepped surface tokens (`--color-bg`, `--color-surface-band`, `--color-surface-sunken`, `--color-surface`, `--color-surface-elevated`, `--color-surface-hover`) so cards, toolbars, intro bands, and overlays establish clear visual depth without gradients or heavy drop shadows.
+    - Anchored `SiteShell` header and footer on `--color-chrome-bg` (`#1B2547` light / `#080D1B` dark) with inverse `Logo` (`CrownMark` in brass, wordmark in ivory), `tone="chrome"` account loading `Skeleton` (preventing bright ivory flashes on dark navy), and `--color-surface-band` for `AdminShell`'s secondary bar.
+    - Separated `--color-link` / `--color-link-hover` from `--color-primary`, and added `--color-on-danger` / `--color-danger-hover` and `--color-backdrop` tokens so dark mode maintains WCAG 2.2 AA contrast without hardcoded colors outside `tokens.css`.
+
+20. **Responsive `ThemeToggle` Placement & Strict Component Boundaries**
+    - Placed the `44x44px` icon `ThemeToggle` in `SiteShell`'s `.rightGroup` at `>= 768px` and as a full-row `menu-row` control inside `.mobilePanel` below `768px` so `320px` viewports remain overflow-free while still exposing theme switching in both desktop and mobile navigation.
+    - Exposed `useAuthTheme()` in `src/features/auth/hooks/useAuthTheme.ts` so `AuthCardLayout.tsx` stays strictly decoupled from direct `core/` imports while rendering a top-right `ThemeToggle` across login, signup, and auth skeleton states.
+
+21. **Zero-Flash MPA Theme Boot, `rm.theme` Storage, and Dual SHA-256 CSP**
+    - Added `rm.theme` as the second allowed `localStorage` key alongside `rm.hasSession`, backed by `@preact/signals` (`src/core/theme/theme.ts`), OS `prefers-color-scheme` fallback when unset, cross-tab `storage` synchronization, and `<meta name="theme-color">` updates matching `--color-chrome-bg` (`#1B2547` / `#080D1B`).
+    - Added a synchronous `try/catch` inline `<script>` and dual-theme `<style>` in every HTML `<head>` so `data-theme` and background color apply before first paint, and updated `vite.config.ts` `buildProductionCsp()` to emit exact SHA-256 hashes for both inline `<style>` (`style-src`) and inline `<script>` (`script-src`) without `'unsafe-inline'`.

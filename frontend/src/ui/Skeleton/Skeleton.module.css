@@ -6,6 +6,11 @@
     animation: rm-pulse 1.4s var(--ease-soft) infinite;
   }
 
+  .chrome {
+    background-color: var(--color-chrome-surface);
+    border: 1px solid var(--color-chrome-border);
+  }
+
   .text {
     height: 1rem;
     width: 100%;

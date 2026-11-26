@@ -10,6 +10,12 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    padding: var(--space-4);
+    background-color: var(--color-surface-band);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-surface);
   }
 
   .subtitle {
@@ -48,6 +54,7 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface);
+    box-shadow: var(--shadow-surface);
     overflow: hidden;
   }
 
@@ -68,6 +75,12 @@
     .grid {
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: var(--space-6);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .intro {
+      padding: var(--space-6);
     }
   }
 }

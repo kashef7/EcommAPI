@@ -31,7 +31,7 @@ export {
   type ImageAspectRatio,
   type ImageWithFallbackProps,
 } from './ImageWithFallback/ImageWithFallback';
-export { CrownMark, Logo, type LogoProps } from './Logo/Logo';
+export { CrownMark, Logo, type LogoProps, type LogoTone } from './Logo/Logo';
 export { Menu, type MenuItem, type MenuProps } from './Menu/Menu';
 export { Pagination, buildPaginationTokens, type PaginationProps } from './Pagination/Pagination';
 export { Price, type PriceProps, type PriceSize } from './Price/Price';
@@ -41,9 +41,15 @@ export {
   type SegmentedOption,
   type SegmentedOptionGroupProps,
 } from './SegmentedOptionGroup/SegmentedOptionGroup';
-export { Skeleton, type SkeletonProps, type SkeletonVariant } from './Skeleton/Skeleton';
+export {
+  Skeleton,
+  type SkeletonProps,
+  type SkeletonTone,
+  type SkeletonVariant,
+} from './Skeleton/Skeleton';
 export { SkipLink, type SkipLinkProps } from './SkipLink/SkipLink';
 export { Spinner, type SpinnerProps } from './Spinner/Spinner';
+export { ThemeToggle, type ThemeToggleProps } from './ThemeToggle/ThemeToggle';
 export { Toast, type ToastProps } from './Toast/Toast';
 export { ToastHost } from './Toast/ToastHost';
 export {

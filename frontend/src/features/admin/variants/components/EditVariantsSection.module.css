@@ -116,12 +116,13 @@
     gap: var(--space-1);
   }
 
-  .deleteBtn {
+  .actionsWrap button.deleteBtn {
     color: var(--color-danger-ink);
   }
 
-  .deleteBtn:hover:not(:disabled) {
+  .actionsWrap button.deleteBtn:hover:not(:disabled) {
     background-color: var(--color-danger-bg);
+    border-color: var(--color-danger-border);
     color: var(--color-danger-ink);
   }
 
@@ -134,6 +135,7 @@
     .tableWrap {
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
+      box-shadow: var(--shadow-surface);
       overflow-x: auto;
     }
 
@@ -164,6 +166,11 @@
       border: 0;
       border-radius: 0;
       border-bottom: 1px solid var(--color-border);
+      transition: background-color var(--dur-fast) var(--ease-soft);
+    }
+
+    .row:hover {
+      background-color: var(--color-surface-hover);
     }
 
     .row:last-child {

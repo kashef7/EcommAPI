@@ -9,8 +9,10 @@
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background-color: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-chrome-bg);
+    color: var(--color-chrome-ink);
+    border-bottom: 1px solid var(--color-chrome-border);
+    box-shadow: var(--shadow-surface);
     view-transition-name: site-header;
   }
 
@@ -44,30 +46,38 @@
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    padding-inline: var(--space-1);
-    color: var(--color-ink);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-chrome-ink);
     font-size: var(--text-base);
     font-weight: 600;
     text-decoration: none;
-    transition: color var(--dur-fast) var(--ease-soft);
+    transition:
+      background-color var(--dur-fast) var(--ease-soft),
+      color var(--dur-fast) var(--ease-soft);
   }
 
   .navLink:hover {
-    color: var(--color-primary);
+    background-color: var(--color-chrome-surface-hover);
+    color: var(--color-chrome-accent);
+  }
+
+  .navLink:focus-visible {
+    outline-color: var(--color-chrome-focus);
   }
 
   .navLink[aria-current='page'] {
-    color: var(--color-primary);
+    color: var(--color-chrome-ink);
   }
 
   .navLink[aria-current='page']::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
+    left: var(--space-3);
+    right: var(--space-3);
     bottom: 6px;
     height: 2px;
-    background-color: var(--color-accent);
+    background-color: var(--color-chrome-accent);
   }
 
   .rightGroup {
@@ -75,6 +85,10 @@
     align-items: center;
     gap: var(--space-2);
     flex-shrink: 0;
+  }
+
+  .desktopThemeToggle {
+    display: none;
   }
 
   .cartLink {
@@ -85,7 +99,7 @@
     width: 44px;
     height: 44px;
     border-radius: var(--radius-md);
-    color: var(--color-ink);
+    color: var(--color-chrome-ink);
     text-decoration: none;
     transition:
       background-color var(--dur-fast) var(--ease-soft),
@@ -93,13 +107,17 @@
   }
 
   .cartLink:hover {
-    background-color: var(--color-surface-sunken);
-    color: var(--color-primary);
+    background-color: var(--color-chrome-surface-hover);
+    color: var(--color-chrome-accent);
+  }
+
+  .cartLink:focus-visible {
+    outline-color: var(--color-chrome-focus);
   }
 
   .cartLink[aria-current='page'] {
-    color: var(--color-primary);
-    background-color: var(--color-surface-sunken);
+    color: var(--color-chrome-accent);
+    background-color: var(--color-chrome-surface);
   }
 
   .cartBadge {
@@ -110,10 +128,10 @@
     height: 18px;
     padding-inline: 5px;
     border-radius: var(--radius-sm);
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
+    background-color: var(--color-chrome-accent);
+    color: var(--color-chrome-on-accent);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 18px;
     text-align: center;
     font-variant-numeric: tabular-nums;
@@ -132,11 +150,25 @@
     height: 44px;
   }
 
-  .accountMenu button {
+  .accountMenu > button {
     max-width: 220px;
+    background-color: var(--color-chrome-surface);
+    border-color: var(--color-chrome-border);
+    color: var(--color-chrome-ink);
+    box-shadow: none;
   }
 
-  .accountMenu button > span {
+  .accountMenu > button:hover {
+    background-color: var(--color-chrome-surface-hover);
+    border-color: var(--color-chrome-accent);
+    color: var(--color-chrome-ink);
+  }
+
+  .accountMenu > button:focus-visible {
+    outline-color: var(--color-chrome-focus);
+  }
+
+  .accountMenu > button > span {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -147,13 +179,62 @@
     white-space: nowrap;
   }
 
-  .mobileMenuButton {
+  .header .rightGroup .chromeQuietLink {
+    color: var(--color-chrome-ink);
+    border-color: transparent;
+  }
+
+  .header .rightGroup .chromeQuietLink:hover {
+    background-color: var(--color-chrome-surface-hover);
+    border-color: var(--color-chrome-border);
+    color: var(--color-chrome-accent);
+  }
+
+  .header .rightGroup .chromeQuietLink:focus-visible {
+    outline-color: var(--color-chrome-focus);
+  }
+
+  .header .rightGroup .chromeSecondaryLink {
+    background-color: var(--color-chrome-surface);
+    border-color: var(--color-chrome-border);
+    color: var(--color-chrome-ink);
+    box-shadow: none;
+  }
+
+  .header .rightGroup .chromeSecondaryLink:hover {
+    background-color: var(--color-chrome-surface-hover);
+    border-color: var(--color-chrome-accent);
+    color: var(--color-chrome-ink);
+  }
+
+  .header .rightGroup .chromeSecondaryLink:focus-visible {
+    outline-color: var(--color-chrome-focus);
+  }
+
+  .header .rightGroup .chromeQuietLink[aria-current='page'],
+  .header .rightGroup .chromeSecondaryLink[aria-current='page'] {
+    border-color: var(--color-chrome-accent);
+    color: var(--color-chrome-accent);
+  }
+
+  .header .rightGroup button.mobileMenuButton {
     display: inline-flex;
+    color: var(--color-chrome-ink);
+  }
+
+  .header .rightGroup button.mobileMenuButton:hover:not(:disabled) {
+    background-color: var(--color-chrome-surface-hover);
+    border-color: var(--color-chrome-border);
+    color: var(--color-chrome-accent);
+  }
+
+  .header .rightGroup button.mobileMenuButton:focus-visible {
+    outline-color: var(--color-chrome-focus);
   }
 
   .mobilePanel {
-    border-top: 1px solid var(--color-border);
-    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-chrome-border);
+    background-color: var(--color-chrome-surface);
     padding-block: var(--space-3) var(--space-4);
   }
 
@@ -171,45 +252,52 @@
     min-height: 44px;
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
-    color: var(--color-ink);
+    color: var(--color-chrome-ink);
     font-size: var(--text-base);
     font-weight: 600;
     text-align: left;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color var(--dur-fast) var(--ease-soft);
+    transition:
+      background-color var(--dur-fast) var(--ease-soft),
+      color var(--dur-fast) var(--ease-soft);
   }
 
   .mobileItem:hover {
-    background-color: var(--color-surface-sunken);
-    color: var(--color-primary);
+    background-color: var(--color-chrome-surface-hover);
+    color: var(--color-chrome-accent);
+  }
+
+  .mobileItem:focus-visible {
+    outline-color: var(--color-chrome-focus);
   }
 
   .mobileItem[aria-current='page'] {
-    background-color: var(--color-surface-sunken);
-    color: var(--color-primary);
-    border-left: 3px solid var(--color-accent);
+    background-color: var(--color-chrome-bg);
+    color: var(--color-chrome-accent);
+    border-left: 3px solid var(--color-chrome-accent);
   }
 
   .mobileItemDanger {
     color: var(--color-danger-ink);
+    background-color: var(--color-danger-bg);
   }
 
   .mobileItemDanger:hover {
-    background-color: var(--color-danger-bg);
-    color: var(--color-danger-ink);
+    background-color: var(--color-danger);
+    color: var(--color-on-danger);
   }
 
   .mobileDivider {
     height: 1px;
-    background-color: var(--color-border);
+    background-color: var(--color-chrome-border);
     margin-block: var(--space-2);
   }
 
   .mobileAccountIdentity {
     padding: var(--space-2) var(--space-3);
     font-size: var(--text-sm);
-    color: var(--color-ink-muted);
+    color: var(--color-chrome-ink-muted);
     overflow-wrap: anywhere;
   }
 
@@ -219,8 +307,10 @@
   }
 
   .footer {
-    border-top: 1px solid var(--color-accent-line);
-    padding-block: var(--space-6);
+    background-color: var(--color-chrome-bg);
+    color: var(--color-chrome-ink);
+    border-top: 2px solid var(--color-accent);
+    padding-block: var(--space-8);
     margin-top: var(--space-12);
   }
 
@@ -234,7 +324,7 @@
 
   .footerMeta {
     font-size: var(--text-sm);
-    color: var(--color-ink-muted);
+    color: var(--color-chrome-ink-muted);
   }
 
   @media (min-width: 768px) {
@@ -242,11 +332,15 @@
       display: flex;
     }
 
+    .desktopThemeToggle {
+      display: inline-flex;
+    }
+
     .desktopAccount {
       display: flex;
     }
 
-    .mobileMenuButton,
+    .header .rightGroup button.mobileMenuButton,
     .mobilePanel {
       display: none;
     }

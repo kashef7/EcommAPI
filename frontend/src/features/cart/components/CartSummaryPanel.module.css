@@ -5,8 +5,8 @@
     right: 0;
     bottom: 0;
     z-index: var(--z-sticky);
-    background-color: var(--color-surface);
-    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface-elevated);
+    border-top: 1px solid var(--color-border-strong);
     padding: var(--space-3) var(--gutter);
     box-shadow: var(--shadow-floating);
   }
@@ -57,10 +57,12 @@
       left: auto;
       right: auto;
       bottom: auto;
+      background-color: var(--color-surface);
       border: 1px solid var(--color-border);
+      border-top: 3px solid var(--color-accent);
       border-radius: var(--radius-lg);
       padding: var(--space-6);
-      box-shadow: none;
+      box-shadow: var(--shadow-surface);
     }
 
     .panelInner {

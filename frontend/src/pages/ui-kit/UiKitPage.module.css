@@ -4,6 +4,19 @@
 
 .intro {
   margin-bottom: var(--space-8);
+  padding: var(--space-6);
+  background-color: var(--color-surface-band);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+}
+
+.introTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
 .lead {
@@ -27,6 +40,15 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
+}
+
+.inversePreview {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-chrome-bg);
+  border: 1px solid var(--color-chrome-border);
 }
 
 .stack {
@@ -59,7 +81,7 @@
 
 .swatchRow {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--space-3);
 }
 
@@ -78,17 +100,29 @@
   margin-bottom: var(--space-2);
 }
 
-.bgIvory {
+.bgCanvas {
   background-color: var(--color-bg);
+}
+.bgBand {
+  background-color: var(--color-surface-band);
+}
+.bgSunken {
+  background-color: var(--color-surface-sunken);
+}
+.bgSurface {
+  background-color: var(--color-surface);
+}
+.bgHover {
+  background-color: var(--color-surface-hover);
+}
+.bgChrome {
+  background-color: var(--color-chrome-bg);
 }
 .bgNavy {
   background-color: var(--color-primary);
 }
 .bgBrass {
   background-color: var(--color-accent);
-}
-.bgSunken {
-  background-color: var(--color-surface-sunken);
 }
 .bgSuccess {
   background-color: var(--color-success-bg);
@@ -98,4 +132,7 @@
 }
 .bgDanger {
   background-color: var(--color-danger-bg);
+}
+.bgInfo {
+  background-color: var(--color-info-bg);
 }

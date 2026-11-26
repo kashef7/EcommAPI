@@ -5,6 +5,7 @@ import { logoutSession } from '@/core/auth/refresh';
 import { sessionState } from '@/core/auth/session';
 import { getCurrentRelativeUrl, routes } from '@/core/navigation/routes';
 import { sanitizeRedirect } from '@/core/navigation/safe-redirect';
+import { isDarkMode, toggleTheme } from '@/core/theme/theme';
 import { formatCartBadgeCount, useCartSummary } from '@/features/cart/summary';
 import { buttonClassNames } from '@/ui/Button/Button';
 import { IconButton } from '@/ui/Button/IconButton';
@@ -14,6 +15,7 @@ import { Logo } from '@/ui/Logo/Logo';
 import { Menu, type MenuItem } from '@/ui/Menu/Menu';
 import { Skeleton } from '@/ui/Skeleton/Skeleton';
 import { SkipLink } from '@/ui/SkipLink/SkipLink';
+import { ThemeToggle } from '@/ui/ThemeToggle/ThemeToggle';
 import { LAYOUT_COPY } from './copy';
 import styles from './SiteShell.module.css';
 
@@ -45,6 +47,7 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
   const mobileNavId = useId();
   const mobileToggleRef = useRef<HTMLButtonElement | null>(null);
   const session = sessionState.value;
+  const dark = isDarkMode.value;
   const cartSummary = useCartSummary();
   const badgeText = formatCartBadgeCount(cartSummary.count);
   const currentYear = new Date().getFullYear();
@@ -121,6 +124,7 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
               label={env.appName}
               href={routes.home()}
               size="sm"
+              tone="inverse"
               {...(styles.brandLogo ? { class: styles.brandLogo } : {})}
             />
 
@@ -136,6 +140,13 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
           </div>
 
           <div class={styles.rightGroup}>
+            <ThemeToggle
+              isDark={dark}
+              onToggle={toggleTheme}
+              tone="chrome"
+              {...(styles.desktopThemeToggle ? { class: styles.desktopThemeToggle } : {})}
+            />
+
             <a
               href={routes.cart()}
               class={styles.cartLink}
@@ -157,20 +168,20 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
             <div class={styles.desktopAccount}>
               {session.status === 'unknown' ? (
                 <div class={styles.accountSkeleton} aria-hidden="true">
-                  <Skeleton variant="block" width="164px" height="44px" />
+                  <Skeleton variant="block" tone="chrome" width="164px" height="44px" />
                 </div>
               ) : session.status === 'anonymous' ? (
                 <>
                   <a
                     href={loginHref}
-                    class={`${buttonClassNames({ variant: 'quiet' })} ${styles.authLink}`}
+                    class={`${buttonClassNames({ variant: 'quiet' })} ${styles.authLink} ${styles.chromeQuietLink}`}
                     aria-current={activeNav === 'login' ? 'page' : undefined}
                   >
                     {LAYOUT_COPY.signInLink}
                   </a>
                   <a
                     href={signupHref}
-                    class={`${buttonClassNames({ variant: 'secondary' })} ${styles.authLink}`}
+                    class={`${buttonClassNames({ variant: 'secondary' })} ${styles.authLink} ${styles.chromeSecondaryLink}`}
                     aria-current={activeNav === 'signup' ? 'page' : undefined}
                   >
                     {LAYOUT_COPY.createAccountLink}
@@ -215,7 +226,7 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
               <div class={styles.mobileDivider} />
 
               {session.status === 'unknown' ? (
-                <Skeleton variant="block" width="100%" height="44px" />
+                <Skeleton variant="block" tone="chrome" width="100%" height="44px" />
               ) : session.status === 'anonymous' ? (
                 <>
                   <a
@@ -269,6 +280,10 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
                   </button>
                 </>
               )}
+
+              <div class={styles.mobileDivider} />
+
+              <ThemeToggle isDark={dark} onToggle={toggleTheme} variant="menu-row" tone="chrome" />
             </div>
           </nav>
         ) : null}
@@ -284,7 +299,7 @@ export function SiteShell({ activeNav, mainClass, children }: SiteShellProps) {
 
       <footer class={styles.footer}>
         <div class={`rm-container ${styles.footerInner}`}>
-          <Logo label={env.appName} size="sm" />
+          <Logo label={env.appName} size="sm" tone="inverse" />
           <p class={styles.footerMeta}>
             {env.appName} &middot; {currentYear}
           </p>

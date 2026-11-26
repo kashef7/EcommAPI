@@ -2,6 +2,8 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/pr
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ensureHttpAuthConfigured, resetAuthCoordinationForTests } from '@/core/auth/refresh';
 import { sessionState } from '@/core/auth/session';
+import { THEME_STORAGE_KEY } from '@/core/storage/safe-storage';
+import { syncThemeFromEnvironmentForTests } from '@/core/theme/theme';
 import { LoginView } from './LoginView';
 import { SignupView } from './SignupView';
 
@@ -36,6 +38,8 @@ beforeEach(() => {
   sessionState.value = { status: 'anonymous' };
   window.sessionStorage.clear();
   window.localStorage.clear();
+  delete document.documentElement.dataset.theme;
+  syncThemeFromEnvironmentForTests();
   resetAuthCoordinationForTests();
   ensureHttpAuthConfigured();
 });
@@ -66,6 +70,17 @@ describe('LoginView', () => {
 
     expect(replace).toHaveBeenCalledWith('/cart.html');
     expect(screen.queryByRole('heading', { name: 'Sign in' })).toBeNull();
+  });
+
+  it('exposes an accessible theme toggle inside AuthCardLayout', () => {
+    mockWindowLocation('/login.html', '');
+    render(<LoginView />);
+
+    const toggleBtn = screen.getByRole('button', { name: 'Switch to dark theme' });
+    fireEvent.click(toggleBtn);
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
+    expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeTruthy();
   });
 
   it('shows redirect notice and preserves sanitized next on the signup switch link', () => {

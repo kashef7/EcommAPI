@@ -14,25 +14,25 @@
 
   .neutral {
     background-color: var(--color-surface-sunken);
-    color: var(--color-ink-muted);
+    color: var(--color-ink);
     border-color: var(--color-border);
   }
 
   .success {
     background-color: var(--color-success-bg);
     color: var(--color-success-ink);
-    border-color: var(--color-success-bg);
+    border-color: var(--color-success-border);
   }
 
   .warning {
     background-color: var(--color-warning-bg);
     color: var(--color-warning-ink);
-    border-color: var(--color-warning-bg);
+    border-color: var(--color-warning-border);
   }
 
   .danger {
     background-color: var(--color-danger-bg);
     color: var(--color-danger-ink);
-    border-color: var(--color-danger-bg);
+    border-color: var(--color-danger-border);
   }
 }

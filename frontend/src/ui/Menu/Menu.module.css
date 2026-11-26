@@ -17,13 +17,14 @@
     font-size: var(--text-sm);
     font-weight: 600;
     cursor: pointer;
+    box-shadow: var(--shadow-surface);
     transition:
       background-color var(--dur-fast) var(--ease-soft),
       border-color var(--dur-fast) var(--ease-soft);
   }
 
   .trigger:hover {
-    background-color: var(--color-surface-sunken);
+    background-color: var(--color-surface-hover);
     border-color: var(--color-ink);
   }
 
@@ -31,12 +32,12 @@
     position: absolute;
     top: calc(100% + var(--space-2));
     z-index: var(--z-menu);
-    min-width: 200px;
+    min-width: 210px;
     max-width: calc(100vw - 32px);
     padding: var(--space-2);
     border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface-elevated);
     box-shadow: var(--shadow-floating);
     display: flex;
     flex-direction: column;
@@ -61,17 +62,19 @@
     border-radius: var(--radius-md);
     color: var(--color-ink);
     font-size: var(--text-sm);
-    font-weight: 400;
+    font-weight: 600;
     text-align: left;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color var(--dur-fast) var(--ease-soft);
+    transition:
+      background-color var(--dur-fast) var(--ease-soft),
+      color var(--dur-fast) var(--ease-soft);
   }
 
   .item:hover,
   .item:focus-visible {
-    background-color: var(--color-surface-sunken);
-    color: var(--color-ink);
+    background-color: var(--color-surface-hover);
+    color: var(--color-link-hover);
   }
 
   .danger {

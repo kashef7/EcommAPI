@@ -94,17 +94,17 @@ shop.example.com {
 
 ## 3. Recommended HTTP Security Headers
 
-`vite.config.ts` injects a production `<meta http-equiv="Content-Security-Policy">` into every built `.html` file containing the exact SHA-256 hash of the inline FOUC background rule (`<style>body{background-color:#faf7f2}</style>`):
+`vite.config.ts` injects a production `<meta http-equiv="Content-Security-Policy">` into every built `.html` file containing the exact SHA-256 hashes of both the synchronous inline theme boot `<script>` (`script-src`) and the dual-theme inline FOUC `<style>` (`style-src`):
 
 ```text
-default-src 'self'; script-src 'self'; style-src 'self' 'sha256-...'; font-src 'self'; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'
+default-src 'self'; script-src 'self' 'sha256-...'; style-src 'self' 'sha256-...'; font-src 'self'; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'
 ```
 
 Because HTML `<meta>` CSP ignores directives such as `frame-ancestors`, apply the full security header set at your reverse proxy or CDN:
 
 | Header | Recommended Value | Reason |
 | :--- | :--- | :--- |
-| `Content-Security-Policy` | `default-src 'self'; script-src 'self'; style-src 'self' 'sha256-<hash-from-build>'; font-src 'self'; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'` | Enforces `frame-ancestors 'none'` in addition to script/style/connect restrictions. Read the exact `'sha256-...'` hash from built `dist/*.html` if deploying as an HTTP header. |
+| `Content-Security-Policy` | `default-src 'self'; script-src 'self' 'sha256-<script-hash>'; style-src 'self' 'sha256-<style-hash>'; font-src 'self'; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'` | Enforces `frame-ancestors 'none'` in addition to strict script/style/connect restrictions with zero `'unsafe-inline'`. Read the exact `'sha256-...'` hashes from built `dist/*.html` if deploying as an HTTP header. |
 | `X-Frame-Options` | `DENY` | Legacy clickjacking protection alongside `frame-ancestors 'none'` |
 | `X-Content-Type-Options` | `nosniff` | Prevents MIME-type sniffing on uploaded or proxied responses |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | Limits referrer leakage on outbound requests (images also use `referrerpolicy="no-referrer"`) |

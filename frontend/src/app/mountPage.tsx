@@ -6,6 +6,7 @@ import { installGlobalErrorHandlers } from '@/core/logging/global-handlers';
 import { logger } from '@/core/logging/logger';
 import { installLinkPrefetch } from '@/core/navigation/prefetch';
 import { consumeFlashToast } from '@/core/storage/safe-storage';
+import { initThemeSync } from '@/core/theme/theme';
 import { ToastHost } from '@/ui/Toast/ToastHost';
 import { showToast, toast } from '@/ui/Toast/toast-store';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -40,6 +41,7 @@ export function mountPage(Page: ComponentType): void {
     return;
   }
 
+  initThemeSync();
   installGlobalErrorHandlers(() => {
     toast.error('Something went wrong. Please try again.');
   });

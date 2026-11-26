@@ -3,13 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#FAF7F2" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1B2547" />
     <title>Profile | Royal Market</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (function () {
+        var theme = 'light';
+        try {
+          var stored = window.localStorage.getItem('rm.theme');
+          if (stored === 'light' || stored === 'dark') {
+            theme = stored;
+          } else if (
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+          ) {
+            theme = 'dark';
+          }
+        } catch (error) {
+          try {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              theme = 'dark';
+            }
+          } catch (mediaError) {
+            theme = 'light';
+          }
+        }
+        document.documentElement.dataset.theme = theme;
+        var themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) {
+          themeMeta.setAttribute('content', theme === 'dark' ? '#080D1B' : '#1B2547');
+        }
+      })();
+    </script>
     <style>
+      html,
       body {
-        background-color: #faf7f2;
+        background-color: #f4efe6;
+      }
+      html[data-theme='dark'],
+      html[data-theme='dark'] body {
+        background-color: #0e1424;
       }
     </style>
   </head>

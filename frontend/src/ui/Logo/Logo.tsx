@@ -1,9 +1,12 @@
 import styles from './Logo.module.css';
 
+export type LogoTone = 'default' | 'inverse';
+
 export interface LogoProps {
   readonly label: string;
   readonly href?: string;
   readonly size?: 'sm' | 'md' | 'lg';
+  readonly tone?: LogoTone;
   readonly showWordmark?: boolean;
   readonly class?: string;
 }
@@ -38,11 +41,19 @@ export function Logo({
   label,
   href,
   size = 'md',
+  tone = 'default',
   showWordmark = true,
   class: className,
 }: LogoProps) {
   const iconSize = size === 'sm' ? 20 : size === 'lg' ? 28 : 24;
-  const classes = `${styles.logo} ${styles[size]}${className ? ` ${className}` : ''}`;
+  const classes = [
+    styles.logo,
+    styles[size],
+    tone === 'inverse' ? styles.inverse : '',
+    className ?? '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const content = (
     <>

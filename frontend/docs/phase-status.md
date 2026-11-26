@@ -14,6 +14,7 @@ Specification: `frontend/frontendPrompt.md`.
 - Phase 6 (Cart and Review Flow): Completed (Build & Review passed)
 - Phase 7 (Admin Console): Completed (Build & Review passed)
 - Phase 8 (Hardening, Performance, Audit, and Final Docs): Completed (Phases 1-8 Complete, Build & Review passed)
+- Phase 9 (Light/Dark Theme System, Visual Depth & Living Documentation): Completed (Build & Review passed)
 
 ## Step 0 Notes
 
@@ -74,3 +75,15 @@ Specification: `frontend/frontendPrompt.md`.
 - Verified all 33 endpoints in Section 3 are typed and wired across `src/api/*` and feature hooks with zero non-existent features or endpoints.
 - Produced and finalized `frontend/README.md`, `frontend/docs/architecture.md`, `frontend/docs/deployment.md`, `frontend/docs/qa-checklist.md`, `frontend/docs/ui-kit.md`, `frontend/docs/decisions.md`, `frontend/docs/backend-notes.md`, and `frontend/docs/phase-status.md` (with relative markdown links and env bounds matched to `src/config/env.ts`).
 - Confirmed Phases 1-8 pass `npm run format`, `npm run check` (`34` test files / `110` tests, `typecheck`, `eslint`, `vite build`), `npm run format:check`, `npm audit` (`0` vulnerabilities), and all production CSP/font-preload HTML checks.
+
+## Phase 9 (Light/Dark Theme System, Visual Depth & Living Documentation) Summary (Final Review)
+
+- Implemented `@preact/signals` theme store in `src/core/theme/theme.ts` (`theme`, `isDarkMode`, `setTheme`, `toggleTheme`, `initThemeSync`) backed by `rm.theme` in `src/core/storage/safe-storage.ts`, `prefers-color-scheme` fallback, cross-tab `storage` sync, restricted-storage resilience, and `<meta name="theme-color">` chrome matching (`#1B2547` light / `#080D1B` dark).
+- Added synchronous `try/catch` inline theme boot `<script>` and dual-theme inline FOUC `<style>` across all 9 production HTML pages plus `ui-kit.html`, and updated `vite.config.ts` `buildProductionCsp()` to emit exact SHA-256 hashes for both `script-src` and `style-src` with zero `'unsafe-inline'`.
+- Upgraded `src/styles/tokens.css` (`:root[data-theme='light']` and `:root[data-theme='dark']` with explicit `color-scheme` declarations), `src/styles/base.css`, `src/ui/*`, `SiteShell` (anchored deep royal navy header/footer, inverse `Logo`, `tone="chrome"` account loading `Skeleton`, desktop + mobile `ThemeToggle`), `AdminShell` (`--color-surface-band` sub-nav), `AuthCardLayout` (`useAuthTheme` hook + header `ThemeToggle`), `/ui-kit.html`, and feature CSS modules with stepped surfaces and restrained elevation (`--shadow-surface`, `--shadow-card-hover`, `--shadow-floating`).
+- Phase 9 Review fixes applied:
+  1. Eliminated CSS Module specificity ties on `SiteShell` header buttons (`ThemeToggle` `tone="chrome"` `.chromeButton` + scoped `.header .rightGroup` rules for `.chromeQuietLink`, `.chromeSecondaryLink`, and `button.mobileMenuButton`), `Banner` `.dismiss`, `AdminProductsView` `.deleteBtn`, and `EditVariantsSection` `.deleteBtn` so light/dark navy contrast is independent of CSS chunk order.
+  2. Verified programmatic WCAG 2.2 AA contrast across all 32 Light and Dark semantic token pairs, zero hardcoded colors outside `tokens.css`, exact SHA-256 CSP hashes across all 9 `dist/**/*.html` routes, and zero broken relative links in `docs/*` and `README.md`.
+  3. Added private-browsing (`localStorage` throwing `SecurityError`) coverage in `src/core/theme/theme.test.ts`.
+- Created `frontend/docs/design-system.md` and updated `docs/ui-kit.md`, `docs/decisions.md`, `docs/architecture.md`, `docs/deployment.md`, `docs/qa-checklist.md`, `README.md`, and `docs/phase-status.md`.
+- Verified `npm run format`, `npm run check` (`36` test files / `119` tests, `typecheck`, `eslint`, `vite build`), `npm run format:check`, `npm audit` (`0` vulnerabilities), dual SHA-256 CSP verification across all 9 `dist/**/*.html` routes, and per-page gzip JS totals all under `60 kB`.

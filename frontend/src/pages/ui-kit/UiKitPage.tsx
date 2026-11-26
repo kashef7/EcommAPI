@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks';
+import { isDarkMode, toggleTheme } from '@/core/theme/theme';
 import {
   Badge,
   Banner,
@@ -32,6 +33,7 @@ import {
   SkipLink,
   Spinner,
   Textarea,
+  ThemeToggle,
   Trash2,
   User,
   VisuallyHidden,
@@ -54,45 +56,71 @@ export function UiKitPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const dark = isDarkMode.value;
 
   return (
     <>
       <SkipLink />
       <main id="main-content" class={`rm-container ${styles.page}`}>
         <header class={styles.intro}>
-          <p class="rm-eyebrow">Internal gallery (dev only)</p>
-          <h1>Royal Market UI Kit</h1>
+          <div class={styles.introTop}>
+            <div>
+              <p class="rm-eyebrow">Internal gallery (dev only)</p>
+              <h1>Royal Market UI Kit</h1>
+            </div>
+            <ThemeToggle isDark={dark} onToggle={toggleTheme} />
+          </div>
           <p class={styles.lead}>
-            Reference gallery of design tokens and primitives. Excluded from production builds.
+            Reference gallery of design tokens and primitives in Light and Dark themes. Excluded
+            from production builds.
           </p>
           <hr class="rm-ornament rm-ornament--diamond" />
         </header>
 
         <div class={styles.sections}>
           <Card padding="lg">
-            <h2 class={styles.sectionTitle}>Brand, Typography, and Tokens</h2>
+            <h2 class={styles.sectionTitle}>Brand, Typography, and Surface Hierarchy</h2>
             <div class={styles.stack}>
               <div class={styles.row}>
                 <Logo label="Royal Market" href="/ui-kit.html" size="sm" />
                 <Logo label="Royal Market" href="/ui-kit.html" size="md" />
                 <Logo label="Royal Market" href="/ui-kit.html" size="lg" />
+                <span class={styles.inversePreview}>
+                  <Logo label="Royal Market" href="/ui-kit.html" size="sm" tone="inverse" />
+                </span>
               </div>
               <div class={styles.swatchRow}>
                 <div class={styles.swatch}>
-                  <div class={`${styles.swatchColor} ${styles.bgIvory}`} />
-                  Ivory bg
+                  <div class={`${styles.swatchColor} ${styles.bgCanvas}`} />
+                  Canvas (`--color-bg`)
                 </div>
                 <div class={styles.swatch}>
-                  <div class={`${styles.swatchColor} ${styles.bgNavy}`} />
-                  Royal navy
-                </div>
-                <div class={styles.swatch}>
-                  <div class={`${styles.swatchColor} ${styles.bgBrass}`} />
-                  Muted brass
+                  <div class={`${styles.swatchColor} ${styles.bgBand}`} />
+                  Band (`--color-surface-band`)
                 </div>
                 <div class={styles.swatch}>
                   <div class={`${styles.swatchColor} ${styles.bgSunken}`} />
-                  Sunken surface
+                  Sunken (`--color-surface-sunken`)
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgSurface}`} />
+                  Surface (`--color-surface`)
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgHover}`} />
+                  Hover (`--color-surface-hover`)
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgChrome}`} />
+                  Chrome (`--color-chrome-bg`)
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgNavy}`} />
+                  Primary (`--color-primary`)
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgBrass}`} />
+                  Brass (`--color-accent`)
                 </div>
                 <div class={styles.swatch}>
                   <div class={`${styles.swatchColor} ${styles.bgSuccess}`} />
@@ -105,6 +133,10 @@ export function UiKitPage() {
                 <div class={styles.swatch}>
                   <div class={`${styles.swatchColor} ${styles.bgDanger}`} />
                   Danger bg
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgInfo}`} />
+                  Info bg
                 </div>
               </div>
             </div>

@@ -1,6 +1,12 @@
+// Only two localStorage keys are permitted across Royal Market:
+// 1. rm.hasSession (non-sensitive cookie-refresh hint)
+// 2. rm.theme (user light/dark theme preference)
 const HAS_SESSION_HINT_KEY = 'rm.hasSession';
+export const THEME_STORAGE_KEY = 'rm.theme';
 const SESSION_STORAGE_KEY = 'rm.session';
 const FLASH_TOAST_KEY = 'rm.flashToast';
+
+export type StoredTheme = 'light' | 'dark';
 
 export function readSessionStorage(key: string): string | null {
   try {
@@ -57,6 +63,31 @@ export function writeHasSessionHint(): void {
 export function clearHasSessionHint(): void {
   try {
     window.localStorage.removeItem(HAS_SESSION_HINT_KEY);
+  } catch {
+    // Ignore storage errors on cleanup.
+  }
+}
+
+export function readStoredTheme(): StoredTheme | null {
+  try {
+    const value = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return value === 'light' || value === 'dark' ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+export function writeStoredTheme(theme: StoredTheme): void {
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // Ignore storage errors if localStorage is blocked.
+  }
+}
+
+export function clearStoredTheme(): void {
+  try {
+    window.localStorage.removeItem(THEME_STORAGE_KEY);
   } catch {
     // Ignore storage errors on cleanup.
   }

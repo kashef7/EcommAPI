@@ -7,7 +7,13 @@
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-surface);
     align-items: start;
+    transition: border-color var(--dur-fast) var(--ease-soft);
+  }
+
+  .row:hover {
+    border-color: var(--color-border-strong);
   }
 
   .thumbLink {
@@ -49,7 +55,7 @@
   }
 
   .productLink:hover {
-    color: var(--color-primary);
+    color: var(--color-link-hover);
     text-decoration: underline;
   }
 

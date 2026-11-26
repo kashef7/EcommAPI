@@ -54,10 +54,12 @@
 
   .control:hover:not(:disabled):not([aria-invalid='true']) {
     border-color: var(--color-ink);
+    background-color: var(--color-surface-elevated);
   }
 
   .control:disabled {
     background-color: var(--color-surface-sunken);
+    border-color: var(--color-border);
     color: var(--color-disabled-ink);
     cursor: not-allowed;
   }

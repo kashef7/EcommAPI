@@ -2,7 +2,8 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/pr
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as refreshModule from '@/core/auth/refresh';
 import { sessionState } from '@/core/auth/session';
-import { consumeFlashToast } from '@/core/storage/safe-storage';
+import { consumeFlashToast, THEME_STORAGE_KEY } from '@/core/storage/safe-storage';
+import { syncThemeFromEnvironmentForTests } from '@/core/theme/theme';
 import { resetCartSummary } from '@/features/cart';
 import { AdminShell } from './AdminShell';
 import { SiteShell } from './SiteShell';
@@ -39,6 +40,9 @@ beforeEach(() => {
   refreshModule.ensureHttpAuthConfigured();
   sessionState.value = { status: 'unknown' };
   resetCartSummary();
+  window.localStorage.clear();
+  delete document.documentElement.dataset.theme;
+  syncThemeFromEnvironmentForTests();
   vi.stubGlobal(
     'fetch',
     vi.fn<typeof fetch>().mockResolvedValue(jsonResponse({ cartItems: [], totalPrice: 0 })),
@@ -179,6 +183,30 @@ describe('SiteShell', () => {
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('navigation', { name: 'Mobile navigation' })).toBeNull();
     expect(document.activeElement).toBe(menuButton);
+  });
+
+  it('toggles theme from desktop header and mobile disclosure menu', () => {
+    sessionState.value = { status: 'anonymous' };
+
+    render(
+      <SiteShell activeNav="shop">
+        <h1>Home</h1>
+      </SiteShell>,
+    );
+
+    const desktopToggle = screen.getByRole('button', { name: 'Switch to dark theme' });
+    fireEvent.click(desktopToggle);
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
+
+    const menuButton = screen.getByRole('button', { name: 'Open navigation menu' });
+    fireEvent.click(menuButton);
+    const toggleButtons = screen.getAllByRole('button', { name: 'Switch to light theme' });
+    expect(toggleButtons.length).toBe(2);
+
+    fireEvent.click(toggleButtons[1]!);
+    expect(document.documentElement.dataset.theme).toBe('light');
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('light');
   });
 });
 

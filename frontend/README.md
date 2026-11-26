@@ -101,7 +101,7 @@ frontend/
     api/                      # Thin typed wrappers over HTTP client + DTO types
     app/                      # mountPage(), ErrorBoundary, global wiring
     config/                   # env.ts (single reader of import.meta.env)
-    core/                     # auth, data (useResource/useMutation), format, http, logging, navigation, storage, validation
+    core/                     # auth, data (useResource/useMutation), format, http, logging, navigation, storage, theme, validation
     features/                 # auth, catalog, product, cart, profile, admin/{categories,products,options,variants}
     layouts/                  # SiteShell (header, mobile menu, footer) & AdminShell (admin guard & secondary nav)
     pages/                    # Tiny HTML entry points wiring layout + feature component
@@ -111,7 +111,7 @@ frontend/
 
 ## Adding a New Page
 
-1. **Create the HTML entry** (`newpage.html` or `admin/newpage.html`) with `<html lang="en">`, `<meta name="color-scheme" content="light">`, `<meta name="theme-color" content="#FAF7F2">`, the single FOUC inline rule `<style>body { background-color: #faf7f2; }</style>`, `<div id="app"></div>`, and `<script type="module" src="/src/pages/newpage/main.tsx"></script>`.
+1. **Create the HTML entry** (`newpage.html` or `admin/newpage.html`) with `<html lang="en">`, `<meta name="color-scheme" content="light dark">`, `<meta name="theme-color" content="#1B2547">`, the synchronous theme boot `<script>` (reading `rm.theme` / `prefers-color-scheme` inside `try/catch` to set `data-theme` and `theme-color`), the dual-theme inline FOUC `<style>` (`#f4efe6` light / `#0e1424` dark), `<div id="app"></div>`, and `<script type="module" src="/src/pages/newpage/main.tsx"></script>`. Copy `<head>` structure from `index.html`.
 2. **Register the Rollup input** in `vite.config.ts` under `build.rollupOptions.input`.
 3. **Add route helpers** in `src/core/navigation/routes.ts` so links stay typed and centralized.
 4. **Build the feature slice** under `src/features/<feature>/` (`copy.ts`, pure `model/`, stateful `hooks/`, presentational `components/`), exposing the page component from a public barrel (`index.ts` or dedicated page barrel).
@@ -120,6 +120,7 @@ frontend/
 
 ## Additional Documentation
 
+- [Design System](docs/design-system.md) — Light & Dark semantic token table, WCAG contrast rules, surface hierarchy, brand guardrails, MPA theme boot, and dual SHA-256 CSP architecture.
 - [Architecture](docs/architecture.md) — Layers, ESLint dependency rules, data flow, session/refresh lifecycle, and swapping `ErrorReporter`.
 - [Deployment](docs/deployment.md) — Same-origin hosting, `/api` reverse-proxy examples, HTTP security headers, HTTPS cookie caveats, and the backend CORS alternative.
 - [Backend Notes](docs/backend-notes.md) — Verified backend behaviors, quirks, and adaptations.

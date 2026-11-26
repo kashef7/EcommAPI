@@ -3,13 +3,13 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    color: var(--color-primary);
+    color: var(--color-accent);
     text-decoration: none;
     min-height: 44px;
   }
 
   .logo:hover {
-    color: var(--color-primary-hover);
+    color: var(--color-link-hover);
   }
 
   .mark {
@@ -22,6 +22,26 @@
     letter-spacing: -0.01em;
     line-height: 1.1;
     color: var(--color-ink);
+  }
+
+  .inverse {
+    color: var(--color-chrome-accent);
+  }
+
+  .inverse .wordmark {
+    color: var(--color-chrome-ink);
+  }
+
+  .inverse:hover {
+    color: var(--color-chrome-accent);
+  }
+
+  .inverse:hover .wordmark {
+    color: var(--color-chrome-accent);
+  }
+
+  .inverse:focus-visible {
+    outline-color: var(--color-chrome-focus);
   }
 
   .sm .wordmark {

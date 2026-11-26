@@ -3,7 +3,9 @@ import { env } from '@/config/env';
 import { Card } from '@/ui/Card/Card';
 import { Logo } from '@/ui/Logo/Logo';
 import { Skeleton } from '@/ui/Skeleton/Skeleton';
+import { ThemeToggle } from '@/ui/ThemeToggle/ThemeToggle';
 import { AUTH_COPY } from '../copy';
+import { useAuthTheme } from '../hooks/useAuthTheme';
 import styles from './AuthCardLayout.module.css';
 
 export interface AuthCardLayoutProps {
@@ -14,11 +16,16 @@ export interface AuthCardLayoutProps {
 }
 
 export function AuthCardLayout({ title, subtitle, children, footer }: AuthCardLayoutProps) {
+  const { isDark, toggleTheme } = useAuthTheme();
+
   return (
     <div class={`rm-container ${styles.wrapper}`}>
       <Card as="section" padding="lg" {...(styles.card ? { class: styles.card } : {})}>
         <div class={styles.header}>
-          <Logo label={env.appName} size="md" />
+          <div class={styles.headerTopRow}>
+            <Logo label={env.appName} size="md" />
+            <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+          </div>
           <p class="rm-eyebrow">{AUTH_COPY.eyebrow}</p>
           <h1 class={styles.title}>{title}</h1>
           <p class={styles.subtitle}>{subtitle}</p>
@@ -35,12 +42,16 @@ export function AuthCardLayout({ title, subtitle, children, footer }: AuthCardLa
 }
 
 export function AuthCardSkeleton({ fieldCount = 2 }: { readonly fieldCount?: number }) {
+  const { isDark, toggleTheme } = useAuthTheme();
   const fields = Array.from({ length: fieldCount }, (_, index) => index);
   return (
     <div class={`rm-container ${styles.wrapper}`}>
       <Card as="section" padding="lg" {...(styles.card ? { class: styles.card } : {})}>
         <div class={styles.skeletonGroup} aria-busy="true" aria-label={AUTH_COPY.loadingLabel}>
-          <Skeleton variant="text" width="140px" height="24px" />
+          <div class={styles.headerTopRow}>
+            <Skeleton variant="text" width="140px" height="24px" />
+            <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+          </div>
           <Skeleton variant="title" width="210px" />
           <Skeleton variant="text" width="85%" />
           <hr class="rm-ornament" aria-hidden="true" />

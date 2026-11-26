@@ -21,6 +21,7 @@
     font-weight: 600;
     line-height: 1.25;
     cursor: pointer;
+    box-shadow: var(--shadow-surface);
     transition:
       background-color var(--dur-fast) var(--ease-soft),
       border-color var(--dur-fast) var(--ease-soft),
@@ -28,13 +29,13 @@
   }
 
   .option:hover:not(.unavailable) {
-    border-color: var(--color-primary);
-    background-color: var(--color-surface-sunken);
+    border-color: var(--color-link);
+    background-color: var(--color-surface-hover);
   }
 
   .selected {
     background-color: var(--color-primary);
-    border-color: var(--color-primary);
+    border-color: var(--color-primary-border);
     color: var(--color-on-primary);
   }
 
@@ -47,11 +48,12 @@
   .soldOut {
     color: var(--color-ink-muted);
     background-color: var(--color-surface-sunken);
+    box-shadow: none;
   }
 
   .soldOut.selected {
     background-color: var(--color-surface-sunken);
-    border-color: var(--color-primary);
+    border-color: var(--color-accent);
     border-width: 2px;
     color: var(--color-ink);
   }
@@ -71,6 +73,7 @@
     border-color: var(--color-border);
     background-color: var(--color-bg);
     color: var(--color-disabled-ink);
+    box-shadow: none;
     cursor: not-allowed;
   }
 }
