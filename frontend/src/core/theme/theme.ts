@@ -4,8 +4,8 @@ import { readStoredTheme, THEME_STORAGE_KEY, writeStoredTheme } from '@/core/sto
 export type Theme = 'light' | 'dark';
 
 export const THEME_CHROME_COLORS: Readonly<Record<Theme, string>> = {
-  light: '#1B2547',
-  dark: '#080D1B',
+  light: '#194350',
+  dark: '#194350',
 };
 
 const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';

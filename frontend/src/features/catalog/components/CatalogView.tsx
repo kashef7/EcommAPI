@@ -102,7 +102,7 @@ export function CatalogView() {
         <p class="rm-eyebrow">{CATALOG_COPY.intro.eyebrow}</p>
         <h1>{CATALOG_COPY.intro.title}</h1>
         <p class={styles.subtitle}>{CATALOG_COPY.intro.subtitle}</p>
-        <hr class="rm-ornament rm-ornament--diamond" aria-hidden="true" />
+        <hr class="rm-ornament rm-ornament--diamond rm-ornament--compact" aria-hidden="true" />
       </section>
 
       <CatalogFilters

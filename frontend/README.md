@@ -111,7 +111,7 @@ frontend/
 
 ## Adding a New Page
 
-1. **Create the HTML entry** (`newpage.html` or `admin/newpage.html`) with `<html lang="en">`, `<meta name="color-scheme" content="light dark">`, `<meta name="theme-color" content="#1B2547">`, the synchronous theme boot `<script>` (reading `rm.theme` / `prefers-color-scheme` inside `try/catch` to set `data-theme` and `theme-color`), the dual-theme inline FOUC `<style>` (`#f4efe6` light / `#0e1424` dark), `<div id="app"></div>`, and `<script type="module" src="/src/pages/newpage/main.tsx"></script>`. Copy `<head>` structure from `index.html`.
+1. **Create the HTML entry** (`newpage.html` or `admin/newpage.html`) with `<html lang="en">`, `<meta name="color-scheme" content="light dark">`, `<meta name="theme-color" content="#194350">`, the synchronous theme boot `<script>` (reading `rm.theme` / `prefers-color-scheme` inside `try/catch` to set `data-theme` and `theme-color`), the dual-theme inline FOUC `<style>` (`#f5f8f7` light / `#0b1014` dark), `<div id="app"></div>`, and `<script type="module" src="/src/pages/newpage/main.tsx"></script>`. Copy `<head>` structure from `index.html`.
 2. **Register the Rollup input** in `vite.config.ts` under `build.rollupOptions.input`.
 3. **Add route helpers** in `src/core/navigation/routes.ts` so links stay typed and centralized.
 4. **Build the feature slice** under `src/features/<feature>/` (`copy.ts`, pure `model/`, stateful `hooks/`, presentational `components/`), exposing the page component from a public barrel (`index.ts` or dedicated page barrel).

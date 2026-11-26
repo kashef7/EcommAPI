@@ -34,15 +34,15 @@
   }
 
   .selected {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary-border);
-    color: var(--color-on-primary);
+    background-color: var(--color-selection-bg);
+    border-color: var(--color-selection-border);
+    color: var(--color-selection-ink);
   }
 
   .selected:hover:not(.unavailable) {
-    background-color: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
-    color: var(--color-on-primary);
+    background-color: var(--color-selection-hover);
+    border-color: var(--color-selection-border);
+    color: var(--color-selection-ink);
   }
 
   .soldOut {

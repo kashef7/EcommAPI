@@ -60,7 +60,7 @@
     padding: var(--space-4);
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-top: 2px solid var(--color-accent);
+    border-top: 2px solid var(--color-accent-line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-surface);
   }

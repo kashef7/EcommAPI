@@ -42,6 +42,10 @@
     transform: translate(-50%, -50%) rotate(45deg);
   }
 
+  .rm-ornament--compact {
+    margin-block: var(--space-3) var(--space-1);
+  }
+
   .rm-sr-only {
     position: absolute;
     width: 1px;

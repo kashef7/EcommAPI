@@ -15,6 +15,8 @@ Specification: `frontend/frontendPrompt.md`.
 - Phase 7 (Admin Console): Completed (Build & Review passed)
 - Phase 8 (Hardening, Performance, Audit, and Final Docs): Completed (Phases 1-8 Complete, Build & Review passed)
 - Phase 9 (Light/Dark Theme System, Visual Depth & Living Documentation): Completed (Build & Review passed)
+- Phase 9B (Coastal Editorial Palette Refresh & Catalog Tightening): Completed (Build & Verification passed)
+- Phase 9C (Dark Mode Surface Separation, Palette Balance & Intro Tightening): Completed (Build & Verification passed)
 
 ## Step 0 Notes
 
@@ -87,3 +89,15 @@ Specification: `frontend/frontendPrompt.md`.
   3. Added private-browsing (`localStorage` throwing `SecurityError`) coverage in `src/core/theme/theme.test.ts`.
 - Created `frontend/docs/design-system.md` and updated `docs/ui-kit.md`, `docs/decisions.md`, `docs/architecture.md`, `docs/deployment.md`, `docs/qa-checklist.md`, `README.md`, and `docs/phase-status.md`.
 - Verified `npm run format`, `npm run check` (`36` test files / `119` tests, `typecheck`, `eslint`, `vite build`), `npm run format:check`, `npm audit` (`0` vulnerabilities), dual SHA-256 CSP verification across all 9 `dist/**/*.html` routes, and per-page gzip JS totals all under `60 kB`.
+
+## Phase 9B (Coastal Editorial Palette Refresh & Catalog Tightening) Summary
+
+- Refreshed `src/styles/tokens.css`, `src/core/theme/theme.ts`, `public/favicon.svg`, `SiteShell.module.css`, `Skeleton.module.css`, and all 10 HTML entries to the `#194350` Deep Petrol / `#9DBEB8` Soft Sage / `#FFC2B4` Soft Peach / `#FF8882` Warm Coral palette (`#f5f8f7` light canvas / `#0e2026` dark canvas; `#194350` / `#09151A` `theme-color`).
+- Tightened `CatalogView.module.css` intro padding/gaps for above-the-fold desktop visibility and unified `CatalogFilters.module.css` onto `--color-surface` with a `1px` `--color-border` divider.
+- Updated `docs/design-system.md`, `docs/decisions.md`, `docs/phase-status.md`, and `UiKitPage.tsx`; verified `npm run format`, `npm run check`, `npm run format:check`, WCAG 2.2 AA token contrast, and all 9 `dist/**/*.html` CSP SHA-256 hashes.
+
+## Phase 9C (Dark Mode Surface Separation, Palette Balance & Intro Tightening) Summary
+
+- Re-engineered dark mode surface separation in `src/styles/tokens.css`: `#0B1014` obsidian-slate canvas, `#0D1519` recessed `--color-input-bg`, `#101D23` sunken wells, `#16272E` cards, `#193842` bands, `#1F3944` elevated overlays, and `#194350` Deep Petrol header/footer chrome.
+- Balanced all 4 anchor colors across `tokens.css`, `Form.module.css`, `QuantityStepper.module.css`, `Chip.module.css`, `SegmentedOptionGroup.module.css`, and `ProductView.module.css` (Soft Sage `--color-selection-bg` on selected chips/options; Warm Coral `--color-primary` reserved for dark-mode CTAs and cart badge).
+- Added `.rm-ornament--compact` in `src/styles/utilities.css` to eliminate excess bottom margin inside `CatalogView`'s intro band, synced all 10 HTML files and `theme.ts`, updated `docs/*`, and verified `npm run check`, `npm run format:check`, WCAG contrast, surface luminance separation, and CSP SHA-256 hashes.

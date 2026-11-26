@@ -107,6 +107,14 @@ export function UiKitPage() {
                   Surface (`--color-surface`)
                 </div>
                 <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgInput}`} />
+                  Input well (`--color-input-bg`)
+                </div>
+                <div class={styles.swatch}>
+                  <div class={`${styles.swatchColor} ${styles.bgSelection}`} />
+                  Selection (`--color-selection-bg`)
+                </div>
+                <div class={styles.swatch}>
                   <div class={`${styles.swatchColor} ${styles.bgHover}`} />
                   Hover (`--color-surface-hover`)
                 </div>
@@ -120,7 +128,7 @@ export function UiKitPage() {
                 </div>
                 <div class={styles.swatch}>
                   <div class={`${styles.swatchColor} ${styles.bgBrass}`} />
-                  Brass (`--color-accent`)
+                  Accent (`--color-accent`)
                 </div>
                 <div class={styles.swatch}>
                   <div class={`${styles.swatchColor} ${styles.bgSuccess}`} />

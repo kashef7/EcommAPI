@@ -112,6 +112,12 @@
 .bgSurface {
   background-color: var(--color-surface);
 }
+.bgInput {
+  background-color: var(--color-input-bg);
+}
+.bgSelection {
+  background-color: var(--color-selection-bg);
+}
 .bgHover {
   background-color: var(--color-surface-hover);
 }

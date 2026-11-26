@@ -20,7 +20,7 @@ Verify each page in the flow below across all five breakpoints:
 - [ ] **Zoom 200%**: Text remains unclipped and controls stay reachable without overlap.
 - [ ] **Keyboard-only (`Tab`, `Shift+Tab`, `Enter`, `Space`, arrows, `Escape`)**:
   - [ ] Skip link appears first on `Tab` and moves focus to `#main-content`.
-  - [ ] Every control shows the 2px `:focus-visible` ring (`#23305C` in light mode, `#DFBE6F` in dark mode and on royal navy header/footer controls).
+  - [ ] Every control shows the 2px `:focus-visible` ring (`#194350` in light mode, `#FFC2B4` in dark mode and on Deep Petrol header/footer controls).
   - [ ] Touch/click target sizes are at least `44x44px`.
   - [ ] Account `Menu`, Gallery thumbnails, `SegmentedOptionGroup`, `Dialog`, and `ConfirmDialog` operate without a mouse and restore focus on close (`ConfirmDialog` defaults focus to Cancel).
 - [ ] **`prefers-reduced-motion: reduce`**: Cross-document View Transition fade does not play, product card hover lift/image scale stops, button active press transform stops, and skeleton opacity pulse stops.
@@ -32,8 +32,8 @@ Verify each page in the flow below across all five breakpoints:
   - [ ] Desktop (`>= 768px`): `SiteShell` header renders `Moon`/`Sun` `ThemeToggle` (`Switch to dark theme` / `Switch to light theme`) next to Cart; clicking persists `rm.theme` in `localStorage` and updates `html[data-theme]`.
   - [ ] Mobile (`320px` / `375px`): Top bar fits cleanly without horizontal overflow; opening the mobile disclosure menu shows the full-width `ThemeToggle` row.
   - [ ] Auth pages (`login.html`, `signup.html`) and `/ui-kit.html` expose matching `ThemeToggle` controls.
-- [ ] **Zero-flash MPA navigation & reload:** Set Dark Mode, hard-reload (`Ctrl+Shift+R`), and navigate across Catalog -> Product -> Cart -> Profile -> Admin -> Auth. Confirm zero white background flash before external CSS loads and verify `<meta name="theme-color">` matches `--color-chrome-bg` (`#1B2547` light / `#080D1B` dark).
-- [ ] **Account skeleton on dark navy header:** Throttle network or reload while `sessionState === 'unknown'` and verify the header account `Skeleton` renders as a muted navy block rather than a bright light-mode rectangle.
+- [ ] **Zero-flash MPA navigation & reload:** Set Dark Mode, hard-reload (`Ctrl+Shift+R`), and navigate across Catalog -> Product -> Cart -> Profile -> Admin -> Auth. Confirm zero white background flash before external CSS loads and verify `<meta name="theme-color">` matches `--color-chrome-bg` (`#194350`).
+- [ ] **Account skeleton on Deep Petrol header:** Throttle network or reload while `sessionState === 'unknown'` and verify the header account `Skeleton` renders as a muted petrol block rather than a bright light-mode rectangle.
 - [ ] **Cross-tab theme sync:** Open Tab A and Tab B; toggle theme in Tab A -> Tab B switches immediately via the `storage` event without reloading.
 - [ ] **Production CSP check (`npm run preview`):** Verify zero CSP console violations on all 9 production routes (inline `<script>` and inline `<style>` allowed strictly by SHA-256 hash).
 - [ ] **WCAG contrast & readability:** Verify text, muted labels, placeholders, links, primary/secondary/quiet/danger buttons, badges, banners, dialogs, menus, toasts, and table hover rows remain clearly legible and distinct in both Light and Dark themes.

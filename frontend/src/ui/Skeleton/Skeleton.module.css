@@ -7,7 +7,7 @@
   }
 
   .chrome {
-    background-color: var(--color-chrome-surface);
+    background-color: var(--color-chrome-skeleton);
     border: 1px solid var(--color-chrome-border);
   }
 

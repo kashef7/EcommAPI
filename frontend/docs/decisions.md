@@ -94,5 +94,18 @@
     - Exposed `useAuthTheme()` in `src/features/auth/hooks/useAuthTheme.ts` so `AuthCardLayout.tsx` stays strictly decoupled from direct `core/` imports while rendering a top-right `ThemeToggle` across login, signup, and auth skeleton states.
 
 21. **Zero-Flash MPA Theme Boot, `rm.theme` Storage, and Dual SHA-256 CSP**
-    - Added `rm.theme` as the second allowed `localStorage` key alongside `rm.hasSession`, backed by `@preact/signals` (`src/core/theme/theme.ts`), OS `prefers-color-scheme` fallback when unset, cross-tab `storage` synchronization, and `<meta name="theme-color">` updates matching `--color-chrome-bg` (`#1B2547` / `#080D1B`).
+    - Added `rm.theme` as the second allowed `localStorage` key alongside `rm.hasSession`, backed by `@preact/signals` (`src/core/theme/theme.ts`), OS `prefers-color-scheme` fallback when unset, cross-tab `storage` synchronization, and `<meta name="theme-color">` updates matching `--color-chrome-bg`.
     - Added a synchronous `try/catch` inline `<script>` and dual-theme `<style>` in every HTML `<head>` so `data-theme` and background color apply before first paint, and updated `vite.config.ts` `buildProductionCsp()` to emit exact SHA-256 hashes for both inline `<style>` (`style-src`) and inline `<script>` (`script-src`) without `'unsafe-inline'`.
+
+## Phase 9B — Coastal Editorial Palette Refresh & Catalog Tightening
+
+22. **Coastal Editorial Palette (`#194350` / `#9DBEB8` / `#FFC2B4` / `#FF8882`)**
+    - Replaced the navy/ivory/brass palette in `src/styles/tokens.css`, `src/core/theme/theme.ts`, `public/favicon.svg`, and HTML boot scripts with Deep Petrol (`#194350`), Soft Sage (`#9DBEB8`), Soft Peach (`#FFC2B4`), and Warm Coral (`#FF8882`), paired with darkened readable text tokens (`--color-accent: #B8443E` light, `--color-ink: #122B33` light, `--color-on-primary: #0E2026` on `#FF8882` dark CTAs) so every combination passes WCAG 2.2 AA contrast.
+    - Tightened `CatalogView.module.css` intro padding/gaps so the first product row stays visible above the fold on `1080p`, and unified `CatalogFilters.module.css` onto a single `--color-surface` background with a `1px` `--color-border` divider.
+
+## Phase 9C — Dark Mode Surface Separation, Palette Balance & Intro Tightening
+
+23. **Obsidian-Slate Canvas, Recessed Inputs & Soft Sage Selection Tokens**
+    - Re-anchored dark mode `--color-bg` to neutral obsidian-slate (`#0B1014`) while keeping `--color-chrome-bg` at Deep Petrol (`#194350`), stepping cards (`#16272E`) and bands (`#193842`) cleanly above the canvas.
+    - Added `--color-input-bg` (`#F8FBFA` light / `#0D1519` dark) for recessed `Form` and `QuantityStepper` controls, and `--color-selection-*` (`#CFE3DF` / `#9DBEB8` Soft Sage) for `Chip` and `SegmentedOptionGroup` selections so Warm Coral (`#FF8882`) remains dedicated to high-priority primary CTAs.
+    - Added `.rm-ornament--compact` in `src/styles/utilities.css` (`margin-block: var(--space-3) var(--space-1)`) to eliminate the `24px` excess bottom margin beneath the diamond rule in `CatalogView`'s intro band.
