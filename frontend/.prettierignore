@@ -1,0 +1,6 @@
+dist/
+node_modules/
+coverage/
+frontendPrompt.md
+docs/
+package-lock.json

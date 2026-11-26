@@ -1,0 +1,78 @@
+@layer components {
+  .dialog {
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-floating);
+    width: calc(100% - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow: hidden;
+  }
+
+  .dialog::backdrop {
+    background-color: rgba(30, 36, 51, 0.45);
+  }
+
+  .sm {
+    max-width: 440px;
+  }
+
+  .md {
+    max-width: 560px;
+  }
+
+  .lg {
+    max-width: 720px;
+  }
+
+  .surface {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 32px);
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .closeBtn {
+    margin: -6px -10px -6px 0;
+  }
+
+  .body {
+    padding: var(--space-6);
+    overflow-y: auto;
+    color: var(--color-ink);
+  }
+
+  .description {
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+  }
+}

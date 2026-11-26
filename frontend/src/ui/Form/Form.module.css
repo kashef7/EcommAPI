@@ -1,0 +1,162 @@
+@layer components {
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.4;
+  }
+
+  .requiredMark {
+    color: var(--color-danger-ink);
+    margin-left: 2px;
+  }
+
+  .hint {
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+    line-height: 1.45;
+  }
+
+  .error {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--color-danger-ink);
+    line-height: 1.45;
+  }
+
+  .errorIcon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .control {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-control);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    transition:
+      border-color var(--dur-fast) var(--ease-soft),
+      background-color var(--dur-fast) var(--ease-soft);
+  }
+
+  .control:hover:not(:disabled):not([aria-invalid='true']) {
+    border-color: var(--color-ink);
+  }
+
+  .control:disabled {
+    background-color: var(--color-surface-sunken);
+    color: var(--color-disabled-ink);
+    cursor: not-allowed;
+  }
+
+  .control[aria-invalid='true'],
+  .invalid {
+    border-color: var(--color-danger);
+  }
+
+  .textarea {
+    min-height: 112px;
+    resize: vertical;
+  }
+
+  .selectWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .select {
+    appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  .selectChevron {
+    position: absolute;
+    right: var(--space-3);
+    pointer-events: none;
+    color: var(--color-ink-muted);
+    display: inline-flex;
+  }
+
+  .inputGroup {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .passwordControl {
+    padding-right: 48px;
+  }
+
+  .searchControl {
+    padding-left: 40px;
+    padding-right: 48px;
+  }
+
+  .searchControl::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .leadingAdornment {
+    position: absolute;
+    left: var(--space-3);
+    pointer-events: none;
+    color: var(--color-ink-muted);
+    display: inline-flex;
+  }
+
+  .trailingAction {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .checkboxLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    cursor: pointer;
+    color: var(--color-ink);
+    font-size: var(--text-base);
+    user-select: none;
+  }
+
+  .checkboxBoxWrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-left: -10px;
+    flex-shrink: 0;
+  }
+
+  .checkboxInput {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  .checkboxInput:disabled {
+    cursor: not-allowed;
+  }
+}

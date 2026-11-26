@@ -1,0 +1,38 @@
+@layer components {
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-primary);
+    text-decoration: none;
+    min-height: 44px;
+  }
+
+  .logo:hover {
+    color: var(--color-primary-hover);
+  }
+
+  .mark {
+    flex-shrink: 0;
+  }
+
+  .wordmark {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--color-ink);
+  }
+
+  .sm .wordmark {
+    font-size: var(--text-md);
+  }
+
+  .md .wordmark {
+    font-size: var(--text-lg);
+  }
+
+  .lg .wordmark {
+    font-size: var(--text-xl);
+  }
+}

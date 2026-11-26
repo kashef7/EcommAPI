@@ -1,0 +1,56 @@
+@layer utilities {
+  .rm-container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .rm-eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .rm-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rm-ornament {
+    position: relative;
+    height: 1px;
+    background-color: var(--color-accent-line);
+    border: 0;
+    margin-block: var(--space-4);
+  }
+
+  .rm-ornament--diamond {
+    margin-block: var(--space-6);
+  }
+
+  .rm-ornament--diamond::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-accent);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .rm-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

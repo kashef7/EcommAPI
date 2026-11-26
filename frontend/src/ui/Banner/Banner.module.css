@@ -1,0 +1,65 @@
+@layer components {
+  .banner {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  .info {
+    background-color: var(--color-surface-sunken);
+    border-color: var(--color-border);
+    color: var(--color-ink);
+  }
+
+  .success {
+    background-color: var(--color-success-bg);
+    border-color: var(--color-success-bg);
+    color: var(--color-success-ink);
+  }
+
+  .warning {
+    background-color: var(--color-warning-bg);
+    border-color: var(--color-warning-bg);
+    color: var(--color-warning-ink);
+  }
+
+  .danger {
+    background-color: var(--color-danger-bg);
+    border-color: var(--color-danger-bg);
+    color: var(--color-danger-ink);
+  }
+
+  .iconWrap {
+    flex-shrink: 0;
+    padding-top: 2px;
+    display: inline-flex;
+  }
+
+  .content {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .title {
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .dismiss {
+    margin: -8px -8px -8px 0;
+    color: currentColor;
+  }
+}

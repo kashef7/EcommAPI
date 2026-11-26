@@ -1,0 +1,78 @@
+@layer components {
+  .wrapper {
+    padding-block: var(--space-8) var(--space-12);
+    display: flex;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 440px;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .title {
+    margin-top: var(--space-2);
+  }
+
+  .subtitle {
+    color: var(--color-ink-muted);
+    font-size: var(--text-base);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .errorList {
+    margin: 0;
+    padding-left: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .submitWrap {
+    margin-top: var(--space-2);
+  }
+
+  .footerSwitch {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .switchLink {
+    font-weight: 600;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .skeletonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}

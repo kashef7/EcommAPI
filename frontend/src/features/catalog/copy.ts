@@ -1,0 +1,52 @@
+export const CATALOG_COPY = {
+  intro: {
+    eyebrow: 'Royal Market',
+    title: 'Everyday goods, chosen with care',
+    subtitle: 'Browse our collection and find something you will keep.',
+  },
+  filters: {
+    searchLabel: 'Search products',
+    searchPlaceholder: 'Search by product name',
+    clearSearchLabel: 'Clear search',
+    categoryLabel: 'Category',
+    allCategoriesOption: 'All categories',
+    sortLabel: 'Sort by',
+    sortOptions: {
+      newest: 'Newest',
+      priceAsc: 'Price: low to high',
+      priceDesc: 'Price: high to low',
+    },
+    inStockLabel: 'In stock only',
+    minPriceLabel: 'Min price',
+    maxPriceLabel: 'Max price',
+    pricePlaceholder: '0.00',
+    priceRangeInvalid: 'Minimum price cannot exceed maximum price.',
+    tagsHeading: 'Tags',
+    mobileFiltersButton: 'Filters',
+    mobileFiltersDialogTitle: 'Filter products',
+    showResultsButton: 'Show results',
+    clearFiltersButton: 'Clear filters',
+    priceBetweenLabel: (min: string, max: string) => `${min} to ${max}`,
+    priceFromLabel: (min: string) => `From ${min}`,
+    priceUpToLabel: (max: string) => `Up to ${max}`,
+  },
+  results: {
+    countSingular: '1 product',
+    countPlural: (count: number) => `${count} products`,
+    loadingLabel: 'Loading products',
+    refreshingLabel: 'Updating product list',
+  },
+  card: {
+    fromPricePrefix: 'From',
+    soldOutBadge: 'Sold out',
+    noImageFallback: 'No image',
+  },
+  empty: {
+    heading: 'No products match your filters',
+    message: 'Try adjusting your search, price range, or selected tags.',
+    actionLabel: 'Clear filters',
+  },
+  error: {
+    title: 'Unable to load products',
+  },
+} as const;

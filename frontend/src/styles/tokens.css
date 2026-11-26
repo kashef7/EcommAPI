@@ -1,0 +1,101 @@
+@layer tokens {
+  :root {
+    color-scheme: light;
+
+    /* Surface and border colors */
+    --color-bg: #faf7f2;
+    --color-surface: #ffffff;
+    --color-surface-sunken: #f2eee6;
+    --color-border: #e3ddd0;
+    --color-border-control: #8a8374;
+
+    /* Ink colors */
+    --color-ink: #1e2433;
+    --color-ink-muted: #5a6070;
+    --color-ink-placeholder: #6b6f7c;
+    --color-disabled-ink: #8b8f9b;
+
+    /* Brand and accent */
+    --color-primary: #26325b;
+    --color-primary-hover: #1c2647;
+    --color-on-primary: #faf7f2;
+    --color-accent: #7a5f26;
+    --color-accent-line: #cfc6b4;
+
+    /* Semantic statuses */
+    --color-success: #2f6b4f;
+    --color-success-bg: #e8f2ec;
+    --color-success-ink: #245a41;
+    --color-danger: #a12d2d;
+    --color-danger-bg: #fbecec;
+    --color-danger-ink: #8e2323;
+    --color-warning-bg: #fbf1dc;
+    --color-warning-ink: #7a4d0b;
+
+    /* Focus ring */
+    --color-focus: #26325b;
+
+    /* Typography */
+    --font-serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Source Sans 3 Variable', 'Segoe UI', sans-serif;
+
+    --text-eyebrow: 0.75rem;
+    --text-xs: 0.8125rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-md: 1.125rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 1.875rem;
+    --text-3xl: 2.375rem;
+    --text-4xl: 3rem;
+
+    /* Spacing (4px base scale) */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-24: 96px;
+
+    /* Layout */
+    --container-max: 1200px;
+    --gutter: 16px;
+
+    /* Radius */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 10px;
+
+    /* Elevation (used only for dialogs, menus, and toasts) */
+    --shadow-floating: 0 8px 24px rgba(30, 36, 51, 0.12);
+
+    /* Motion */
+    --dur-fast: 120ms;
+    --dur-base: 200ms;
+    --dur-slow: 320ms;
+    --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    /* Layering */
+    --z-sticky: 20;
+    --z-header: 30;
+    --z-menu: 40;
+    --z-dialog: 50;
+    --z-toast: 60;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --gutter: 24px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --gutter: 32px;
+    }
+  }
+}

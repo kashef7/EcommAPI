@@ -1,0 +1,12 @@
+@layer components {
+  .spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .icon {
+    animation: rm-spin 0.9s linear infinite;
+  }
+}

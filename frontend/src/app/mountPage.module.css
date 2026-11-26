@@ -1,0 +1,13 @@
+.configError {
+  padding-block: var(--space-12);
+}
+
+.configErrorLead {
+  margin-top: var(--space-3);
+  color: var(--color-ink-muted);
+}
+
+.configErrorList {
+  margin-top: var(--space-4);
+  padding-left: var(--space-6);
+}

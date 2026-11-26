@@ -1,0 +1,42 @@
+@layer components {
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .link {
+    color: var(--color-ink-muted);
+    text-decoration: none;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .link:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .current {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .separator {
+    color: var(--color-ink-muted);
+    display: inline-flex;
+  }
+}

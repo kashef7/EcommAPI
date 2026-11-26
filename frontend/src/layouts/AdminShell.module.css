@@ -1,0 +1,55 @@
+@layer components {
+  .adminBar {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .adminNav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    overflow-x: auto;
+  }
+
+  .adminLink {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: var(--space-1);
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-soft);
+  }
+
+  .adminLink:hover {
+    color: var(--color-ink);
+  }
+
+  .adminLink[aria-current='page'] {
+    color: var(--color-primary);
+  }
+
+  .adminLink[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+  }
+
+  .adminBody {
+    padding-block: var(--space-8);
+  }
+
+  .skeletonStack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}
