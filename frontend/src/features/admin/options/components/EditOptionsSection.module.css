@@ -1,0 +1,120 @@
+@layer components {
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .headerRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .emptyNote {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .optionList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .optionCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--color-surface-sunken);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .optionHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .optionTitle {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-ink);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .inlineActions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    flex-shrink: 0;
+  }
+
+  .inlineEditForm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .inlineEditBtns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .valuesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .valuesList > li {
+    max-width: 100%;
+  }
+
+  .valuePill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 44px;
+    max-width: 100%;
+    padding: 2px var(--space-1) 2px var(--space-3);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-control);
+    border-radius: var(--radius-md);
+  }
+
+  .valueText {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-ink);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .addValueForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: flex-end;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .addValueInputWrap {
+    flex: 1 1 180px;
+    min-width: 0;
+  }
+}

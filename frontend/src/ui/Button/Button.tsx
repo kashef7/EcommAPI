@@ -50,6 +50,7 @@ export interface ButtonProps {
   readonly name?: string | undefined;
   readonly form?: string | undefined;
   readonly ariaDescribedBy?: string | undefined;
+  readonly ariaLabel?: string | undefined;
   readonly ariaExpanded?: boolean | undefined;
   readonly ariaControls?: string | undefined;
   readonly class?: string | undefined;
@@ -72,6 +73,7 @@ export function Button({
   name,
   form,
   ariaDescribedBy,
+  ariaLabel,
   ariaExpanded,
   ariaControls,
   class: className,
@@ -108,6 +110,7 @@ export function Button({
       aria-disabled={isInert ? 'true' : undefined}
       aria-busy={loading ? 'true' : undefined}
       aria-describedby={ariaDescribedBy}
+      aria-label={ariaLabel}
       aria-expanded={ariaExpanded !== undefined ? (ariaExpanded ? 'true' : 'false') : undefined}
       aria-controls={ariaControls}
       class={classes}

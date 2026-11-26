@@ -1,12 +1,13 @@
 import { mountPage } from '@/app/mountPage';
+import { AdminProductsView } from '@/features/admin/products';
 import { AdminShell } from '@/layouts';
 
-function AdminProductsPlaceholderPage() {
+function AdminProductsPage() {
   return (
     <AdminShell activeSection="products">
-      <h1>Products</h1>
+      <AdminProductsView />
     </AdminShell>
   );
 }
 
-mountPage(AdminProductsPlaceholderPage);
+mountPage(AdminProductsPage);

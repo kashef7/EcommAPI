@@ -1,12 +1,13 @@
 import { mountPage } from '@/app/mountPage';
+import { AdminCategoriesView } from '@/features/admin/categories';
 import { AdminShell } from '@/layouts';
 
-function AdminCategoriesPlaceholderPage() {
+function AdminCategoriesPage() {
   return (
     <AdminShell activeSection="categories">
-      <h1>Categories</h1>
+      <AdminCategoriesView />
     </AdminShell>
   );
 }
 
-mountPage(AdminCategoriesPlaceholderPage);
+mountPage(AdminCategoriesPage);

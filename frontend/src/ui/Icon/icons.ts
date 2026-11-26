@@ -1,5 +1,7 @@
 export {
+  ArrowDown,
   ArrowLeft,
+  ArrowUp,
   Check,
   ChevronDown,
   ChevronLeft,

@@ -77,6 +77,7 @@ export function CartView() {
       <div class={`rm-container ${styles.page}`}>
         <ErrorState
           title={CART_COPY.error.title}
+          headingLevel="h1"
           message={loadErrorMessage ?? CART_COPY.error.title}
           onRetry={reloadCart}
         />

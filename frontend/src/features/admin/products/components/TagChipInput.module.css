@@ -1,0 +1,38 @@
+@layer components {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .inputRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+
+  .inputWrap {
+    flex: 1 1 180px;
+    min-width: 0;
+  }
+
+  .chipsWrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .suggestionsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .suggestionsLabel {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.04em;
+  }
+}

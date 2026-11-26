@@ -6,6 +6,7 @@ import styles from './StateMessage.module.css';
 
 export interface ErrorStateProps {
   readonly title?: string;
+  readonly headingLevel?: 'h1' | 'h2';
   readonly message: string;
   readonly retryLabel?: string;
   readonly onRetry?: () => void;
@@ -16,6 +17,7 @@ export interface ErrorStateProps {
 
 export function ErrorState({
   title = 'Unable to load',
+  headingLevel = 'h2',
   message,
   retryLabel = 'Try again',
   onRetry,
@@ -23,12 +25,13 @@ export function ErrorState({
   action,
   class: className,
 }: ErrorStateProps) {
+  const HeadingTag = headingLevel;
   return (
     <section role="alert" class={`${styles.container}${className ? ` ${className}` : ''}`}>
       <div class={styles.iconWrap}>
         <Icon icon={CircleAlert} size={24} />
       </div>
-      <h2 class={styles.heading}>{title}</h2>
+      <HeadingTag class={styles.heading}>{title}</HeadingTag>
       <p class={styles.message}>{message}</p>
       {onRetry || action ? (
         <div class={styles.action}>

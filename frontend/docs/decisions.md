@@ -62,3 +62,22 @@
 
 14. **Dedicated `features/cart/summary` entry for header & product pages**
     - Exporting `CartView` alongside `useCartSummary` from `features/cart/index.ts` caused Vite/Rollup to pull `CartView` and its UI dependencies (`ConfirmDialog`, `QuantityStepper`, `Banner`) into the shared `layouts` chunk (`30.94 kB` gzip). Splitting the lightweight signal/hook exports into `src/features/cart/summary.ts` (permitted by scoped ESLint rules for `layouts/` and `pages/`) keeps `CartView` exclusive to `cart.html` and restores `layouts` to ~23.5 kB gzip.
+
+## Phase 7 — Admin Console
+
+15. **Per-page admin entry barrels (`categories.ts`, `products.ts`, `product-editor.ts`)**
+    - Importing all three admin pages through the single `src/features/admin/index.ts` barrel caused Vite/Rollup to bundle all admin views into one shared `admin` chunk (`22.72 kB` gzip), loading product-editor code on the Categories and Products list pages. Adding dedicated top-level entry barrels (`categories.ts`, `products.ts`, `product-editor.ts`) permitted by scoped `eslint.config.js` page rules isolates each page bundle (`3.21 kB`, `4.22 kB`, and `17.43 kB` gzip entry chunks respectively).
+
+16. **Scroll-preserving refetch and dirty-draft protection during edit-mode mutations**
+    - Because `useEditProductEditor` keeps the loaded `ProductDetail` mounted during `GET /api/products/{id}` refetches while setting `aria-busy="true"`, and captures/restores `window.scrollX`/`window.scrollY` in `requestAnimationFrame` once the refetch settles, the page avoids skeleton flicker and preserves scroll position.
+    - Unsaved Details edits (`isDirty`) are preserved across independent option/variant refetches, and `confirmDeleteProduct` sets a `skipBeforeUnloadRef` bypass before navigating to `admin/index.html` so deleting a dirty product does not trigger a spurious browser unload prompt.
+
+17. **WCAG 2.5.3 `ariaLabel` support on `Button` and view-model interfaces in `features/admin/*/model/`**
+    - Added optional `ariaLabel` to `src/ui/Button/Button.tsx` so repeated row controls (`"Save price for Size: A5"`, `"Add stock for Size: A5"`, `"Remove stock for Size: A5"`, `"Delete ..."`) preserve visible button text while exposing unique accessible names.
+    - Defined view-model payload/result types in `features/admin/*/model/` and kept all `api/` and `core/http/` error mapping inside `hooks/` so `components/` remain decoupled from transport types and error classes.
+
+## Phase 8 — Hardening, Accessibility & Documentation
+
+18. **Single-`h1` top-level fallback headings & reduced-motion view transitions**
+    - Added `headingLevel?: 'h1' | 'h2'` (default `'h2'`) to `EmptyState` and `ErrorState` so full-page 404/error states (`ErrorBoundary`, `ProductView`, `CartView`, `AdminProductEditView`) always expose an accessible `h1` without changing embedded section hierarchies or visual `.heading` sizing.
+    - Added `@view-transition { navigation: none; }` inside `@media (prefers-reduced-motion: reduce)` in `src/styles/motion.css` alongside `animation: none !important` and `.header { view-transition-name: none; }` so supporting browsers skip cross-document transition capture altogether under reduced motion.

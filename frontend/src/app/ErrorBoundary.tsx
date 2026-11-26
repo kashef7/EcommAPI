@@ -28,6 +28,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <main class={`rm-container ${styles.configError}`}>
           <ErrorState
             title="Something went wrong"
+            headingLevel="h1"
             message="This page ran into an unexpected problem. Reload the page to continue."
             retryLabel="Reload page"
             onRetry={() => window.location.reload()}

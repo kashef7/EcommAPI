@@ -1,3 +1,4 @@
+import { useId } from 'preact/hooks';
 import { env } from '@/config/env';
 import { formatMoney } from '@/core/format/money';
 import { routes } from '@/core/navigation/routes';
@@ -47,6 +48,7 @@ function ProductPageSkeleton() {
 }
 
 export function ProductView({ onCartUpdated }: ProductViewProps) {
+  const soldOutNoteId = useId();
   const {
     isNotFound,
     productResource,
@@ -70,6 +72,7 @@ export function ProductView({ onCartUpdated }: ProductViewProps) {
       <div class={`rm-container ${styles.page}`}>
         <EmptyState
           heading={PRODUCT_COPY.notFound.heading}
+          headingLevel="h1"
           message={PRODUCT_COPY.notFound.message}
           action={
             <a
@@ -93,6 +96,7 @@ export function ProductView({ onCartUpdated }: ProductViewProps) {
       <div class={`rm-container ${styles.page}`}>
         <ErrorState
           title={PRODUCT_COPY.error.title}
+          headingLevel="h1"
           message={productErrorMessage ?? PRODUCT_COPY.error.title}
           onRetry={productResource.reload}
         />
@@ -194,6 +198,7 @@ export function ProductView({ onCartUpdated }: ProductViewProps) {
                 variant="primary"
                 size="lg"
                 ariaDisabled={isSoldOut || isSessionPending}
+                ariaDescribedBy={!selectedVariant || isSoldOut ? soldOutNoteId : undefined}
                 loading={submittingAdd}
                 leadingIcon={<Icon icon={addedJustNow ? Check : ShoppingBag} size={16} />}
                 {...(styles.addButton ? { class: styles.addButton } : {})}
@@ -210,9 +215,13 @@ export function ProductView({ onCartUpdated }: ProductViewProps) {
             </div>
 
             {!selectedVariant ? (
-              <p class={styles.soldOutNote}>{PRODUCT_COPY.stock.unavailableHint}</p>
+              <p id={soldOutNoteId} class={styles.soldOutNote}>
+                {PRODUCT_COPY.stock.unavailableHint}
+              </p>
             ) : isSoldOut ? (
-              <p class={styles.soldOutNote}>{PRODUCT_COPY.stock.soldOutHint}</p>
+              <p id={soldOutNoteId} class={styles.soldOutNote}>
+                {PRODUCT_COPY.stock.soldOutHint}
+              </p>
             ) : null}
 
             {inlineCartError ? (

@@ -237,7 +237,8 @@ export default tseslint.config(
       'no-restricted-imports': forbidLayerPatterns(
         ['api', 'ui'],
         [
-          '^(?:@/features/(?:auth|catalog|product|profile|admin)/.+|(?:\\.\\./)+features/(?:auth|catalog|product|profile|admin)/.+)$',
+          '^(?:@/features/(?:auth|catalog|product|profile)/.+|(?:\\.\\./)+features/(?:auth|catalog|product|profile)/.+)$',
+          '^(?:@/features/admin/(?!categories$|products$|product-editor$).+|(?:\\.\\./)+features/admin/(?!categories$|products$|product-editor$).+)$',
           '^(?:@/features/cart/(?!summary$).+|(?:\\.\\./)+features/cart/(?!summary$).+)$',
         ],
       ),

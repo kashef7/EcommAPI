@@ -254,7 +254,7 @@ export function UiKitPage() {
           </Card>
 
           <Card padding="lg">
-            <h2 class={styles.sectionTitle}>Images and Skeletons (Zero Gradients)</h2>
+            <h2 class={styles.sectionTitle}>Images and Skeletons (Opacity Pulse)</h2>
             <div class={styles.mediaGrid}>
               <ImageWithFallback
                 src="javascript:alert(1)"

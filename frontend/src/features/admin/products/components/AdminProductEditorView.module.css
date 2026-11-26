@@ -1,0 +1,95 @@
+@layer components {
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .topActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .titleRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .subtitle {
+    color: var(--color-ink-muted);
+    max-width: 60ch;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .sectionHeading {
+    margin-bottom: var(--space-4);
+  }
+
+  .detailsHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .unsavedLabel {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .errorList {
+    margin: 0;
+    padding-left: var(--space-4);
+  }
+
+  .submitBar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+  }
+
+  .dangerCard {
+    border-color: var(--color-danger);
+  }
+
+  .dangerRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .dangerText {
+    color: var(--color-ink-muted);
+    max-width: 56ch;
+  }
+
+  .skeletonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
