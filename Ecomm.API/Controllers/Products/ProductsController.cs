@@ -92,7 +92,7 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}/variants/{variantId:guid}")]
+    [HttpPatch("{id:guid}/variants/{variantId:guid}")] //Note: Should be /price like the /stock since it is specific not general
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdateVariantPrice(Guid id, Guid variantId, UpdateVariantPriceDTO dto)
     {

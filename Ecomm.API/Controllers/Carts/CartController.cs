@@ -58,7 +58,7 @@ public class CartController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("items/{variantId:guid}/quantity")]
+    [HttpPut("items/{variantId:guid}/quantity")] //We should be able to update the variant as well to choose new attributes if possible or the frontend can handle it by removing the old variant and adding the new variant
     public async Task<IActionResult> UpdateCartItem(Guid variantId, UpdateCartItemQuantityDTO updateCartItemQuantityDto)
     {
         if (!User.TryGetUserId(out var userId))
